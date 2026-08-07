@@ -1,16 +1,12 @@
 #![no_std]
 #![no_main]
 
-mod button;
-mod encoder;
-
-use button::Button;
+use dick_mouse::input::{Button, RotaryEncoder};
 use embassy_executor::Spawner;
 use embassy_time::{Duration, Timer};
-use encoder::RotaryEncoder;
 use esp_backtrace as _;
 use esp_hal::{
-    gpio::{Input, InputConfig, Level, Pull},
+    gpio::Level,
     interrupt::software::SoftwareInterruptControl,
     pcnt::{Pcnt, channel},
     peripherals::{GPIO11, GPIO12, GPIO41, GPIO42, PCNT},
@@ -26,9 +22,9 @@ async fn scroll_wheel_task(pcnt: PCNT<'static>, gpio_a: GPIO11<'static>, gpio_b:
     let unit = pcnt.unit0;
     unit.set_filter(Some(800)).expect("invalid pcnt filter");
 
-    let input_config = InputConfig::default().with_pull(Pull::Up);
-    let input_a = Input::new(gpio_a, input_config);
-    let input_b = Input::new(gpio_b, input_config);
+    let now_ms = Instant::now().duration_since_epoch().as_millis();
+    let mut encoder = RotaryEncoder::initial(gpio_a, gpio_b, unit.value() as i32, now_ms, 2);
+    let (input_a, input_b, stable_count, _, _, _) = encoder.values();
     let signal_a = input_a.peripheral_input();
     let signal_b = input_b.peripheral_input();
 
@@ -44,13 +40,11 @@ async fn scroll_wheel_task(pcnt: PCNT<'static>, gpio_a: GPIO11<'static>, gpio_b:
     ch1.set_ctrl_mode(channel::CtrlMode::Reverse, channel::CtrlMode::Keep);
     ch1.set_input_mode(channel::EdgeMode::Decrement, channel::EdgeMode::Increment);
 
-    let now_ms = Instant::now().duration_since_epoch().as_millis();
-    let mut encoder = RotaryEncoder::initial(unit.value() as i32, now_ms, 2);
-    let mut reported_count = encoder.stable_count();
+    let mut reported_count = stable_count;
 
     loop {
         let now_ms = Instant::now().duration_since_epoch().as_millis();
-        encoder = encoder.update(unit.value() as i32, now_ms);
+        encoder.update(unit.value() as i32, now_ms);
 
         let detents = encoder.detents_from(reported_count, 4);
         if detents != 0 {
@@ -64,38 +58,34 @@ async fn scroll_wheel_task(pcnt: PCNT<'static>, gpio_a: GPIO11<'static>, gpio_b:
 
 #[embassy_executor::task]
 async fn left_button_task(gpio: GPIO41<'static>) {
-    let input = Input::new(gpio, InputConfig::default().with_pull(Pull::Up));
-    let now_ms = Instant::now().duration_since_epoch().as_millis();
-    let mut button = Button::new(input.level(), input.level(), Level::Low, now_ms, 5);
+    let mut button = Button::new(gpio, Level::Low, 5);
 
     loop {
         let now_ms = Instant::now().duration_since_epoch().as_millis();
-        let next_button = button.update(input.level(), now_ms);
+        let (next_button, changed) = button.update(now_ms);
+        button = next_button;
 
-        if next_button.is_pressed() != button.is_pressed() {
-            esp_println::println!("left button pressed: {}", next_button.is_pressed());
+        if changed {
+            esp_println::println!("left button pressed: {}", button.is_pressed());
         }
 
-        button = next_button;
         Timer::after(Duration::from_millis(1)).await;
     }
 }
 
 #[embassy_executor::task]
 async fn right_button_task(gpio: GPIO42<'static>) {
-    let input = Input::new(gpio, InputConfig::default().with_pull(Pull::Up));
-    let now_ms = Instant::now().duration_since_epoch().as_millis();
-    let mut button = Button::new(input.level(), input.level(), Level::Low, now_ms, 5);
+    let mut button = Button::new(gpio, Level::Low, 5);
 
     loop {
         let now_ms = Instant::now().duration_since_epoch().as_millis();
-        let next_button = button.update(input.level(), now_ms);
+        let (next_button, changed) = button.update(now_ms);
+        button = next_button;
 
-        if next_button.is_pressed() != button.is_pressed() {
-            esp_println::println!("right button pressed: {}", next_button.is_pressed());
+        if changed {
+            esp_println::println!("right button pressed: {}", button.is_pressed());
         }
 
-        button = next_button;
         Timer::after(Duration::from_millis(1)).await;
     }
 }
