@@ -21,14 +21,6 @@ use esp_hal::{
 esp_bootloader_esp_idf::esp_app_desc!();
 
 #[embassy_executor::task]
-async fn run() {
-    loop {
-        esp_println::println!("Hello world from embassy!");
-        Timer::after(Duration::from_millis(1_000)).await;
-    }
-}
-
-#[embassy_executor::task]
 async fn scroll_wheel_task(pcnt: PCNT<'static>, gpio_a: GPIO11<'static>, gpio_b: GPIO12<'static>) {
     let pcnt = Pcnt::new(pcnt);
     let unit = pcnt.unit0;
@@ -118,23 +110,15 @@ async fn main(spawner: Spawner) {
     let timg0 = TimerGroup::new(peripherals.TIMG0);
     esp_rtos::start(timg0.timer0, sw_int.software_interrupt0);
 
-    spawner.spawn(run()).expect("failed to spawn run task");
+    spawner.spawn(
+        scroll_wheel_task(peripherals.PCNT, peripherals.GPIO11, peripherals.GPIO12)
+            .expect("failed to create scroll wheel task"),
+    );
+    spawner.spawn(left_button_task(peripherals.GPIO41).expect("failed to create left button task"));
     spawner
-        .spawn(scroll_wheel_task(
-            peripherals.PCNT,
-            peripherals.GPIO11,
-            peripherals.GPIO12,
-        ))
-        .expect("failed to spawn scroll wheel task");
-    spawner
-        .spawn(left_button_task(peripherals.GPIO41))
-        .expect("failed to spawn left button task");
-    spawner
-        .spawn(right_button_task(peripherals.GPIO42))
-        .expect("failed to spawn right button task");
+        .spawn(right_button_task(peripherals.GPIO42).expect("failed to create right button task"));
 
     loop {
-        esp_println::println!("Bing!");
         Timer::after(Duration::from_millis(5_000)).await;
     }
 }
