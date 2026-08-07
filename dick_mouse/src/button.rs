@@ -56,10 +56,6 @@ impl Button {
         self.level
     }
 
-    pub const fn candidate_level(&self) -> Level {
-        self.candidate_level
-    }
-
     pub const fn is_pressed(&self) -> bool {
         matches!(
             (self.level, self.active_level),

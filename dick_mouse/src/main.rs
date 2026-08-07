@@ -1,13 +1,9 @@
 #![no_std]
 #![no_main]
 
-mod button;
-mod encoder;
-
-use button::Button;
+use dick_mouse::{button::Button, encoder::RotaryEncoder};
 use embassy_executor::Spawner;
 use embassy_time::{Duration, Timer};
-use encoder::RotaryEncoder;
 use esp_backtrace as _;
 use esp_hal::{
     gpio::{Input, InputConfig, Level, Pull},
