@@ -9,4 +9,14 @@ runner = "espflash flash --monitor"
 rustflags = [
     "-C",
     "link-arg=-Tlinkall.x",
+    "-C",
+    "link-arg=-Tembedded-test.x",
+]
+
+[alias]
+test-hil = [
+    "test",
+    "--tests",
+    "--config",
+    "target.xtensa-esp32s3-none-elf.runner=\"probe-rs run --chip esp32s3\"",
 ]

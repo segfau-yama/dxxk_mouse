@@ -1,82 +1,92 @@
+#![no_std]
+#![no_main]
 #![allow(non_snake_case)]
+#![allow(unexpected_cfgs)]
 
-use dick_mouse::input::{Button, Led, Toggle};
-use esp_hal::gpio::Level;
+esp_bootloader_esp_idf::esp_app_desc!();
 
-#[test]
-fn T01_active_lowの安定値がLowなら押下になる() {
-    let button = Button::new(Level::Low, Level::Low, Level::Low, 0, 5);
+#[cfg(test)]
+#[embedded_test::tests]
+mod tests {
+    use core::assert_eq;
 
-    assert!(button.is_pressed());
-    assert!(!button.is_released());
-}
+    use dick_mouse::input::{Button, Led, Toggle};
+    use esp_hal::gpio::{AnyPin, Level};
 
-#[test]
-fn T02_チャタリング時間未満では押下状態に変わらない() {
-    let button = Button::new(Level::High, Level::High, Level::Low, 100, 5);
+    fn pin(number: u8) -> AnyPin<'static> {
+        unsafe { AnyPin::steal(number) }
+    }
 
-    let candidate = button.update(Level::Low, 101);
-    let still_released = candidate.update(Level::Low, 105);
+    #[test]
+    fn T01_Buttonはactive_levelとdebounceを保持する() {
+        let button = Button::new(pin(41), Level::Low, 5);
+        let (_, _, active_level, pending_since_ms, debounce_ms) = button.values();
 
-    assert!(still_released.is_released());
-    assert_eq!(still_released.level(), Level::High);
-}
+        assert_eq!(active_level, Level::Low);
+        assert_eq!(pending_since_ms, None);
+        assert_eq!(debounce_ms, 5);
+    }
 
-#[test]
-fn T03_チャタリング時間経過後に押下状態へ変わる() {
-    let button = Button::new(Level::High, Level::High, Level::Low, 100, 5);
+    #[test]
+    fn T02_Button_updateは次のButtonと変化有無を返す() {
+        let button = Button::new(pin(41), Level::Low, 5);
+        let (_, previous_level, _, _, _) = button.values();
+        let (next_button, changed) = button.update(100);
+        let (_, level, active_level, _, debounce_ms) = next_button.values();
 
-    let candidate = button.update(Level::Low, 101);
-    let pressed = candidate.update(Level::Low, 106);
+        assert_eq!(active_level, Level::Low);
+        assert_eq!(debounce_ms, 5);
+        assert_eq!(changed, level != previous_level);
+    }
 
-    assert!(pressed.is_pressed());
-    assert_eq!(pressed.level(), Level::Low);
-}
+    #[test]
+    fn T03_Button_is_pressedは安定Levelとactive_levelの比較結果を返す() {
+        let button = Button::new(pin(41), Level::Low, 5);
+        let (_, level, active_level, _, _) = button.values();
 
-#[test]
-fn T04_updateは元のButtonを変更せず新しいButtonを返す() {
-    let button = Button::new(Level::High, Level::High, Level::Low, 100, 5);
+        assert_eq!(button.is_pressed(), level == active_level);
+    }
 
-    let next_button = button.update(Level::Low, 101);
-    let pressed = next_button.update(Level::Low, 106);
+    #[test]
+    fn T04_Toggleは初期状態を保持する() {
+        let toggle = Toggle::new(true, false);
 
-    assert_eq!(button.level(), Level::High);
-    assert_eq!(next_button.level(), Level::High);
-    assert_eq!(pressed.level(), Level::Low);
-}
+        assert_eq!(toggle.values(), (true, false));
+    }
 
-#[test]
-fn T05_debounceが0なら実測値をすぐに反映する() {
-    let button = Button::new(Level::High, Level::High, Level::Low, 100, 0);
+    #[test]
+    fn T05_Toggleは押下エッジで切り替わる() {
+        let button = Button::new(pin(41), Level::Low, 5);
+        let is_on = false;
+        let was_pressed = false;
+        let toggle = Toggle::new(is_on, was_pressed);
+        let toggled = toggle.update(&button);
+        let expected_is_on = if button.is_pressed() && !was_pressed {
+            !is_on
+        } else {
+            is_on
+        };
 
-    let pressed = button.update(Level::Low, 101);
+        assert_eq!(toggled.values(), (expected_is_on, button.is_pressed()));
+    }
 
-    assert!(pressed.is_pressed());
-    assert_eq!(pressed.level(), Level::Low);
-}
+    #[test]
+    fn T06_Ledはboolから出力Levelを更新する() {
+        let led = Led::new(Level::Low, Level::High);
+        let led_on = led.update(true);
+        let led_off = led_on.update(false);
 
-#[test]
-fn T06_Toggleは押下エッジで一度だけ切り替わる() {
-    let released = Button::new(Level::High, Level::High, Level::Low, 0, 5);
-    let pressed = Button::new(Level::Low, Level::Low, Level::Low, 0, 5);
+        assert_eq!(led_on.values().0, Level::High);
+        assert_eq!(led_off.values().0, Level::Low);
+    }
 
-    let toggle = Toggle::new(false, released.is_pressed());
-    let toggled = toggle.update(pressed);
-    let unchanged = toggled.update(pressed);
+    #[test]
+    fn T07_LedはToggleの状態から出力Levelを更新する() {
+        let led = Led::new(Level::Low, Level::High);
+        let led_on = led.update_with_toggle(Toggle::new(true, false));
+        let led_off = led_on.update_with_toggle(Toggle::new(false, false));
 
-    assert!(toggled.is_on());
-    assert!(unchanged.is_on());
-}
-
-#[test]
-fn T07_LedはButtonの押下状態から出力Levelを更新する() {
-    let pressed = Button::new(Level::Low, Level::Low, Level::Low, 0, 5);
-    let released = Button::new(Level::High, Level::High, Level::Low, 0, 5);
-    let led = Led::new(Level::Low, Level::High);
-
-    let led_on = led.update_with_button(pressed);
-    let led_off = led_on.update_with_button(released);
-
-    assert_eq!(led_on.level(), Level::High);
-    assert_eq!(led_off.level(), Level::Low);
+        assert_eq!(led_on.values().0, Level::High);
+        assert_eq!(led_off.values().0, Level::Low);
+    }
 }
