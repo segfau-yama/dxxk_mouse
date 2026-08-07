@@ -25,8 +25,14 @@ test = false
 
 [[test]]
 name = "button"
+path = "tests/input/button.rs"
 harness = false
 
 [[test]]
 name = "encoder"
+path = "tests/input/encoder.rs"
+harness = false
+
+[[test]]
+name = "main"
 harness = false
