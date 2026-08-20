@@ -1,16 +1,17 @@
 #![no_std]
 #![no_main]
 
-use dick_mouse::{button::Button, encoder::RotaryEncoder, input::Joystick};
+use dick_mouse::input::{Button, Joystick, RotaryEncoder};
 use embassy_executor::Spawner;
 use embassy_time::{Duration, Timer};
 use esp_backtrace as _;
 use esp_hal::{
     analog::adc::{Adc, AdcConfig, Attenuation},
-    gpio::{AnyPin, Input, InputConfig, Level, Pin, Pull},
+    gpio::{AnyPin, Level, Pin},
     interrupt::software::SoftwareInterruptControl,
     pcnt::{Pcnt, channel},
     peripherals::{ADC1, GPIO1, GPIO2, PCNT},
+    time::Instant,
     timer::timg::TimerGroup,
 };
 
@@ -36,9 +37,9 @@ async fn encoder_task(
     let unit = pcnt.unit0;
     unit.set_filter(Some(800)).expect("invalid pcnt filter");
 
-    let input_config = InputConfig::default().with_pull(Pull::Up);
-    let input_a = Input::new(gpio_a, input_config);
-    let input_b = Input::new(gpio_b, input_config);
+    let now_ms = Instant::now().duration_since_epoch().as_millis();
+    let mut encoder = RotaryEncoder::initial(gpio_a, gpio_b, unit.value() as i32, now_ms, 2);
+    let (input_a, input_b, stable_count, _, _, _) = encoder.values();
     let signal_a = input_a.peripheral_input();
     let signal_b = input_b.peripheral_input();
 
@@ -54,15 +55,13 @@ async fn encoder_task(
     ch1.set_ctrl_mode(channel::CtrlMode::Reverse, channel::CtrlMode::Keep);
     ch1.set_input_mode(channel::EdgeMode::Decrement, channel::EdgeMode::Increment);
 
-    let now_ms = embassy_time::Instant::now().as_millis();
-    let mut encoder = RotaryEncoder::new(unit.value() as i32, now_ms, 2);
-    let mut reported_count = encoder.stable_count();
+    let mut reported_count = stable_count;
 
     loop {
-        let now_ms = embassy_time::Instant::now().as_millis();
-        encoder = encoder.update(unit.value() as i32, now_ms);
+        let now_ms = Instant::now().duration_since_epoch().as_millis();
+        encoder.update(unit.value() as i32, now_ms);
 
-        let detents = encoder.stable_count().saturating_sub(reported_count) / 4;
+        let detents = encoder.detents_from(reported_count, 4);
         if detents != 0 {
             reported_count = reported_count.saturating_add(detents.saturating_mul(4));
             esp_println::println!("{} encoder detents: {}", label, detents);
@@ -73,23 +72,18 @@ async fn encoder_task(
 }
 
 #[embassy_executor::task(pool_size = 11)]
-async fn button_task(label: &'static str, input: Input<'static>) {
-    let mut button = Button::new(
-        input.level(),
-        Level::Low,
-        embassy_time::Instant::now().as_millis(),
-        5,
-    );
+async fn button_task(label: &'static str, gpio: AnyPin<'static>) {
+    let mut button = Button::new(gpio, Level::Low, 5);
 
     loop {
-        let now_ms = embassy_time::Instant::now().as_millis();
-        let next_button = button.update(input.level(), now_ms);
+        let now_ms = Instant::now().duration_since_epoch().as_millis();
+        let (next_button, changed) = button.update(now_ms);
+        button = next_button;
 
-        if next_button.is_pressed() != button.is_pressed() {
-            esp_println::println!("{} button pressed: {}", label, next_button.is_pressed());
+        if changed {
+            esp_println::println!("{} button pressed: {}", label, button.is_pressed());
         }
 
-        button = next_button;
         Timer::after(Duration::from_millis(1)).await;
     }
 }
@@ -154,39 +148,27 @@ async fn main(spawner: Spawner) {
     let timg0 = TimerGroup::new(peripherals.TIMG0);
     esp_rtos::start(timg0.timer0, sw_int.software_interrupt0);
 
-    spawner
-        .spawn(encoder_task(
+    spawner.spawn(
+        encoder_task(
             "scroll",
             peripherals.PCNT,
             peripherals.GPIO11.degrade(),
             peripherals.GPIO12.degrade(),
-        ))
-        .expect("failed to spawn scroll encoder task");
-    spawner
-        .spawn(joystick_task(
-            peripherals.ADC1,
-            peripherals.GPIO1,
-            peripherals.GPIO2,
-        ))
-        .expect("failed to spawn joystick task");
-    spawner
-        .spawn(button_task(
-            "left",
-            Input::new(
-                peripherals.GPIO41,
-                InputConfig::default().with_pull(Pull::Up),
-            ),
-        ))
-        .expect("failed to spawn left button task");
-    spawner
-        .spawn(button_task(
-            "right",
-            Input::new(
-                peripherals.GPIO42,
-                InputConfig::default().with_pull(Pull::Up),
-            ),
-        ))
-        .expect("failed to spawn right button task");
+        )
+        .expect("failed to create scroll encoder task"),
+    );
+    spawner.spawn(
+        joystick_task(peripherals.ADC1, peripherals.GPIO1, peripherals.GPIO2)
+            .expect("failed to create joystick task"),
+    );
+    spawner.spawn(
+        button_task("left", peripherals.GPIO41.degrade())
+            .expect("failed to create left button task"),
+    );
+    spawner.spawn(
+        button_task("right", peripherals.GPIO42.degrade())
+            .expect("failed to create right button task"),
+    );
 
     core::future::pending::<()>().await;
 }
