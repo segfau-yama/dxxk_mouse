@@ -17,14 +17,7 @@ use esp_hal::{
 
 esp_bootloader_esp_idf::esp_app_desc!();
 
-const JOYSTICK_CENTER: i32 = 2048;
 const JOYSTICK_LOG_DELTA: u16 = 64;
-
-fn joystick_axis(raw: u16) -> i16 {
-    i32::from(raw)
-        .saturating_sub(JOYSTICK_CENTER)
-        .clamp(i32::from(i16::MIN), i32::from(i16::MAX)) as i16
-}
 
 #[embassy_executor::task(pool_size = 3)]
 async fn encoder_task(
@@ -59,7 +52,7 @@ async fn encoder_task(
 
     loop {
         let now_ms = Instant::now().duration_since_epoch().as_millis();
-        encoder.update(unit.value() as i32, now_ms);
+        encoder = encoder.update(unit.value() as i32, now_ms);
 
         let detents = encoder.detents_from(reported_count, 4);
         if detents != 0 {
@@ -94,13 +87,15 @@ async fn joystick_task(adc: ADC1<'static>, gpio_x: GPIO1<'static>, gpio_y: GPIO2
     let mut x_pin = adc_config.enable_pin(gpio_x, Attenuation::_11dB);
     let mut y_pin = adc_config.enable_pin(gpio_y, Attenuation::_11dB);
     let mut adc = Adc::new(adc, adc_config);
-    let mut reported_joystick = Joystick::new(0, 0);
+    let center_x = adc.read_blocking(&mut x_pin);
+    let center_y = adc.read_blocking(&mut y_pin);
+    let mut joystick = Joystick::new(center_x, center_y);
+    let mut reported_joystick = joystick;
+
+    esp_println::println!("joystick center x: {}, y: {}", center_x, center_y);
 
     loop {
-        let joystick = Joystick::new(
-            joystick_axis(adc.read_blocking(&mut x_pin)),
-            joystick_axis(adc.read_blocking(&mut y_pin)),
-        );
+        joystick = joystick.update(adc.read_blocking(&mut x_pin), adc.read_blocking(&mut y_pin));
 
         if reported_joystick.x().abs_diff(joystick.x()) >= JOYSTICK_LOG_DELTA
             || reported_joystick.y().abs_diff(joystick.y()) >= JOYSTICK_LOG_DELTA
