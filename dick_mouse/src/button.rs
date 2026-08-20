@@ -10,18 +10,12 @@ pub struct Button {
 }
 
 impl Button {
-    pub const fn new(
-        level: Level,
-        candidate_level: Level,
-        active_level: Level,
-        candidate_since_ms: u64,
-        debounce_ms: u64,
-    ) -> Self {
+    pub const fn new(level: Level, active_level: Level, now_ms: u64, debounce_ms: u64) -> Self {
         Self {
             level,
-            candidate_level,
+            candidate_level: level,
             active_level,
-            candidate_since_ms,
+            candidate_since_ms: now_ms,
             debounce_ms,
         }
     }
@@ -56,82 +50,71 @@ impl Button {
         self.level
     }
 
-    pub const fn is_pressed(&self) -> bool {
-        matches!(
-            (self.level, self.active_level),
-            (Level::High, Level::High) | (Level::Low, Level::Low)
-        )
+    pub fn is_pressed(&self) -> bool {
+        self.level == self.active_level
     }
 
-    pub const fn is_released(&self) -> bool {
+    pub fn is_released(&self) -> bool {
         !self.is_pressed()
     }
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq)]
-pub struct Toggle {
-    is_on: bool,
-    was_pressed: bool,
-}
+#[cfg(test)]
+mod tests {
+    #![allow(non_snake_case)]
 
-impl Toggle {
-    pub const fn new(is_on: bool, was_pressed: bool) -> Self {
-        Self { is_on, was_pressed }
+    use super::Button;
+    use esp_hal::gpio::Level;
+
+    #[test]
+    fn T01_active_lowの安定値がLowなら押下になる() {
+        let button = Button::new(Level::Low, Level::Low, 0, 5);
+
+        assert!(button.is_pressed());
+        assert!(!button.is_released());
     }
 
-    pub fn update(self, button: Button) -> Self {
-        let is_pressed = button.is_pressed();
-        let is_on = if is_pressed && !self.was_pressed {
-            !self.is_on
-        } else {
-            self.is_on
-        };
+    #[test]
+    fn T02_チャタリング時間未満では押下状態に変わらない() {
+        let button = Button::new(Level::High, Level::Low, 100, 5);
 
-        Self {
-            is_on,
-            was_pressed: is_pressed,
-        }
+        let candidate = button.update(Level::Low, 101);
+        let still_released = candidate.update(Level::Low, 105);
+
+        assert!(still_released.is_released());
+        assert_eq!(still_released.level(), Level::High);
     }
 
-    pub const fn is_on(&self) -> bool {
-        self.is_on
-    }
-}
+    #[test]
+    fn T03_チャタリング時間経過後に押下状態へ変わる() {
+        let button = Button::new(Level::High, Level::Low, 100, 5);
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq)]
-pub struct Led {
-    level: Level,
-    active_level: Level,
-}
+        let candidate = button.update(Level::Low, 101);
+        let pressed = candidate.update(Level::Low, 106);
 
-impl Led {
-    pub const fn new(level: Level, active_level: Level) -> Self {
-        Self {
-            level,
-            active_level,
-        }
+        assert!(pressed.is_pressed());
+        assert_eq!(pressed.level(), Level::Low);
     }
 
-    pub fn update(self, is_on: bool) -> Self {
-        Self {
-            level: if is_on {
-                self.active_level
-            } else {
-                !self.active_level
-            },
-            ..self
-        }
+    #[test]
+    fn T04_updateは元のButtonを変更せず新しいButtonを返す() {
+        let button = Button::new(Level::High, Level::Low, 100, 5);
+
+        let next_button = button.update(Level::Low, 101);
+        let pressed = next_button.update(Level::Low, 106);
+
+        assert_eq!(button.level(), Level::High);
+        assert_eq!(next_button.level(), Level::High);
+        assert_eq!(pressed.level(), Level::Low);
     }
 
-    pub fn update_with_button(self, button: Button) -> Self {
-        self.update(button.is_pressed())
-    }
+    #[test]
+    fn T05_debounceが0なら実測値をすぐに反映する() {
+        let button = Button::new(Level::High, Level::Low, 100, 0);
 
-    pub fn update_with_toggle(self, toggle: Toggle) -> Self {
-        self.update(toggle.is_on())
-    }
+        let pressed = button.update(Level::Low, 101);
 
-    pub const fn level(&self) -> Level {
-        self.level
+        assert!(pressed.is_pressed());
+        assert_eq!(pressed.level(), Level::Low);
     }
 }
