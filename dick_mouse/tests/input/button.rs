@@ -11,39 +11,33 @@ mod tests {
     use core::assert_eq;
 
     use dick_mouse::input::Button;
-    use esp_hal::gpio::{AnyPin, Level};
-
-    fn pin(number: u8) -> AnyPin<'static> {
-        unsafe { AnyPin::steal(number) }
-    }
+    use esp_hal::gpio::Level;
 
     #[test]
     fn T01_Buttonはactive_levelとdebounceを保持する() {
-        let button = Button::new(pin(41), Level::Low, 5);
-        let (_, _, active_level, pending_since_ms, debounce_ms) = button.values();
+        let button = Button::new(Level::High, Level::Low, 5);
 
-        assert_eq!(active_level, Level::Low);
-        assert_eq!(pending_since_ms, None);
-        assert_eq!(debounce_ms, 5);
+        assert_eq!(button.active_level(), Level::Low);
+        assert_eq!(button.debounce_ms(), 5);
     }
 
     #[test]
     fn T02_Button_updateは次のButtonと変化有無を返す() {
-        let button = Button::new(pin(41), Level::Low, 5);
-        let (_, previous_level, _, _, _) = button.values();
-        let (next_button, changed) = button.update(100);
-        let (_, level, active_level, _, debounce_ms) = next_button.values();
+        let button = Button::new(Level::High, Level::Low, 5);
+        let (button, changed) = button.update(Level::Low, 100);
+        let (next_button, next_changed) = button.update(Level::Low, 105);
 
-        assert_eq!(active_level, Level::Low);
-        assert_eq!(debounce_ms, 5);
-        assert_eq!(changed, level != previous_level);
+        assert_eq!(next_button.active_level(), Level::Low);
+        assert_eq!(next_button.debounce_ms(), 5);
+        assert_eq!(changed, false);
+        assert_eq!(next_changed, true);
+        assert_eq!(next_button.level(), Level::Low);
     }
 
     #[test]
     fn T03_Button_is_pressedは安定Levelとactive_levelの比較結果を返す() {
-        let button = Button::new(pin(41), Level::Low, 5);
-        let (_, level, active_level, _, _) = button.values();
+        let button = Button::new(Level::Low, Level::Low, 5);
 
-        assert_eq!(button.is_pressed(), level == active_level);
+        assert_eq!(button.is_pressed(), button.level() == button.active_level());
     }
 }

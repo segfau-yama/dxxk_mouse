@@ -7,10 +7,10 @@ use embassy_time::{Duration, Timer};
 use esp_backtrace as _;
 use esp_hal::{
     analog::adc::{Adc, AdcConfig, Attenuation},
-    gpio::{AnyPin, Level, Pin},
+    gpio::{AnyPin, Input, InputConfig, Level, Pin, Pull},
     interrupt::software::SoftwareInterruptControl,
-    pcnt::{Pcnt, channel},
-    peripherals::{ADC1, GPIO1, GPIO2, PCNT},
+    pcnt::{Pcnt, channel, unit::Unit},
+    peripherals::{ADC1, GPIO1, GPIO2},
     time::Instant,
     timer::timg::TimerGroup,
 };
@@ -19,22 +19,15 @@ esp_bootloader_esp_idf::esp_app_desc!();
 
 const JOYSTICK_LOG_DELTA: u16 = 64;
 
-#[embassy_executor::task(pool_size = 3)]
-async fn encoder_task(
-    label: &'static str,
-    pcnt: PCNT<'static>,
-    gpio_a: AnyPin<'static>,
-    gpio_b: AnyPin<'static>,
+fn configure_encoder_unit<const NUM: usize>(
+    unit: &Unit<'static, NUM>,
+    input_a: &Input<'static>,
+    input_b: &Input<'static>,
 ) {
-    let pcnt = Pcnt::new(pcnt);
-    let unit = pcnt.unit0;
-    unit.set_filter(Some(800)).expect("invalid pcnt filter");
-
-    let now_ms = Instant::now().duration_since_epoch().as_millis();
-    let mut encoder = RotaryEncoder::initial(gpio_a, gpio_b, unit.value() as i32, now_ms, 2);
-    let (input_a, input_b, stable_count, _, _, _) = encoder.values();
     let signal_a = input_a.peripheral_input();
     let signal_b = input_b.peripheral_input();
+
+    unit.set_filter(Some(800)).expect("invalid pcnt filter");
 
     let ch0 = &unit.channel0;
     ch0.set_ctrl_signal(signal_a.clone());
@@ -43,21 +36,101 @@ async fn encoder_task(
     ch0.set_input_mode(channel::EdgeMode::Increment, channel::EdgeMode::Decrement);
 
     let ch1 = &unit.channel1;
-    ch1.set_ctrl_signal(signal_b);
-    ch1.set_edge_signal(signal_a);
+    ch1.set_ctrl_signal(signal_b.clone());
+    ch1.set_edge_signal(signal_a.clone());
     ch1.set_ctrl_mode(channel::CtrlMode::Reverse, channel::CtrlMode::Keep);
     ch1.set_input_mode(channel::EdgeMode::Decrement, channel::EdgeMode::Increment);
+}
 
-    let mut reported_count = stable_count;
+fn setup_encoder<const NUM: usize>(
+    unit: &Unit<'static, NUM>,
+    gpio_a: AnyPin<'static>,
+    gpio_b: AnyPin<'static>,
+) -> (Input<'static>, Input<'static>, RotaryEncoder, i32) {
+    let input_a = Input::new(gpio_a, InputConfig::default().with_pull(Pull::Up));
+    let input_b = Input::new(gpio_b, InputConfig::default().with_pull(Pull::Up));
+    configure_encoder_unit(unit, &input_a, &input_b);
+
+    let count = unit.value() as i32;
+    let now_ms = Instant::now().duration_since_epoch().as_millis();
+    (
+        input_a,
+        input_b,
+        RotaryEncoder::new(count, now_ms, 2),
+        count,
+    )
+}
+
+fn encoder_detents<const NUM: usize>(
+    unit: &Unit<'static, NUM>,
+    encoder: &mut RotaryEncoder,
+    reported_count: &mut i32,
+) -> i32 {
+    let now_ms = Instant::now().duration_since_epoch().as_millis();
+    *encoder = (*encoder).update(unit.value() as i32, now_ms);
+
+    let detents = encoder.detents_from(*reported_count, 4);
+    if detents != 0 {
+        *reported_count = (*reported_count).saturating_add(detents.saturating_mul(4));
+    }
+
+    detents
+}
+
+#[embassy_executor::task]
+async fn scroll_task(
+    unit: Unit<'static, 0>,
+    gpio_a: AnyPin<'static>,
+    gpio_b: AnyPin<'static>,
+) {
+    let (_input_a, _input_b, mut encoder, mut reported_count) =
+        setup_encoder(&unit, gpio_a, gpio_b);
 
     loop {
-        let now_ms = Instant::now().duration_since_epoch().as_millis();
-        encoder = encoder.update(unit.value() as i32, now_ms);
+        let detents = encoder_detents(&unit, &mut encoder, &mut reported_count);
 
-        let detents = encoder.detents_from(reported_count, 4);
         if detents != 0 {
-            reported_count = reported_count.saturating_add(detents.saturating_mul(4));
-            esp_println::println!("{} encoder detents: {}", label, detents);
+            esp_println::println!("scroll encoder detents: {}", detents);
+        }
+
+        Timer::after(Duration::from_millis(1)).await;
+    }
+}
+
+#[embassy_executor::task]
+async fn microphone_volume_task(
+    unit: Unit<'static, 1>,
+    gpio_a: AnyPin<'static>,
+    gpio_b: AnyPin<'static>,
+) {
+    let (_input_a, _input_b, mut encoder, mut reported_count) =
+        setup_encoder(&unit, gpio_a, gpio_b);
+
+    loop {
+        let detents = encoder_detents(&unit, &mut encoder, &mut reported_count);
+
+        if detents != 0 {
+            esp_println::println!("microphone volume encoder detents: {}", detents);
+        }
+
+        Timer::after(Duration::from_millis(1)).await;
+    }
+}
+
+#[embassy_executor::task]
+async fn speaker_volume_task(
+    unit: Unit<'static, 2>,
+    gpio_a: AnyPin<'static>,
+    gpio_b: AnyPin<'static>,
+) {
+    let (_input_a, _input_b, mut encoder, mut reported_count) =
+        setup_encoder(&unit, gpio_a, gpio_b);
+
+    loop {
+        let detents = encoder_detents(&unit, &mut encoder, &mut reported_count);
+
+        if detents != 0 {
+            esp_println::println!("speaker volume encoder detents: {}", detents);
         }
 
         Timer::after(Duration::from_millis(1)).await;
@@ -66,11 +139,12 @@ async fn encoder_task(
 
 #[embassy_executor::task(pool_size = 11)]
 async fn button_task(label: &'static str, gpio: AnyPin<'static>) {
-    let mut button = Button::new(gpio, Level::Low, 5);
+    let input = Input::new(gpio, InputConfig::default().with_pull(Pull::Up));
+    let mut button = Button::new(input.level(), Level::Low, 5);
 
     loop {
         let now_ms = Instant::now().duration_since_epoch().as_millis();
-        let (next_button, changed) = button.update(now_ms);
+        let (next_button, changed) = button.update(input.level(), now_ms);
         button = next_button;
 
         if changed {
@@ -108,31 +182,6 @@ async fn joystick_task(adc: ADC1<'static>, gpio_x: GPIO1<'static>, gpio_y: GPIO2
     }
 }
 
-#[embassy_executor::task]
-async fn keyboard_task() {
-    core::future::pending::<()>().await;
-}
-
-#[embassy_executor::task]
-async fn mouse_task() {
-    core::future::pending::<()>().await;
-}
-
-#[embassy_executor::task]
-async fn audio_input_task() {
-    core::future::pending::<()>().await;
-}
-
-#[embassy_executor::task]
-async fn audio_output_task() {
-    core::future::pending::<()>().await;
-}
-
-#[embassy_executor::task]
-async fn usb_task() {
-    core::future::pending::<()>().await;
-}
-
 #[esp_rtos::main]
 async fn main(spawner: Spawner) {
     let peripherals = esp_hal::init(esp_hal::Config::default());
@@ -143,14 +192,31 @@ async fn main(spawner: Spawner) {
     let timg0 = TimerGroup::new(peripherals.TIMG0);
     esp_rtos::start(timg0.timer0, sw_int.software_interrupt0);
 
+    let pcnt = Pcnt::new(peripherals.PCNT);
+
     spawner.spawn(
-        encoder_task(
-            "scroll",
-            peripherals.PCNT,
+        scroll_task(
+            pcnt.unit0,
             peripherals.GPIO11.degrade(),
             peripherals.GPIO12.degrade(),
         )
         .expect("failed to create scroll encoder task"),
+    );
+    spawner.spawn(
+        microphone_volume_task(
+            pcnt.unit1,
+            peripherals.GPIO13.degrade(),
+            peripherals.GPIO14.degrade(),
+        )
+        .expect("failed to create microphone volume encoder task"),
+    );
+    spawner.spawn(
+        speaker_volume_task(
+            pcnt.unit2,
+            peripherals.GPIO15.degrade(),
+            peripherals.GPIO16.degrade(),
+        )
+        .expect("failed to create speaker volume encoder task"),
     );
     spawner.spawn(
         joystick_task(peripherals.ADC1, peripherals.GPIO1, peripherals.GPIO2)

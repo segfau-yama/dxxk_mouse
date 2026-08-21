@@ -1,21 +1,16 @@
-use esp_hal::gpio::{Input, InputConfig, InputPin, Level, Pull};
+use esp_hal::gpio::Level;
 
-#[derive(Debug)]
-pub struct Button<'d> {
-    input: Input<'d>,
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+pub struct Button {
     level: Level,
     active_level: Level,
     pending_since_ms: Option<u64>,
     debounce_ms: u64,
 }
 
-impl<'d> Button<'d> {
-    pub fn new(gpio: impl InputPin + 'd, active_level: Level, debounce_ms: u64) -> Self {
-        let input = Input::new(gpio, InputConfig::default().with_pull(Pull::Up));
-        let level = input.level();
-
+impl Button {
+    pub const fn new(level: Level, active_level: Level, debounce_ms: u64) -> Self {
         Self {
-            input,
             level,
             active_level,
             pending_since_ms: None,
@@ -23,9 +18,7 @@ impl<'d> Button<'d> {
         }
     }
 
-    pub fn update(self, now_ms: u64) -> (Self, bool) {
-        let measured_level = self.input.level();
-
+    pub fn update(self, measured_level: Level, now_ms: u64) -> (Self, bool) {
         if measured_level == self.level {
             return (
                 Self {
@@ -58,14 +51,16 @@ impl<'d> Button<'d> {
         )
     }
 
-    pub fn values(&self) -> (&Input<'d>, Level, Level, Option<u64>, u64) {
-        (
-            &self.input,
-            self.level,
-            self.active_level,
-            self.pending_since_ms,
-            self.debounce_ms,
-        )
+    pub const fn level(&self) -> Level {
+        self.level
+    }
+
+    pub const fn active_level(&self) -> Level {
+        self.active_level
+    }
+
+    pub const fn debounce_ms(&self) -> u64 {
+        self.debounce_ms
     }
 
     pub fn is_pressed(&self) -> bool {

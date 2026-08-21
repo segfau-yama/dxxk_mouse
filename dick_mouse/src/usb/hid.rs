@@ -33,16 +33,6 @@ pub mod keyboard {
 
 pub mod mouse {
     pub use usbd_hid::descriptor::MouseReport as Report;
-
-    pub const fn report(buttons: u8, x: i8, y: i8, wheel: i8, pan: i8) -> Report {
-        Report {
-            buttons,
-            x,
-            y,
-            wheel,
-            pan,
-        }
-    }
 }
 
 #[cfg(test)]
