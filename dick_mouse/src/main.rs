@@ -218,31 +218,28 @@ async fn mouse_task(
 }
 
 #[embassy_executor::task]
-async fn keyboard_task(
-    copy_gpio: AnyPin<'static>,
-    paste_gpio: AnyPin<'static>,
-    back_gpio: AnyPin<'static>,
-    forward_gpio: AnyPin<'static>,
-) {
-    let make_button = |gpio: AnyPin<'static>, shortcut: Shortcut| {
-        let input = Input::new(gpio, InputConfig::default().with_pull(Pull::Up));
-        let button = Button::new(input.level(), Level::Low, 5);
-        (input, button, shortcut)
-    };
-    let mut buttons = [
-        make_button(copy_gpio, Shortcut::Copy),
-        make_button(paste_gpio, Shortcut::Paste),
-        make_button(back_gpio, Shortcut::Back),
-        make_button(forward_gpio, Shortcut::Forward),
-    ];
+async fn keyboard_task(back_gpio: AnyPin<'static>, forward_gpio: AnyPin<'static>) {
+    let back_input = Input::new(back_gpio, InputConfig::default().with_pull(Pull::Up));
+    let forward_input = Input::new(forward_gpio, InputConfig::default().with_pull(Pull::Up));
+    let mut back_button = Button::new(back_input.level(), Level::Low, 5);
+    let mut forward_button = Button::new(forward_input.level(), Level::Low, 5);
 
     loop {
         let now_ms = Instant::now().duration_since_epoch().as_millis();
 
-        for (input, button, shortcut) in buttons.iter_mut() {
-            if let Some(report) = keyboard_button_report(button, input.level(), *shortcut, now_ms) {
-                USB_KEYBOARD_REPORTS.send(report).await;
-            }
+        if let Some(report) =
+            keyboard_button_report(&mut back_button, back_input.level(), Shortcut::Back, now_ms)
+        {
+            USB_KEYBOARD_REPORTS.send(report).await;
+        }
+
+        if let Some(report) = keyboard_button_report(
+            &mut forward_button,
+            forward_input.level(),
+            Shortcut::Forward,
+            now_ms,
+        ) {
+            USB_KEYBOARD_REPORTS.send(report).await;
         }
 
         Timer::after(Duration::from_millis(u64::from(USB_HID_POLL_MS))).await;
@@ -250,14 +247,29 @@ async fn keyboard_task(
 }
 
 #[embassy_executor::task]
-async fn microphone_task(mut i2s_rx: I2sRx<'static, Async>) {
+async fn microphone_task(mut i2s_rx: I2sRx<'static, Async>, mute_gpio: AnyPin<'static>) {
     let mut microphone = Microphone::new([0; AUDIO_FRAME_SAMPLES]);
+    let mute_input = Input::new(mute_gpio, InputConfig::default().with_pull(Pull::Up));
+    let mut mute_button = Button::new(mute_input.level(), Level::Low, 5);
+    let mut muted = false;
 
     loop {
+        let now_ms = Instant::now().duration_since_epoch().as_millis();
+        let (next_mute_button, mute_changed) = mute_button.update(mute_input.level(), now_ms);
+        mute_button = next_mute_button;
+        if mute_changed && mute_button.is_pressed() {
+            muted = !muted;
+        }
+
         let mut bytes = [0; AUDIO_FRAME_BYTES];
 
         if i2s_rx.read_dma_async(&mut bytes).await.is_ok() {
-            microphone = microphone.update(bytes_to_audio_frame(&bytes));
+            let frame = if muted {
+                [0; AUDIO_FRAME_SAMPLES]
+            } else {
+                bytes_to_audio_frame(&bytes)
+            };
+            microphone = microphone.update(frame);
             MICROPHONE_AUDIO.send(*microphone.buffer()).await;
         }
 
@@ -444,12 +456,34 @@ async fn usb_task(usb: Usb<'static>) {
 }
 
 #[embassy_executor::task]
-async fn speaker_task(mut i2s_tx: I2sTx<'static, Async>) {
+async fn speaker_task(mut i2s_tx: I2sTx<'static, Async>, mute_gpio: AnyPin<'static>) {
     let mut speaker = Speaker::new([0; AUDIO_FRAME_SAMPLES]);
+    let mute_input = Input::new(mute_gpio, InputConfig::default().with_pull(Pull::Up));
+    let mut mute_button = Button::new(mute_input.level(), Level::Low, 5);
+    let mut muted = false;
 
     loop {
+        let now_ms = Instant::now().duration_since_epoch().as_millis();
+        let (next_mute_button, mute_changed) = mute_button.update(mute_input.level(), now_ms);
+        mute_button = next_mute_button;
+        if mute_changed && mute_button.is_pressed() {
+            muted = !muted;
+        }
+
         let pc_frame = SPEAKER_AUDIO.receive().await;
-        speaker = speaker.update(pc_frame);
+        let now_ms = Instant::now().duration_since_epoch().as_millis();
+        let (next_mute_button, mute_changed) = mute_button.update(mute_input.level(), now_ms);
+        mute_button = next_mute_button;
+        if mute_changed && mute_button.is_pressed() {
+            muted = !muted;
+        }
+
+        let frame = if muted {
+            [0; AUDIO_FRAME_SAMPLES]
+        } else {
+            pc_frame
+        };
+        speaker = speaker.update(frame);
         let mut bytes = [0; AUDIO_FRAME_BYTES];
 
         for (sample, chunk) in speaker.buffer().iter().zip(bytes.chunks_exact_mut(2)) {
@@ -483,15 +517,15 @@ async fn main(spawner: Spawner) {
     .into_async();
     let i2s_rx = i2s
         .i2s_rx
-        .with_bclk(peripherals.GPIO17)
-        .with_ws(peripherals.GPIO18)
-        .with_din(peripherals.GPIO8)
+        .with_bclk(peripherals.GPIO15)
+        .with_ws(peripherals.GPIO16)
+        .with_din(peripherals.GPIO17)
         .build(rx_descriptors);
     let i2s_tx = i2s
         .i2s_tx
-        .with_bclk(peripherals.GPIO21)
-        .with_ws(peripherals.GPIO38)
-        .with_dout(peripherals.GPIO9)
+        .with_bclk(peripherals.GPIO8)
+        .with_ws(peripherals.GPIO9)
+        .with_dout(peripherals.GPIO10)
         .build(tx_descriptors);
     let usb = Usb::new(peripherals.USB0, peripherals.GPIO20, peripherals.GPIO19);
 
@@ -503,22 +537,22 @@ async fn main(spawner: Spawner) {
             peripherals.ADC1,
             peripherals.GPIO1,
             peripherals.GPIO2,
-            peripherals.GPIO41.degrade(),
-            peripherals.GPIO42.degrade(),
+            peripherals.GPIO13.degrade(),
+            peripherals.GPIO14.degrade(),
         )
         .expect("failed to create mouse task"),
     );
-    spawner.spawn(microphone_task(i2s_rx).expect("failed to create microphone task"));
-    spawner.spawn(usb_task(usb).expect("failed to create usb task"));
-    spawner.spawn(speaker_task(i2s_tx).expect("failed to create speaker task"));
     spawner.spawn(
-        keyboard_task(
-            peripherals.GPIO4.degrade(),
-            peripherals.GPIO5.degrade(),
-            peripherals.GPIO6.degrade(),
-            peripherals.GPIO7.degrade(),
-        )
-        .expect("failed to create keyboard task"),
+        microphone_task(i2s_rx, peripherals.GPIO4.degrade())
+            .expect("failed to create microphone task"),
+    );
+    spawner.spawn(usb_task(usb).expect("failed to create usb task"));
+    spawner.spawn(
+        speaker_task(i2s_tx, peripherals.GPIO5.degrade()).expect("failed to create speaker task"),
+    );
+    spawner.spawn(
+        keyboard_task(peripherals.GPIO6.degrade(), peripherals.GPIO7.degrade())
+            .expect("failed to create keyboard task"),
     );
 
     core::future::pending::<()>().await;

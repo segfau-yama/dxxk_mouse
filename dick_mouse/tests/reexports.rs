@@ -24,7 +24,7 @@ mod tests {
         let encoder = RotaryEncoder::new(4, 0, 2);
         let joystick = Joystick::new(10, 10).update(12, 8);
         let microphone = Microphone::new([1]);
-        let keyboard = shortcut_report(Shortcut::Copy);
+        let keyboard = shortcut_report(Shortcut::Back);
         let mouse = MouseReport {
             buttons: 1,
             x: 2,
@@ -37,7 +37,7 @@ mod tests {
         assert_eq!(encoder.stable_count(), 4);
         assert_eq!(joystick.x(), 2);
         assert_eq!(microphone.buffer(), &[1]);
-        assert_eq!(keyboard.modifier, 0x01);
+        assert_eq!(keyboard.modifier, 0x04);
         assert_eq!(mouse.buttons, 1);
     }
 }

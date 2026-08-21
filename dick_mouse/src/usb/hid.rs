@@ -8,16 +8,12 @@ pub mod keyboard {
 
     #[derive(Debug, Clone, Copy, Eq, PartialEq)]
     pub enum Shortcut {
-        Copy,
-        Paste,
         Back,
         Forward,
     }
 
     pub fn shortcut_report(shortcut: Shortcut) -> Report {
         let (modifier, keycode) = match shortcut {
-            Shortcut::Copy => (0x01, KeyboardUsage::KeyboardCc as u8),
-            Shortcut::Paste => (0x01, KeyboardUsage::KeyboardVv as u8),
             Shortcut::Back => (0x04, KeyboardUsage::KeyboardLeftArrow as u8),
             Shortcut::Forward => (0x04, KeyboardUsage::KeyboardRightArrow as u8),
         };

@@ -57,16 +57,14 @@ GPIO や ADC/PCNT peripheral は task 側が所有し、入力構造体は状態
 
 | task | 入力 | 出力 |
 | --- | --- | --- |
-| `mouse_task` | `GPIO41/42` buttons, `GPIO1/2` joystick, `PCNT0 GPIO11/12` scroll encoder | `USB_MOUSE_REPORTS` |
-| `keyboard_task` | `GPIO4/5/6/7` shortcut buttons | `USB_KEYBOARD_REPORTS` |
+| `mouse_task` | `GPIO13/14` buttons, `GPIO1/2` joystick, `PCNT0 GPIO11/12` scroll encoder | `USB_MOUSE_REPORTS` |
+| `keyboard_task` | `GPIO6/7` shortcut buttons | `USB_KEYBOARD_REPORTS` |
 | `usb_task` | HID report channel | USB HID keyboard/mouse |
 
-キーボードショートカットは以下です。
+キーボードボタンは以下です。
 
-| GPIO | shortcut |
+| GPIO | action |
 | --- | --- |
-| `GPIO4` | Copy |
-| `GPIO5` | Paste |
 | `GPIO6` | Back |
 | `GPIO7` | Forward |
 
@@ -74,11 +72,13 @@ GPIO や ADC/PCNT peripheral は task 側が所有し、入力構造体は状態
 
 | task | 用途 | GPIO / peripheral |
 | --- | --- | --- |
-| `microphone_task` | I2S RX から音声を読み、USB microphone 側へ送る | `I2S0`, `DMA_CH0`, `GPIO17` BCLK, `GPIO18` WS, `GPIO8` DIN |
-| `speaker_task` | USB speaker 側から受けた音声を I2S TX へ出す | `I2S0`, `DMA_CH0`, `GPIO21` BCLK, `GPIO38` WS, `GPIO9` DOUT |
+| `microphone_task` | I2S RX から音声を読み、USB microphone 側へ送る。`GPIO4` でmute toggle | `I2S0`, `DMA_CH0`, `GPIO15` BCLK, `GPIO16` WS, `GPIO17` DIN |
+| `speaker_task` | USB speaker 側から受けた音声を I2S TX へ出す。`GPIO5` でmute toggle | `I2S0`, `DMA_CH0`, `GPIO8` BCLK, `GPIO9` WS, `GPIO10` DOUT |
 | `usb_task` | UAC1 microphone/source と speaker を動かす | `USB0`, `GPIO20`, `GPIO19` |
 
 USB audio は 48 kHz / 16-bit mono を前提にしています。
+
+GPIO は `GPIO0/3/45/46` のstrapping、`GPIO39-42` のJTAG、`GPIO43/44` のUART0、`GPIO19/20` のUSB D-/D+との干渉を避ける前提で割り当てています。
 
 ## ビルドと実行
 

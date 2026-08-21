@@ -35,15 +35,15 @@ mod tests {
         .into_async();
         let _i2s_rx = i2s
             .i2s_rx
-            .with_bclk(peripherals.GPIO17)
-            .with_ws(peripherals.GPIO18)
-            .with_din(peripherals.GPIO8)
+            .with_bclk(peripherals.GPIO15)
+            .with_ws(peripherals.GPIO16)
+            .with_din(peripherals.GPIO17)
             .build(rx_descriptors);
         let _i2s_tx = i2s
             .i2s_tx
-            .with_bclk(peripherals.GPIO21)
-            .with_ws(peripherals.GPIO38)
-            .with_dout(peripherals.GPIO9)
+            .with_bclk(peripherals.GPIO8)
+            .with_ws(peripherals.GPIO9)
+            .with_dout(peripherals.GPIO10)
             .build(tx_descriptors);
         let _usb = Usb::new(peripherals.USB0, peripherals.GPIO20, peripherals.GPIO19);
         let _software_interrupt0 = sw_int.software_interrupt0;
