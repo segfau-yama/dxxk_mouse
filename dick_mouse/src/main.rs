@@ -1,51 +1,34 @@
 #![no_std]
 #![no_main]
 
-use dick_mouse::{
-    input::{Button, Joystick, RotaryEncoder},
-    usb::audio::{Microphone, Speaker},
-    usb::hid::{KeyboardReport, MouseReport, Shortcut, shortcut_report},
-};
+use core::sync::atomic::AtomicBool;
+
+use dick_mouse::device::Button;
 use embassy_executor::Spawner;
-use embassy_futures::join::{join, join5};
-use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
-use embassy_time::{Duration, Timer};
-use embassy_usb::{
-    Builder as UsbBuilder, Config as UsbConfig,
-    class::{
-        hid::{
-            Config as UsbHidConfig, HidBootProtocol, HidSubclass, HidWriter, State as UsbHidState,
-        },
-        uac1::{
-            Channel as UsbAudioChannel, FeedbackRefresh, SampleWidth,
-            source::{
-                AudioSource as UsbMicrophoneClass,
-                AudioSourceControlHandler as UsbMicrophoneControlHandler,
-            },
-            speaker::{Speaker as UsbSpeakerClass, State as UsbSpeakerState},
-        },
+use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel, mutex::Mutex};
+use embassy_usb::class::{
+    hid::State as UsbHidState,
+    uac1::{
+        source::AudioSourceControlHandler as UsbMicrophoneControlHandler,
+        speaker::State as UsbSpeakerState,
     },
 };
 use esp_backtrace as _;
 use esp_hal::{
-    Async,
-    analog::adc::{Adc, AdcConfig, Attenuation},
-    gpio::{AnyPin, Input, InputConfig, Level, Pin, Pull},
-    i2s::master::{Channels, Config as I2sConfig, DataFormat, I2s, I2sRx, I2sTx},
+    gpio::{Level, Pin},
+    i2s::master::{Channels, Config as I2sConfig, DataFormat, I2s},
     interrupt::software::SoftwareInterruptControl,
-    otg_fs::{
-        Usb,
-        asynch::{Config as UsbDriverConfig, Driver as UsbDriver},
-    },
-    pcnt::{Pcnt, channel, unit::Unit},
-    peripherals::{ADC1, GPIO1, GPIO2},
-    time::{Instant, Rate},
+    otg_fs::Usb,
+    pcnt::Pcnt,
+    time::Rate,
     timer::timg::TimerGroup,
 };
 use static_cell::StaticCell;
-use usbd_hid::descriptor::SerializedDescriptor;
+use usbd_hid::descriptor::{KeyboardReport, KeyboardUsage, MouseReport};
 
 esp_bootloader_esp_idf::esp_app_desc!();
+
+mod tasks;
 
 const AUDIO_FRAME_SAMPLES: usize = 48;
 const AUDIO_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i16>();
@@ -59,15 +42,27 @@ const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
 const USB_BOS_DESCRIPTOR_SIZE: usize = 128;
 const USB_MSOS_DESCRIPTOR_SIZE: usize = 128;
 const USB_CONTROL_BUFFER_SIZE: usize = 64;
+const GAME_JOYSTICK_THRESHOLD: i16 = 512;
+const GAME_KEYS: [KeyboardUsage; 9] = [
+    KeyboardUsage::KeyboardUpArrow,
+    KeyboardUsage::KeyboardDownArrow,
+    KeyboardUsage::KeyboardLeftArrow,
+    KeyboardUsage::KeyboardRightArrow,
+    KeyboardUsage::KeyboardSs,
+    KeyboardUsage::KeyboardAa,
+    KeyboardUsage::KeyboardDd,
+    KeyboardUsage::KeyboardSpacebar,
+    KeyboardUsage::KeyboardEnter,
+];
 
 type AudioFrame = [i16; AUDIO_FRAME_SAMPLES];
 
+static GAME_MODE: AtomicBool = AtomicBool::new(false);
+static GAME_BUTTON_BITS: Mutex<CriticalSectionRawMutex, usize> = Mutex::new(0);
 static MICROPHONE_AUDIO: Channel<CriticalSectionRawMutex, AudioFrame, 2> = Channel::new();
 static SPEAKER_AUDIO: Channel<CriticalSectionRawMutex, AudioFrame, 2> = Channel::new();
 static USB_KEYBOARD_REPORTS: Channel<CriticalSectionRawMutex, KeyboardReport, 4> = Channel::new();
 static USB_MOUSE_REPORTS: Channel<CriticalSectionRawMutex, MouseReport, 4> = Channel::new();
-const USB_AUDIO_SAMPLE_RATES: &[u32] = &[48_000];
-const USB_AUDIO_CHANNELS: &[UsbAudioChannel] = &[UsbAudioChannel::LeftFront];
 static USB_EP_OUT_BUFFER: StaticCell<[u8; USB_EP_OUT_BUFFER_SIZE]> = StaticCell::new();
 static USB_CONFIG_DESCRIPTOR: StaticCell<[u8; USB_CONFIG_DESCRIPTOR_SIZE]> = StaticCell::new();
 static USB_BOS_DESCRIPTOR: StaticCell<[u8; USB_BOS_DESCRIPTOR_SIZE]> = StaticCell::new();
@@ -77,56 +72,6 @@ static USB_KEYBOARD_HID_STATE: StaticCell<UsbHidState<'static>> = StaticCell::ne
 static USB_MOUSE_HID_STATE: StaticCell<UsbHidState<'static>> = StaticCell::new();
 static USB_MICROPHONE_HANDLER: StaticCell<UsbMicrophoneControlHandler> = StaticCell::new();
 static USB_SPEAKER_STATE: StaticCell<UsbSpeakerState<'static>> = StaticCell::new();
-
-fn setup_encoder<const NUM: usize>(
-    unit: &Unit<'static, NUM>,
-    gpio_a: AnyPin<'static>,
-    gpio_b: AnyPin<'static>,
-) -> (Input<'static>, Input<'static>, RotaryEncoder, i32) {
-    let input_a = Input::new(gpio_a, InputConfig::default().with_pull(Pull::Up));
-    let input_b = Input::new(gpio_b, InputConfig::default().with_pull(Pull::Up));
-    let signal_a = input_a.peripheral_input();
-    let signal_b = input_b.peripheral_input();
-
-    unit.set_filter(Some(800)).expect("invalid pcnt filter");
-
-    let ch0 = &unit.channel0;
-    ch0.set_ctrl_signal(signal_a.clone());
-    ch0.set_edge_signal(signal_b.clone());
-    ch0.set_ctrl_mode(channel::CtrlMode::Reverse, channel::CtrlMode::Keep);
-    ch0.set_input_mode(channel::EdgeMode::Increment, channel::EdgeMode::Decrement);
-
-    let ch1 = &unit.channel1;
-    ch1.set_ctrl_signal(signal_b.clone());
-    ch1.set_edge_signal(signal_a.clone());
-    ch1.set_ctrl_mode(channel::CtrlMode::Reverse, channel::CtrlMode::Keep);
-    ch1.set_input_mode(channel::EdgeMode::Decrement, channel::EdgeMode::Increment);
-
-    let count = unit.value() as i32;
-    let now_ms = Instant::now().duration_since_epoch().as_millis();
-    (
-        input_a,
-        input_b,
-        RotaryEncoder::new(count, now_ms, 2),
-        count,
-    )
-}
-
-fn encoder_detents<const NUM: usize>(
-    unit: &Unit<'static, NUM>,
-    encoder: &mut RotaryEncoder,
-    reported_count: &mut i32,
-) -> i32 {
-    let now_ms = Instant::now().duration_since_epoch().as_millis();
-    *encoder = (*encoder).update(unit.value() as i32, now_ms);
-
-    let detents = encoder.detents_from(*reported_count, 4);
-    if detents != 0 {
-        *reported_count = (*reported_count).saturating_add(detents.saturating_mul(4));
-    }
-
-    detents
-}
 
 fn bytes_to_audio_frame(bytes: &[u8]) -> AudioFrame {
     let mut frame = [0; AUDIO_FRAME_SAMPLES];
@@ -138,360 +83,40 @@ fn bytes_to_audio_frame(bytes: &[u8]) -> AudioFrame {
     frame
 }
 
-fn keyboard_button_report(
-    button: &mut Button,
-    measured_level: Level,
-    shortcut: Shortcut,
-    now_ms: u64,
-) -> Option<KeyboardReport> {
+fn button_change(button: &mut Button, measured_level: Level, now_ms: u64) -> Option<bool> {
     let (next_button, changed) = button.update(measured_level, now_ms);
     *button = next_button;
-
-    changed.then(|| {
-        if button.is_pressed() {
-            shortcut_report(shortcut)
-        } else {
-            KeyboardReport {
-                modifier: 0,
-                reserved: 0,
-                leds: 0,
-                keycodes: [0; 6],
-            }
-        }
-    })
+    changed.then(|| button.is_pressed())
 }
 
-#[embassy_executor::task]
-async fn mouse_task(
-    unit: Unit<'static, 0>,
-    encoder_gpio_a: AnyPin<'static>,
-    encoder_gpio_b: AnyPin<'static>,
-    adc: ADC1<'static>,
-    gpio_x: GPIO1<'static>,
-    gpio_y: GPIO2<'static>,
-    left_gpio: AnyPin<'static>,
-    right_gpio: AnyPin<'static>,
-) {
-    let (_input_a, _input_b, mut encoder, mut reported_count) =
-        setup_encoder(&unit, encoder_gpio_a, encoder_gpio_b);
-    let left_input = Input::new(left_gpio, InputConfig::default().with_pull(Pull::Up));
-    let right_input = Input::new(right_gpio, InputConfig::default().with_pull(Pull::Up));
-    let mut left_button = Button::new(left_input.level(), Level::Low, 5);
-    let mut right_button = Button::new(right_input.level(), Level::Low, 5);
-    let mut adc_config = AdcConfig::new();
-    let mut x_pin = adc_config.enable_pin(gpio_x, Attenuation::_11dB);
-    let mut y_pin = adc_config.enable_pin(gpio_y, Attenuation::_11dB);
-    let mut adc = Adc::new(adc, adc_config);
-    let mut joystick = Joystick::new(adc.read_blocking(&mut x_pin), adc.read_blocking(&mut y_pin));
-    let mut reported_buttons = 0;
+async fn send_game_key(key: KeyboardUsage, pressed: bool) {
+    let Some(key_index) = GAME_KEYS.iter().position(|game_key| *game_key == key) else {
+        return;
+    };
 
-    loop {
-        let now_ms = Instant::now().duration_since_epoch().as_millis();
-        let detents = encoder_detents(&unit, &mut encoder, &mut reported_count);
-        let (next_left_button, _) = left_button.update(left_input.level(), now_ms);
-        let (next_right_button, _) = right_button.update(right_input.level(), now_ms);
-        left_button = next_left_button;
-        right_button = next_right_button;
-        joystick = joystick.update(adc.read_blocking(&mut x_pin), adc.read_blocking(&mut y_pin));
-
-        let buttons =
-            u8::from(left_button.is_pressed()) | (u8::from(right_button.is_pressed()) << 1);
-        let x = (joystick.x() / 256) as i8;
-        let y = (joystick.y() / 256) as i8;
-        let wheel = detents.clamp(i32::from(i8::MIN), i32::from(i8::MAX)) as i8;
-
-        if buttons != reported_buttons || x != 0 || y != 0 || wheel != 0 {
-            USB_MOUSE_REPORTS
-                .send(MouseReport {
-                    buttons,
-                    x,
-                    y,
-                    wheel,
-                    pan: 0,
-                })
-                .await;
-            reported_buttons = buttons;
-        }
-
-        Timer::after(Duration::from_millis(u64::from(USB_HID_POLL_MS))).await;
+    let mut pressed_buttons = GAME_BUTTON_BITS.lock().await;
+    let mask = 1usize << key_index;
+    if ((*pressed_buttons & mask) != 0) == pressed {
+        return;
     }
-}
 
-#[embassy_executor::task]
-async fn keyboard_task(back_gpio: AnyPin<'static>, forward_gpio: AnyPin<'static>) {
-    let back_input = Input::new(back_gpio, InputConfig::default().with_pull(Pull::Up));
-    let forward_input = Input::new(forward_gpio, InputConfig::default().with_pull(Pull::Up));
-    let mut back_button = Button::new(back_input.level(), Level::Low, 5);
-    let mut forward_button = Button::new(forward_input.level(), Level::Low, 5);
-
-    loop {
-        let now_ms = Instant::now().duration_since_epoch().as_millis();
-
-        if let Some(report) =
-            keyboard_button_report(&mut back_button, back_input.level(), Shortcut::Back, now_ms)
-        {
-            USB_KEYBOARD_REPORTS.send(report).await;
-        }
-
-        if let Some(report) = keyboard_button_report(
-            &mut forward_button,
-            forward_input.level(),
-            Shortcut::Forward,
-            now_ms,
-        ) {
-            USB_KEYBOARD_REPORTS.send(report).await;
-        }
-
-        Timer::after(Duration::from_millis(u64::from(USB_HID_POLL_MS))).await;
+    if pressed {
+        *pressed_buttons |= mask;
+    } else {
+        *pressed_buttons &= !mask;
     }
-}
 
-#[embassy_executor::task]
-async fn microphone_task(mut i2s_rx: I2sRx<'static, Async>, mute_gpio: AnyPin<'static>) {
-    let mut microphone = Microphone::new([0; AUDIO_FRAME_SAMPLES]);
-    let mute_input = Input::new(mute_gpio, InputConfig::default().with_pull(Pull::Up));
-    let mut mute_button = Button::new(mute_input.level(), Level::Low, 5);
-    let mut muted = false;
+    let mut report = KeyboardReport::default();
+    let mut keycode_index = 0;
 
-    loop {
-        let now_ms = Instant::now().duration_since_epoch().as_millis();
-        let (next_mute_button, mute_changed) = mute_button.update(mute_input.level(), now_ms);
-        mute_button = next_mute_button;
-        if mute_changed && mute_button.is_pressed() {
-            muted = !muted;
+    for (index, key) in GAME_KEYS.iter().copied().enumerate() {
+        if *pressed_buttons & (1usize << index) != 0 && keycode_index < report.keycodes.len() {
+            report.keycodes[keycode_index] = key as u8;
+            keycode_index += 1;
         }
-
-        let mut bytes = [0; AUDIO_FRAME_BYTES];
-
-        if i2s_rx.read_dma_async(&mut bytes).await.is_ok() {
-            let frame = if muted {
-                [0; AUDIO_FRAME_SAMPLES]
-            } else {
-                bytes_to_audio_frame(&bytes)
-            };
-            microphone = microphone.update(frame);
-            MICROPHONE_AUDIO.send(*microphone.buffer()).await;
-        }
-
-        Timer::after(Duration::from_millis(1)).await;
     }
-}
 
-#[embassy_executor::task]
-async fn usb_task(usb: Usb<'static>) {
-    let driver = UsbDriver::new(
-        usb,
-        USB_EP_OUT_BUFFER.init([0; USB_EP_OUT_BUFFER_SIZE]),
-        UsbDriverConfig::default(),
-    );
-
-    let mut config = UsbConfig::new(0xc0de, 0x0001);
-    config.manufacturer = Some("dick mouse");
-    config.product = Some("DXXK USB Audio");
-    config.serial_number = Some("0001");
-
-    let mut builder = UsbBuilder::new(
-        driver,
-        config,
-        USB_CONFIG_DESCRIPTOR.init([0; USB_CONFIG_DESCRIPTOR_SIZE]),
-        USB_BOS_DESCRIPTOR.init([0; USB_BOS_DESCRIPTOR_SIZE]),
-        USB_MSOS_DESCRIPTOR.init([0; USB_MSOS_DESCRIPTOR_SIZE]),
-        USB_CONTROL_BUFFER.init([0; USB_CONTROL_BUFFER_SIZE]),
-    );
-
-    let microphone = UsbMicrophoneClass::new(
-        &mut builder,
-        USB_AUDIO_SAMPLE_RATES,
-        SampleWidth::Width2Byte,
-        FeedbackRefresh::Period32Frames as u8,
-        None,
-    );
-    // ponytail: AudioSource currently assumes interface order.
-    builder.handler(USB_MICROPHONE_HANDLER.init(microphone.handler));
-
-    let speaker = UsbSpeakerClass::new(
-        &mut builder,
-        USB_SPEAKER_STATE.init(UsbSpeakerState::new()),
-        USB_AUDIO_MAX_PACKET_BYTES as u16,
-        SampleWidth::Width2Byte,
-        USB_AUDIO_SAMPLE_RATES,
-        USB_AUDIO_CHANNELS,
-        FeedbackRefresh::Period32Frames,
-    );
-    let keyboard_writer = HidWriter::<_, USB_KEYBOARD_REPORT_BYTES>::new(
-        &mut builder,
-        USB_KEYBOARD_HID_STATE.init(UsbHidState::new()),
-        UsbHidConfig {
-            report_descriptor: KeyboardReport::desc(),
-            request_handler: None,
-            poll_ms: USB_HID_POLL_MS,
-            max_packet_size: USB_KEYBOARD_REPORT_BYTES as u16,
-            hid_subclass: HidSubclass::Boot,
-            hid_boot_protocol: HidBootProtocol::Keyboard,
-        },
-    );
-    let mouse_writer = HidWriter::<_, USB_MOUSE_REPORT_BYTES>::new(
-        &mut builder,
-        USB_MOUSE_HID_STATE.init(UsbHidState::new()),
-        UsbHidConfig {
-            report_descriptor: MouseReport::desc(),
-            request_handler: None,
-            poll_ms: USB_HID_POLL_MS,
-            max_packet_size: USB_MOUSE_REPORT_BYTES as u16,
-            hid_subclass: HidSubclass::Boot,
-            hid_boot_protocol: HidBootProtocol::Mouse,
-        },
-    );
-    let mut device = builder.build();
-    let mut speaker_stream = speaker.stream;
-    let mut speaker_feedback = speaker.feedback;
-    let mut microphone_audio = microphone.audio_ep_in;
-    let mut microphone_feedback = microphone.feedback_ep_in;
-
-    join(
-        device.run(),
-        join5(
-            async move {
-                loop {
-                    speaker_stream.wait_connection().await;
-
-                    loop {
-                        let mut packet = [0; USB_AUDIO_MAX_PACKET_BYTES];
-
-                        match speaker_stream.read_packet(&mut packet).await {
-                            Ok(size) if size > 0 => {
-                                SPEAKER_AUDIO
-                                    .send(bytes_to_audio_frame(&packet[..size]))
-                                    .await;
-                            }
-                            Ok(_) => {}
-                            Err(_) => break,
-                        }
-                    }
-                }
-            },
-            async move {
-                loop {
-                    speaker_feedback.wait_connection().await;
-
-                    while speaker_feedback
-                        .write_packet(&USB_AUDIO_FEEDBACK_48K)
-                        .await
-                        .is_ok()
-                    {
-                        Timer::after(Duration::from_millis(
-                            FeedbackRefresh::Period32Frames.frame_count() as u64,
-                        ))
-                        .await;
-                    }
-                }
-            },
-            async move {
-                loop {
-                    microphone_audio.wait_enabled().await;
-
-                    loop {
-                        let frame = MICROPHONE_AUDIO.receive().await;
-                        let mut bytes = [0; USB_AUDIO_MAX_PACKET_BYTES];
-
-                        for (sample, chunk) in frame.iter().zip(bytes.chunks_exact_mut(4)) {
-                            let sample = sample.to_le_bytes();
-                            chunk[..2].copy_from_slice(&sample);
-                            chunk[2..].copy_from_slice(&sample);
-                        }
-
-                        if microphone_audio.write(&bytes).await.is_err() {
-                            break;
-                        }
-                    }
-                }
-            },
-            async move {
-                loop {
-                    microphone_feedback.wait_enabled().await;
-
-                    while microphone_feedback
-                        .write(&USB_AUDIO_FEEDBACK_48K)
-                        .await
-                        .is_ok()
-                    {
-                        Timer::after(Duration::from_millis(
-                            FeedbackRefresh::Period32Frames.frame_count() as u64,
-                        ))
-                        .await;
-                    }
-                }
-            },
-            join(
-                async move {
-                    loop {
-                        keyboard_writer.ready().await;
-
-                        loop {
-                            let report = USB_KEYBOARD_REPORTS.receive().await;
-
-                            if keyboard_writer.write_serialize(&report).await.is_err() {
-                                break;
-                            }
-                        }
-                    }
-                },
-                async move {
-                    loop {
-                        mouse_writer.ready().await;
-
-                        loop {
-                            let report = USB_MOUSE_REPORTS.receive().await;
-
-                            if mouse_writer.write_serialize(&report).await.is_err() {
-                                break;
-                            }
-                        }
-                    }
-                },
-            ),
-        ),
-    )
-    .await;
-}
-
-#[embassy_executor::task]
-async fn speaker_task(mut i2s_tx: I2sTx<'static, Async>, mute_gpio: AnyPin<'static>) {
-    let mut speaker = Speaker::new([0; AUDIO_FRAME_SAMPLES]);
-    let mute_input = Input::new(mute_gpio, InputConfig::default().with_pull(Pull::Up));
-    let mut mute_button = Button::new(mute_input.level(), Level::Low, 5);
-    let mut muted = false;
-
-    loop {
-        let now_ms = Instant::now().duration_since_epoch().as_millis();
-        let (next_mute_button, mute_changed) = mute_button.update(mute_input.level(), now_ms);
-        mute_button = next_mute_button;
-        if mute_changed && mute_button.is_pressed() {
-            muted = !muted;
-        }
-
-        let pc_frame = SPEAKER_AUDIO.receive().await;
-        let now_ms = Instant::now().duration_since_epoch().as_millis();
-        let (next_mute_button, mute_changed) = mute_button.update(mute_input.level(), now_ms);
-        mute_button = next_mute_button;
-        if mute_changed && mute_button.is_pressed() {
-            muted = !muted;
-        }
-
-        let frame = if muted {
-            [0; AUDIO_FRAME_SAMPLES]
-        } else {
-            pc_frame
-        };
-        speaker = speaker.update(frame);
-        let mut bytes = [0; AUDIO_FRAME_BYTES];
-
-        for (sample, chunk) in speaker.buffer().iter().zip(bytes.chunks_exact_mut(2)) {
-            chunk.copy_from_slice(&sample.to_le_bytes());
-        }
-
-        let _ = i2s_tx.write_dma_async(&mut bytes).await;
-    }
+    USB_KEYBOARD_REPORTS.send(report).await;
 }
 
 #[esp_rtos::main]
@@ -530,7 +155,11 @@ async fn main(spawner: Spawner) {
     let usb = Usb::new(peripherals.USB0, peripherals.GPIO20, peripherals.GPIO19);
 
     spawner.spawn(
-        mouse_task(
+        tasks::mode_change::mode_change_task(peripherals.GPIO21.degrade())
+            .expect("failed to create mode change task"),
+    );
+    spawner.spawn(
+        tasks::mouse::mouse_task(
             pcnt.unit0,
             peripherals.GPIO11.degrade(),
             peripherals.GPIO12.degrade(),
@@ -543,16 +172,21 @@ async fn main(spawner: Spawner) {
         .expect("failed to create mouse task"),
     );
     spawner.spawn(
-        microphone_task(i2s_rx, peripherals.GPIO4.degrade())
+        tasks::microphone::microphone_task(i2s_rx, peripherals.GPIO4.degrade())
             .expect("failed to create microphone task"),
     );
-    spawner.spawn(usb_task(usb).expect("failed to create usb task"));
+    spawner.spawn(tasks::usb::usb_task(usb).expect("failed to create usb task"));
     spawner.spawn(
-        speaker_task(i2s_tx, peripherals.GPIO5.degrade()).expect("failed to create speaker task"),
+        tasks::speaker::speaker_task(i2s_tx, peripherals.GPIO5.degrade())
+            .expect("failed to create speaker task"),
     );
     spawner.spawn(
-        keyboard_task(peripherals.GPIO6.degrade(), peripherals.GPIO7.degrade())
-            .expect("failed to create keyboard task"),
+        tasks::keyboard::keyboard_task(
+            peripherals.GPIO18.degrade(),
+            peripherals.GPIO6.degrade(),
+            peripherals.GPIO7.degrade(),
+        )
+        .expect("failed to create keyboard task"),
     );
 
     core::future::pending::<()>().await;

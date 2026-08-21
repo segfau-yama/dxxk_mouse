@@ -9,7 +9,7 @@ esp_bootloader_esp_idf::esp_app_desc!();
 mod tests {
     use core::assert_eq;
 
-    use dick_mouse::input::RotaryEncoder;
+    use dick_mouse::device::RotaryEncoder;
 
     #[test]
     fn updateはデバウンス時間未満なら安定カウントを変えない() {

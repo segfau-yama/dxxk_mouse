@@ -22,34 +22,41 @@ dick_mouse
 ├── src
 │   ├── main.rs
 │   ├── lib.rs
-│   ├── input
+│   ├── device
 │   │   ├── button.rs
 │   │   ├── encoder.rs
-│   │   └── joystick.rs
-│   └── usb
-│       ├── audio.rs
-│       └── hid.rs
+│   │   ├── joystick.rs
+│   │   ├── microphone.rs
+│   │   └── speaker.rs
+│   └── tasks
+│       ├── keyboard.rs
+│       ├── microphone.rs
+│       ├── mode_change.rs
+│       ├── mouse.rs
+│       ├── speaker.rs
+│       └── usb.rs
 └── tests
-    ├── input
+    ├── device
     │   ├── button.rs
     │   ├── encoder.rs
-    │   └── joystick.rs
-    ├── usb
-    │   ├── audio.rs
-    │   └── hid.rs
+    │   ├── joystick.rs
+    │   ├── microphone.rs
+    │   └── speaker.rs
     ├── main.rs
     └── reexports.rs
 ```
 
 ## 実装概要
 
-### 入力
+### デバイス状態
 
 - `Button`: active level、debounce、押下状態を保持するイミュータブルな状態型
 - `RotaryEncoder`: PCNT count の安定化と detent 変換を扱う状態型
 - `Joystick`: ADC の中心値から X/Y 差分を計算する状態型
+- `Microphone`: I2S RX から受けた音声 frame を保持する状態型
+- `Speaker`: USB speaker から受けた音声 frame を保持する状態型
 
-GPIO や ADC/PCNT peripheral は task 側が所有し、入力構造体は状態だけを持ちます。
+GPIO や ADC/PCNT/I2S peripheral は task 側が所有し、device 構造体は状態だけを持ちます。
 
 ### USB HID
 
@@ -58,15 +65,28 @@ GPIO や ADC/PCNT peripheral は task 側が所有し、入力構造体は状態
 | task | 入力 | 出力 |
 | --- | --- | --- |
 | `mouse_task` | `GPIO13/14` buttons, `GPIO1/2` joystick, `PCNT0 GPIO11/12` scroll encoder | `USB_MOUSE_REPORTS` |
-| `keyboard_task` | `GPIO6/7` shortcut buttons | `USB_KEYBOARD_REPORTS` |
+| `keyboard_task` | `GPIO18` joystick push, `GPIO6/7` shortcut buttons | `USB_KEYBOARD_REPORTS` |
+| `mode_change_task` | `GPIO21` slide switch | game mode flag |
 | `usb_task` | HID report channel | USB HID keyboard/mouse |
 
 キーボードボタンは以下です。
 
 | GPIO | action |
 | --- | --- |
+| `GPIO18` | Screenshot |
 | `GPIO6` | Back |
 | `GPIO7` | Forward |
+
+ゲームモード中は通常の keyboard/mouse report を止め、以下のキー入力に切り替えます。
+
+| input | game key |
+| --- | --- |
+| joystick | Arrow keys |
+| joystick push | S |
+| left click | A |
+| right click | D |
+| Back button | Space |
+| Forward button | Enter |
 
 ### USB Audio / I2S
 
@@ -105,8 +125,8 @@ cargo test-hil
 - `button`
 - `encoder`
 - `joystick`
-- `usb_audio`
-- `usb_hid`
+- `microphone`
+- `speaker`
 - `reexports`
 - `main`
 

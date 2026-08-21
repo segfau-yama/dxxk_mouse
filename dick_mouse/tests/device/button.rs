@@ -9,7 +9,7 @@ esp_bootloader_esp_idf::esp_app_desc!();
 mod tests {
     use core::assert_eq;
 
-    use dick_mouse::input::Button;
+    use dick_mouse::device::Button;
     use esp_hal::gpio::Level;
 
     #[test]

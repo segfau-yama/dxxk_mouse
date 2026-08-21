@@ -9,7 +9,7 @@ esp_bootloader_esp_idf::esp_app_desc!();
 mod tests {
     use core::assert_eq;
 
-    use dick_mouse::input::Joystick;
+    use dick_mouse::device::Joystick;
 
     #[test]
     fn updateは中心からの差分を軸値にする() {

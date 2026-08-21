@@ -9,14 +9,7 @@ esp_bootloader_esp_idf::esp_app_desc!();
 mod tests {
     use core::assert_eq;
 
-    use dick_mouse::usb::audio::{Microphone, Speaker};
-
-    #[test]
-    fn microphoneはbufferを更新する() {
-        let microphone = Microphone::new([0, 1]).update([2, 3]);
-
-        assert_eq!(microphone.buffer(), &[2, 3]);
-    }
+    use dick_mouse::device::Speaker;
 
     #[test]
     fn speakerはbufferを更新する() {

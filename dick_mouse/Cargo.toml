@@ -37,27 +37,27 @@ test = false
 
 [[test]]
 name = "button"
-path = "tests/input/button.rs"
+path = "tests/device/button.rs"
 harness = false
 
 [[test]]
 name = "encoder"
-path = "tests/input/encoder.rs"
+path = "tests/device/encoder.rs"
 harness = false
 
 [[test]]
 name = "joystick"
-path = "tests/input/joystick.rs"
+path = "tests/device/joystick.rs"
 harness = false
 
 [[test]]
-name = "usb_audio"
-path = "tests/usb/audio.rs"
+name = "microphone"
+path = "tests/device/microphone.rs"
 harness = false
 
 [[test]]
-name = "usb_hid"
-path = "tests/usb/hid.rs"
+name = "speaker"
+path = "tests/device/speaker.rs"
 harness = false
 
 [[test]]
