@@ -33,8 +33,7 @@ mod tasks;
 const AUDIO_FRAME_SAMPLES: usize = 48;
 const AUDIO_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i16>();
 const USB_HID_POLL_MS: u8 = 10;
-const USB_KEYBOARD_REPORT_BYTES: usize = 8;
-const USB_MOUSE_REPORT_BYTES: usize = 5;
+const USB_HID_REPORT_BYTES: usize = 9;
 const USB_AUDIO_MAX_PACKET_BYTES: usize = AUDIO_FRAME_BYTES * 2;
 const USB_AUDIO_FEEDBACK_48K: [u8; 3] = [0x00, 0x00, 0x0c];
 const USB_EP_OUT_BUFFER_SIZE: usize = 256;
@@ -68,8 +67,7 @@ static USB_CONFIG_DESCRIPTOR: StaticCell<[u8; USB_CONFIG_DESCRIPTOR_SIZE]> = Sta
 static USB_BOS_DESCRIPTOR: StaticCell<[u8; USB_BOS_DESCRIPTOR_SIZE]> = StaticCell::new();
 static USB_MSOS_DESCRIPTOR: StaticCell<[u8; USB_MSOS_DESCRIPTOR_SIZE]> = StaticCell::new();
 static USB_CONTROL_BUFFER: StaticCell<[u8; USB_CONTROL_BUFFER_SIZE]> = StaticCell::new();
-static USB_KEYBOARD_HID_STATE: StaticCell<UsbHidState<'static>> = StaticCell::new();
-static USB_MOUSE_HID_STATE: StaticCell<UsbHidState<'static>> = StaticCell::new();
+static USB_HID_STATE: StaticCell<UsbHidState<'static>> = StaticCell::new();
 static USB_MICROPHONE_HANDLER: StaticCell<UsbMicrophoneControlHandler> = StaticCell::new();
 static USB_SPEAKER_STATE: StaticCell<UsbSpeakerState<'static>> = StaticCell::new();
 
@@ -166,8 +164,8 @@ async fn main(spawner: Spawner) {
             peripherals.ADC1,
             peripherals.GPIO1,
             peripherals.GPIO2,
-            peripherals.GPIO13.degrade(),
-            peripherals.GPIO14.degrade(),
+            peripherals.GPIO42.degrade(),
+            peripherals.GPIO41.degrade(),
         )
         .expect("failed to create mouse task"),
     );

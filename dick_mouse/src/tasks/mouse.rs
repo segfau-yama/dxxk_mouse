@@ -3,7 +3,7 @@ use core::sync::atomic::Ordering;
 use dick_mouse::device::{Button, Joystick, RotaryEncoder};
 use embassy_time::{Duration, Timer};
 use esp_hal::{
-    analog::adc::{Adc, AdcConfig, Attenuation},
+    analog::adc::{Adc, AdcCalLine, AdcConfig, Attenuation},
     gpio::{AnyPin, Input, InputConfig, Level, Pull},
     pcnt::{channel, unit::Unit},
     peripherals::{ADC1, GPIO1, GPIO2},
@@ -54,8 +54,10 @@ pub(crate) async fn mouse_task(
     let mut left_button = Button::new(left_input.level(), Level::Low, 5);
     let mut right_button = Button::new(right_input.level(), Level::Low, 5);
     let mut adc_config = AdcConfig::new();
-    let mut x_pin = adc_config.enable_pin(gpio_x, Attenuation::_11dB);
-    let mut y_pin = adc_config.enable_pin(gpio_y, Attenuation::_11dB);
+    let mut x_pin =
+        adc_config.enable_pin_with_cal::<_, AdcCalLine<ADC1<'static>>>(gpio_x, Attenuation::_11dB);
+    let mut y_pin =
+        adc_config.enable_pin_with_cal::<_, AdcCalLine<ADC1<'static>>>(gpio_y, Attenuation::_11dB);
     let mut adc = Adc::new(adc, adc_config);
     let mut joystick = Joystick::new(adc.read_blocking(&mut x_pin), adc.read_blocking(&mut y_pin));
     let mut reported_buttons = 0;
@@ -80,27 +82,29 @@ pub(crate) async fn mouse_task(
 
         let buttons =
             u8::from(left_button.is_pressed()) | (u8::from(right_button.is_pressed()) << 1);
-        let x = (joystick.x() / 256) as i8;
-        let y = (joystick.y() / 256) as i8;
+        let joystick_x = joystick.x();
+        let joystick_y = joystick.y().saturating_neg();
+        let x = (joystick_x / 256) as i8;
+        let y = (joystick_y / 256) as i8;
         let wheel = detents.clamp(i32::from(i8::MIN), i32::from(i8::MAX)) as i8;
 
         if game_mode {
             for (key, pressed) in [
                 (
                     KeyboardUsage::KeyboardUpArrow,
-                    joystick.y() < -GAME_JOYSTICK_THRESHOLD,
+                    joystick_y < -GAME_JOYSTICK_THRESHOLD,
                 ),
                 (
                     KeyboardUsage::KeyboardDownArrow,
-                    joystick.y() > GAME_JOYSTICK_THRESHOLD,
+                    joystick_y > GAME_JOYSTICK_THRESHOLD,
                 ),
                 (
                     KeyboardUsage::KeyboardLeftArrow,
-                    joystick.x() < -GAME_JOYSTICK_THRESHOLD,
+                    joystick_x < -GAME_JOYSTICK_THRESHOLD,
                 ),
                 (
                     KeyboardUsage::KeyboardRightArrow,
-                    joystick.x() > GAME_JOYSTICK_THRESHOLD,
+                    joystick_x > GAME_JOYSTICK_THRESHOLD,
                 ),
                 (KeyboardUsage::KeyboardAa, left_button.is_pressed()),
                 (KeyboardUsage::KeyboardDd, right_button.is_pressed()),

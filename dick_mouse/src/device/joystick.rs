@@ -33,8 +33,6 @@ impl Joystick {
     }
 
     fn axis(raw: u16, center: u16) -> i16 {
-        i32::from(raw)
-            .saturating_sub(i32::from(center))
-            .clamp(i32::from(i16::MIN), i32::from(i16::MAX)) as i16
+        (i32::from(raw) - i32::from(center)).clamp(i32::from(i16::MIN), i32::from(i16::MAX)) as i16
     }
 }

@@ -5,18 +5,19 @@ target = "xtensa-esp32s3-none-elf"
 build-std = ["core"]
 
 [target.xtensa-esp32s3-none-elf]
-runner = "espflash flash --monitor"
+runner = "espflash flash"
 rustflags = [
     "-C",
     "link-arg=-Tlinkall.x",
-    "-C",
-    "link-arg=-Tembedded-test.x",
 ]
 
 [alias]
 test-hil = [
     "test",
     "--tests",
+    "--no-default-features",
     "--config",
     "target.xtensa-esp32s3-none-elf.runner=\"probe-rs run --chip esp32s3\"",
+    "--config",
+    "target.xtensa-esp32s3-none-elf.rustflags=[\"-C\",\"link-arg=-Tembedded-test.x\"]",
 ]
