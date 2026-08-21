@@ -4,7 +4,7 @@
 use dick_mouse::{
     input::{Button, Joystick, RotaryEncoder},
     usb::audio::{Microphone, Speaker},
-    usb::hid::{KeyboardReport, MouseReport},
+    usb::hid::{KeyboardReport, MouseReport, Shortcut, shortcut_report},
 };
 use embassy_executor::Spawner;
 use embassy_futures::join::{join, join5};
@@ -47,7 +47,6 @@ use usbd_hid::descriptor::SerializedDescriptor;
 
 esp_bootloader_esp_idf::esp_app_desc!();
 
-const JOYSTICK_LOG_DELTA: u16 = 64;
 const AUDIO_FRAME_SAMPLES: usize = 48;
 const AUDIO_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i16>();
 const USB_HID_POLL_MS: u8 = 10;
@@ -139,59 +138,114 @@ fn bytes_to_audio_frame(bytes: &[u8]) -> AudioFrame {
     frame
 }
 
+fn keyboard_button_report(
+    button: &mut Button,
+    measured_level: Level,
+    shortcut: Shortcut,
+    now_ms: u64,
+) -> Option<KeyboardReport> {
+    let (next_button, changed) = button.update(measured_level, now_ms);
+    *button = next_button;
+
+    changed.then(|| {
+        if button.is_pressed() {
+            shortcut_report(shortcut)
+        } else {
+            KeyboardReport {
+                modifier: 0,
+                reserved: 0,
+                leds: 0,
+                keycodes: [0; 6],
+            }
+        }
+    })
+}
+
 #[embassy_executor::task]
-async fn scroll_task(unit: Unit<'static, 0>, gpio_a: AnyPin<'static>, gpio_b: AnyPin<'static>) {
+async fn mouse_task(
+    unit: Unit<'static, 0>,
+    encoder_gpio_a: AnyPin<'static>,
+    encoder_gpio_b: AnyPin<'static>,
+    adc: ADC1<'static>,
+    gpio_x: GPIO1<'static>,
+    gpio_y: GPIO2<'static>,
+    left_gpio: AnyPin<'static>,
+    right_gpio: AnyPin<'static>,
+) {
     let (_input_a, _input_b, mut encoder, mut reported_count) =
-        setup_encoder(&unit, gpio_a, gpio_b);
+        setup_encoder(&unit, encoder_gpio_a, encoder_gpio_b);
+    let left_input = Input::new(left_gpio, InputConfig::default().with_pull(Pull::Up));
+    let right_input = Input::new(right_gpio, InputConfig::default().with_pull(Pull::Up));
+    let mut left_button = Button::new(left_input.level(), Level::Low, 5);
+    let mut right_button = Button::new(right_input.level(), Level::Low, 5);
+    let mut adc_config = AdcConfig::new();
+    let mut x_pin = adc_config.enable_pin(gpio_x, Attenuation::_11dB);
+    let mut y_pin = adc_config.enable_pin(gpio_y, Attenuation::_11dB);
+    let mut adc = Adc::new(adc, adc_config);
+    let mut joystick = Joystick::new(adc.read_blocking(&mut x_pin), adc.read_blocking(&mut y_pin));
+    let mut reported_buttons = 0;
 
     loop {
+        let now_ms = Instant::now().duration_since_epoch().as_millis();
         let detents = encoder_detents(&unit, &mut encoder, &mut reported_count);
+        let (next_left_button, _) = left_button.update(left_input.level(), now_ms);
+        let (next_right_button, _) = right_button.update(right_input.level(), now_ms);
+        left_button = next_left_button;
+        right_button = next_right_button;
+        joystick = joystick.update(adc.read_blocking(&mut x_pin), adc.read_blocking(&mut y_pin));
 
-        if detents != 0 {
-            esp_println::println!("scroll encoder detents: {}", detents);
+        let buttons =
+            u8::from(left_button.is_pressed()) | (u8::from(right_button.is_pressed()) << 1);
+        let x = (joystick.x() / 256) as i8;
+        let y = (joystick.y() / 256) as i8;
+        let wheel = detents.clamp(i32::from(i8::MIN), i32::from(i8::MAX)) as i8;
+
+        if buttons != reported_buttons || x != 0 || y != 0 || wheel != 0 {
+            USB_MOUSE_REPORTS
+                .send(MouseReport {
+                    buttons,
+                    x,
+                    y,
+                    wheel,
+                    pan: 0,
+                })
+                .await;
+            reported_buttons = buttons;
         }
 
-        Timer::after(Duration::from_millis(1)).await;
+        Timer::after(Duration::from_millis(u64::from(USB_HID_POLL_MS))).await;
     }
 }
 
 #[embassy_executor::task]
-async fn microphone_volume_task(
-    unit: Unit<'static, 1>,
-    gpio_a: AnyPin<'static>,
-    gpio_b: AnyPin<'static>,
+async fn keyboard_task(
+    copy_gpio: AnyPin<'static>,
+    paste_gpio: AnyPin<'static>,
+    back_gpio: AnyPin<'static>,
+    forward_gpio: AnyPin<'static>,
 ) {
-    let (_input_a, _input_b, mut encoder, mut reported_count) =
-        setup_encoder(&unit, gpio_a, gpio_b);
+    let make_button = |gpio: AnyPin<'static>, shortcut: Shortcut| {
+        let input = Input::new(gpio, InputConfig::default().with_pull(Pull::Up));
+        let button = Button::new(input.level(), Level::Low, 5);
+        (input, button, shortcut)
+    };
+    let mut buttons = [
+        make_button(copy_gpio, Shortcut::Copy),
+        make_button(paste_gpio, Shortcut::Paste),
+        make_button(back_gpio, Shortcut::Back),
+        make_button(forward_gpio, Shortcut::Forward),
+    ];
 
     loop {
-        let detents = encoder_detents(&unit, &mut encoder, &mut reported_count);
+        let now_ms = Instant::now().duration_since_epoch().as_millis();
 
-        if detents != 0 {
-            esp_println::println!("microphone volume encoder detents: {}", detents);
+        for (input, button, shortcut) in buttons.iter_mut() {
+            if let Some(report) = keyboard_button_report(button, input.level(), *shortcut, now_ms) {
+                USB_KEYBOARD_REPORTS.send(report).await;
+            }
         }
 
-        Timer::after(Duration::from_millis(1)).await;
-    }
-}
-
-#[embassy_executor::task]
-async fn speaker_volume_task(
-    unit: Unit<'static, 2>,
-    gpio_a: AnyPin<'static>,
-    gpio_b: AnyPin<'static>,
-) {
-    let (_input_a, _input_b, mut encoder, mut reported_count) =
-        setup_encoder(&unit, gpio_a, gpio_b);
-
-    loop {
-        let detents = encoder_detents(&unit, &mut encoder, &mut reported_count);
-
-        if detents != 0 {
-            esp_println::println!("speaker volume encoder detents: {}", detents);
-        }
-
-        Timer::after(Duration::from_millis(1)).await;
+        Timer::after(Duration::from_millis(u64::from(USB_HID_POLL_MS))).await;
     }
 }
 
@@ -240,7 +294,7 @@ async fn usb_task(usb: Usb<'static>) {
         FeedbackRefresh::Period32Frames as u8,
         None,
     );
-    // ponytail: git AudioSource assumes interfaces 0/1; remove this ordering constraint when upstream uses stored interface numbers.
+    // ponytail: AudioSource currently assumes interface order.
     builder.handler(USB_MICROPHONE_HANDLER.init(microphone.handler));
 
     let speaker = UsbSpeakerClass::new(
@@ -406,56 +460,9 @@ async fn speaker_task(mut i2s_tx: I2sTx<'static, Async>) {
     }
 }
 
-#[embassy_executor::task(pool_size = 11)]
-async fn button_task(label: &'static str, gpio: AnyPin<'static>) {
-    let input = Input::new(gpio, InputConfig::default().with_pull(Pull::Up));
-    let mut button = Button::new(input.level(), Level::Low, 5);
-
-    loop {
-        let now_ms = Instant::now().duration_since_epoch().as_millis();
-        let (next_button, changed) = button.update(input.level(), now_ms);
-        button = next_button;
-
-        if changed {
-            esp_println::println!("{} button pressed: {}", label, button.is_pressed());
-        }
-
-        Timer::after(Duration::from_millis(1)).await;
-    }
-}
-
-#[embassy_executor::task]
-async fn joystick_task(adc: ADC1<'static>, gpio_x: GPIO1<'static>, gpio_y: GPIO2<'static>) {
-    let mut adc_config = AdcConfig::new();
-    let mut x_pin = adc_config.enable_pin(gpio_x, Attenuation::_11dB);
-    let mut y_pin = adc_config.enable_pin(gpio_y, Attenuation::_11dB);
-    let mut adc = Adc::new(adc, adc_config);
-    let center_x = adc.read_blocking(&mut x_pin);
-    let center_y = adc.read_blocking(&mut y_pin);
-    let mut joystick = Joystick::new(center_x, center_y);
-    let mut reported_joystick = joystick;
-
-    esp_println::println!("joystick center x: {}, y: {}", center_x, center_y);
-
-    loop {
-        joystick = joystick.update(adc.read_blocking(&mut x_pin), adc.read_blocking(&mut y_pin));
-
-        if reported_joystick.x().abs_diff(joystick.x()) >= JOYSTICK_LOG_DELTA
-            || reported_joystick.y().abs_diff(joystick.y()) >= JOYSTICK_LOG_DELTA
-        {
-            esp_println::println!("joystick x: {}, y: {}", joystick.x(), joystick.y());
-            reported_joystick = joystick;
-        }
-
-        Timer::after(Duration::from_millis(1)).await;
-    }
-}
-
 #[esp_rtos::main]
 async fn main(spawner: Spawner) {
     let peripherals = esp_hal::init(esp_hal::Config::default());
-
-    esp_println::println!("Init!");
 
     let sw_int = SoftwareInterruptControl::new(peripherals.SW_INTERRUPT);
     let timg0 = TimerGroup::new(peripherals.TIMG0);
@@ -489,43 +496,29 @@ async fn main(spawner: Spawner) {
     let usb = Usb::new(peripherals.USB0, peripherals.GPIO20, peripherals.GPIO19);
 
     spawner.spawn(
-        scroll_task(
+        mouse_task(
             pcnt.unit0,
             peripherals.GPIO11.degrade(),
             peripherals.GPIO12.degrade(),
+            peripherals.ADC1,
+            peripherals.GPIO1,
+            peripherals.GPIO2,
+            peripherals.GPIO41.degrade(),
+            peripherals.GPIO42.degrade(),
         )
-        .expect("failed to create scroll encoder task"),
-    );
-    spawner.spawn(
-        microphone_volume_task(
-            pcnt.unit1,
-            peripherals.GPIO13.degrade(),
-            peripherals.GPIO14.degrade(),
-        )
-        .expect("failed to create microphone volume encoder task"),
-    );
-    spawner.spawn(
-        speaker_volume_task(
-            pcnt.unit2,
-            peripherals.GPIO15.degrade(),
-            peripherals.GPIO16.degrade(),
-        )
-        .expect("failed to create speaker volume encoder task"),
+        .expect("failed to create mouse task"),
     );
     spawner.spawn(microphone_task(i2s_rx).expect("failed to create microphone task"));
     spawner.spawn(usb_task(usb).expect("failed to create usb task"));
     spawner.spawn(speaker_task(i2s_tx).expect("failed to create speaker task"));
     spawner.spawn(
-        joystick_task(peripherals.ADC1, peripherals.GPIO1, peripherals.GPIO2)
-            .expect("failed to create joystick task"),
-    );
-    spawner.spawn(
-        button_task("left", peripherals.GPIO41.degrade())
-            .expect("failed to create left button task"),
-    );
-    spawner.spawn(
-        button_task("right", peripherals.GPIO42.degrade())
-            .expect("failed to create right button task"),
+        keyboard_task(
+            peripherals.GPIO4.degrade(),
+            peripherals.GPIO5.degrade(),
+            peripherals.GPIO6.degrade(),
+            peripherals.GPIO7.degrade(),
+        )
+        .expect("failed to create keyboard task"),
     );
 
     core::future::pending::<()>().await;

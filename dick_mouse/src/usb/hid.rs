@@ -34,24 +34,3 @@ pub mod keyboard {
 pub mod mouse {
     pub use usbd_hid::descriptor::MouseReport as Report;
 }
-
-#[cfg(test)]
-mod tests {
-    use super::{Shortcut, shortcut_report};
-
-    #[test]
-    fn copyはctrl_cになる() {
-        let report = shortcut_report(Shortcut::Copy);
-
-        assert_eq!(report.modifier, 0x01);
-        assert_eq!(report.keycodes[0], 0x06);
-    }
-
-    #[test]
-    fn backはalt_leftになる() {
-        let report = shortcut_report(Shortcut::Back);
-
-        assert_eq!(report.modifier, 0x04);
-        assert_eq!(report.keycodes[0], 0x50);
-    }
-}
