@@ -47,6 +47,36 @@ dick_mouse
     └── reexports.rs
 ```
 
+## 設計図
+
+```mermaid
+flowchart TD
+  GPIO[GPIO buttons / switch / joystick / encoder] --> KeyboardTask[keyboard_task]
+  GPIO --> MouseTask[mouse_task]
+  GPIO --> ModeTask[mode_change_task]
+
+  KeyboardTask --> KeyboardReports[USB_KEYBOARD_REPORTS]
+  MouseTask --> MouseReports[USB_MOUSE_REPORTS]
+  ModeTask --> GameMode[game mode state]
+
+  KeyboardReports --> UsbTask[usb_task]
+  MouseReports --> UsbTask
+  GameMode --> KeyboardTask
+  GameMode --> MouseTask
+
+  I2sMic[I2S microphone] --> MicrophoneTask[microphone_task]
+  MicrophoneTask --> MicrophoneAudio[MICROPHONE_AUDIO]
+  MicrophoneAudio --> UsbTask
+
+  UsbTask --> SpeakerAudio[SPEAKER_AUDIO]
+  SpeakerAudio --> SpeakerTask[speaker_task]
+  SpeakerTask --> I2sSpeaker[I2S speaker]
+
+  UsbTask --> UsbHid[USB HID keyboard / mouse]
+  UsbTask --> UsbMic[USB UAC microphone]
+  UsbSpeaker[USB UAC speaker] --> UsbTask
+```
+
 ## 実装概要
 
 ### デバイス状態
