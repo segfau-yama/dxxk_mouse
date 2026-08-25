@@ -1,6 +1,6 @@
 use core::sync::atomic::Ordering;
 
-use dick_mouse::device::Button;
+use dick_mouse::device::{Button, button::button_change};
 use embassy_time::{Duration, Timer};
 use esp_hal::{
     gpio::{AnyPin, Input, InputConfig, Level, Pull},
@@ -8,7 +8,10 @@ use esp_hal::{
 };
 use usbd_hid::descriptor::{KeyboardReport, KeyboardUsage};
 
-use crate::{GAME_MODE, USB_HID_POLL_MS, USB_KEYBOARD_REPORTS, button_change, send_game_key};
+use super::{
+    game_hid::{GAME_MODE, send_game_key},
+    usb::{USB_HID_POLL_MS, USB_KEYBOARD_REPORTS},
+};
 
 #[embassy_executor::task]
 pub(crate) async fn keyboard_task(
@@ -27,19 +30,6 @@ pub(crate) async fn keyboard_task(
     loop {
         let now_ms = Instant::now().duration_since_epoch().as_millis();
         let game_mode = GAME_MODE.load(Ordering::Relaxed);
-
-        if game_mode && game_mode != game_mode_was {
-            for (key, pressed) in [
-                (KeyboardUsage::KeyboardSs, screenshot_button.is_pressed()),
-                (KeyboardUsage::KeyboardSpacebar, back_button.is_pressed()),
-                (KeyboardUsage::KeyboardEnter, forward_button.is_pressed()),
-            ] {
-                if pressed {
-                    send_game_key(key, pressed).await;
-                }
-            }
-        }
-        game_mode_was = game_mode;
 
         for (button, input, report, game_key) in [
             (
@@ -76,6 +66,10 @@ pub(crate) async fn keyboard_task(
                 KeyboardUsage::KeyboardEnter,
             ),
         ] {
+            if game_mode && game_mode != game_mode_was && button.is_pressed() {
+                send_game_key(game_key, true).await;
+            }
+
             if let Some(pressed) = button_change(button, input.level(), now_ms) {
                 if game_mode {
                     send_game_key(game_key, pressed).await;
@@ -90,6 +84,7 @@ pub(crate) async fn keyboard_task(
                 }
             }
         }
+        game_mode_was = game_mode;
 
         Timer::after(Duration::from_millis(u64::from(USB_HID_POLL_MS))).await;
     }

@@ -29,6 +29,7 @@ dick_mouse
 │   │   ├── microphone.rs
 │   │   └── speaker.rs
 │   └── tasks
+│       ├── game.rs
 │       ├── keyboard.rs
 │       ├── microphone.rs
 │       ├── mode_change.rs
@@ -67,6 +68,7 @@ GPIO や ADC/PCNT/I2S peripheral は task 側が所有し、device 構造体は�
 | `mouse_task` | `GPIO13/14` buttons, `GPIO1/2` joystick, `PCNT0 GPIO11/12` scroll encoder | `USB_MOUSE_REPORTS` |
 | `keyboard_task` | `GPIO18` joystick push, `GPIO6/7` shortcut buttons | `USB_KEYBOARD_REPORTS` |
 | `mode_change_task` | `GPIO21` slide switch | game mode flag |
+| `game` | game mode state/key report helper | `USB_KEYBOARD_REPORTS` |
 | `usb_task` | HID report channel | USB HID keyboard/mouse |
 
 キーボードボタンは以下です。

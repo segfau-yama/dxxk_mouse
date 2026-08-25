@@ -32,12 +32,4 @@ mod tests {
         assert_eq!(encoder.stable_count(), 3);
         assert_eq!(encoder.measured_count(), 3);
     }
-
-    #[test]
-    fn detents_fromは分解能でクリック数に変換する() {
-        let encoder = RotaryEncoder::new(16, 100, 2);
-
-        assert_eq!(encoder.detents_from(8, 4), 2);
-        assert_eq!(encoder.detents_from(8, 0), 0);
-    }
 }

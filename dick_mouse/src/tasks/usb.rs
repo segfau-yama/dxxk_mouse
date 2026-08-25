@@ -2,6 +2,7 @@ use embassy_futures::{
     join::{join, join5},
     select::{Either, select},
 };
+use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_time::{Duration, Timer};
 use embassy_usb::{
     Builder as UsbBuilder, Config as UsbConfig,
@@ -11,7 +12,10 @@ use embassy_usb::{
         },
         uac1::{
             Channel as UsbAudioChannel, FeedbackRefresh, SampleWidth,
-            source::AudioSource as UsbMicrophoneClass,
+            source::{
+                AudioSource as UsbMicrophoneClass,
+                AudioSourceControlHandler as UsbMicrophoneControlHandler,
+            },
             speaker::{Speaker as UsbSpeakerClass, State as UsbSpeakerState},
         },
     },
@@ -20,17 +24,20 @@ use esp_hal::otg_fs::{
     Usb,
     asynch::{Config as UsbDriverConfig, Driver as UsbDriver},
 };
+use static_cell::StaticCell;
 use usbd_hid::descriptor::{KeyboardReport, MouseReport};
 
-use crate::{
-    MICROPHONE_AUDIO, SPEAKER_AUDIO, USB_AUDIO_FEEDBACK_48K, USB_AUDIO_MAX_PACKET_BYTES,
-    USB_BOS_DESCRIPTOR, USB_BOS_DESCRIPTOR_SIZE, USB_CONFIG_DESCRIPTOR, USB_CONFIG_DESCRIPTOR_SIZE,
-    USB_CONTROL_BUFFER, USB_CONTROL_BUFFER_SIZE, USB_EP_OUT_BUFFER, USB_EP_OUT_BUFFER_SIZE,
-    USB_HID_POLL_MS, USB_HID_REPORT_BYTES, USB_HID_STATE, USB_KEYBOARD_REPORTS,
-    USB_MICROPHONE_HANDLER, USB_MOUSE_REPORTS, USB_MSOS_DESCRIPTOR, USB_MSOS_DESCRIPTOR_SIZE,
-    USB_SPEAKER_STATE, bytes_to_audio_frame,
-};
+use super::audio::{AUDIO_FRAME_BYTES, MICROPHONE_AUDIO, SPEAKER_AUDIO, bytes_to_audio_frame};
 
+pub(crate) const USB_HID_POLL_MS: u8 = 10;
+const USB_HID_REPORT_BYTES: usize = 9;
+const USB_AUDIO_MAX_PACKET_BYTES: usize = AUDIO_FRAME_BYTES * 2;
+const USB_AUDIO_FEEDBACK_48K: [u8; 3] = [0x00, 0x00, 0x0c];
+const USB_EP_OUT_BUFFER_SIZE: usize = 256;
+const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
+const USB_BOS_DESCRIPTOR_SIZE: usize = 128;
+const USB_MSOS_DESCRIPTOR_SIZE: usize = 128;
+const USB_CONTROL_BUFFER_SIZE: usize = 64;
 const USB_KEYBOARD_REPORT_ID: u8 = 1;
 const USB_MOUSE_REPORT_ID: u8 = 2;
 const USB_KEYBOARD_MOUSE_REPORT_DESCRIPTOR: &[u8] = &[
@@ -45,30 +52,18 @@ const USB_KEYBOARD_MOUSE_REPORT_DESCRIPTOR: &[u8] = &[
     0x02, 0x81, 0x06, 0xc0, 0xc0,
 ];
 
-fn keyboard_report_bytes(report: KeyboardReport) -> [u8; USB_HID_REPORT_BYTES] {
-    [
-        USB_KEYBOARD_REPORT_ID,
-        report.modifier,
-        report.reserved,
-        report.keycodes[0],
-        report.keycodes[1],
-        report.keycodes[2],
-        report.keycodes[3],
-        report.keycodes[4],
-        report.keycodes[5],
-    ]
-}
-
-fn mouse_report_bytes(report: MouseReport) -> [u8; 6] {
-    [
-        USB_MOUSE_REPORT_ID,
-        report.buttons,
-        report.x as u8,
-        report.y as u8,
-        report.wheel as u8,
-        report.pan as u8,
-    ]
-}
+pub(crate) static USB_KEYBOARD_REPORTS: Channel<CriticalSectionRawMutex, KeyboardReport, 4> =
+    Channel::new();
+pub(crate) static USB_MOUSE_REPORTS: Channel<CriticalSectionRawMutex, MouseReport, 4> =
+    Channel::new();
+static USB_EP_OUT_BUFFER: StaticCell<[u8; USB_EP_OUT_BUFFER_SIZE]> = StaticCell::new();
+static USB_CONFIG_DESCRIPTOR: StaticCell<[u8; USB_CONFIG_DESCRIPTOR_SIZE]> = StaticCell::new();
+static USB_BOS_DESCRIPTOR: StaticCell<[u8; USB_BOS_DESCRIPTOR_SIZE]> = StaticCell::new();
+static USB_MSOS_DESCRIPTOR: StaticCell<[u8; USB_MSOS_DESCRIPTOR_SIZE]> = StaticCell::new();
+static USB_CONTROL_BUFFER: StaticCell<[u8; USB_CONTROL_BUFFER_SIZE]> = StaticCell::new();
+static USB_HID_STATE: StaticCell<UsbHidState<'static>> = StaticCell::new();
+static USB_MICROPHONE_HANDLER: StaticCell<UsbMicrophoneControlHandler> = StaticCell::new();
+static USB_SPEAKER_STATE: StaticCell<UsbSpeakerState<'static>> = StaticCell::new();
 
 #[embassy_executor::task]
 pub(crate) async fn usb_task(usb: Usb<'static>) {
@@ -212,16 +207,33 @@ pub(crate) async fn usb_task(usb: Usb<'static>) {
                             .await
                         {
                             Either::First(report) => {
-                                if hid_writer
-                                    .write(&keyboard_report_bytes(report))
-                                    .await
-                                    .is_err()
-                                {
+                                let bytes = [
+                                    USB_KEYBOARD_REPORT_ID,
+                                    report.modifier,
+                                    report.reserved,
+                                    report.keycodes[0],
+                                    report.keycodes[1],
+                                    report.keycodes[2],
+                                    report.keycodes[3],
+                                    report.keycodes[4],
+                                    report.keycodes[5],
+                                ];
+
+                                if hid_writer.write(&bytes).await.is_err() {
                                     break;
                                 }
                             }
                             Either::Second(report) => {
-                                if hid_writer.write(&mouse_report_bytes(report)).await.is_err() {
+                                let bytes = [
+                                    USB_MOUSE_REPORT_ID,
+                                    report.buttons,
+                                    report.x as u8,
+                                    report.y as u8,
+                                    report.wheel as u8,
+                                    report.pan as u8,
+                                ];
+
+                                if hid_writer.write(&bytes).await.is_err() {
                                     break;
                                 }
                             }

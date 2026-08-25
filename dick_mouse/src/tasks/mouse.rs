@@ -1,6 +1,6 @@
 use core::sync::atomic::Ordering;
 
-use dick_mouse::device::{Button, Joystick, RotaryEncoder};
+use dick_mouse::device::{Button, Joystick, RotaryEncoder, button::button_change};
 use embassy_time::{Duration, Timer};
 use esp_hal::{
     analog::adc::{Adc, AdcCalLine, AdcConfig, Attenuation},
@@ -11,9 +11,9 @@ use esp_hal::{
 };
 use usbd_hid::descriptor::{KeyboardUsage, MouseReport};
 
-use crate::{
-    GAME_JOYSTICK_THRESHOLD, GAME_MODE, USB_HID_POLL_MS, USB_MOUSE_REPORTS, button_change,
-    send_game_key,
+use super::{
+    game_hid::{GAME_JOYSTICK_THRESHOLD, GAME_MODE, send_game_key},
+    usb::{USB_HID_POLL_MS, USB_MOUSE_REPORTS},
 };
 
 #[embassy_executor::task]
@@ -67,7 +67,7 @@ pub(crate) async fn mouse_task(
         let now_ms = Instant::now().duration_since_epoch().as_millis();
         let game_mode = GAME_MODE.load(Ordering::Relaxed);
         encoder = encoder.update(unit.value() as i32, now_ms);
-        let detents = encoder.detents_from(reported_count, 4);
+        let detents = encoder.stable_count().saturating_sub(reported_count) / 4;
         if detents != 0 {
             reported_count = reported_count.saturating_add(detents.saturating_mul(4));
         }

@@ -310,7 +310,6 @@ dependencies = [
  "esp-backtrace",
  "esp-bootloader-esp-idf",
  "esp-hal",
- "esp-println",
  "esp-rtos",
  "static_cell",
  "usbd-hid",

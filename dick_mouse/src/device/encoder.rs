@@ -44,12 +44,4 @@ impl RotaryEncoder {
     pub const fn measured_count(&self) -> i32 {
         self.measured_count
     }
-
-    pub fn detents_from(&self, previous_count: i32, counts_per_detent: i32) -> i32 {
-        if counts_per_detent == 0 {
-            return 0;
-        }
-
-        self.stable_count.saturating_sub(previous_count) / counts_per_detent
-    }
 }

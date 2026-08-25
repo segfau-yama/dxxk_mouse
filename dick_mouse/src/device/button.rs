@@ -55,15 +55,13 @@ impl Button {
         self.level
     }
 
-    pub const fn active_level(&self) -> Level {
-        self.active_level
-    }
-
-    pub const fn debounce_ms(&self) -> u64 {
-        self.debounce_ms
-    }
-
     pub fn is_pressed(&self) -> bool {
         self.level == self.active_level
     }
+}
+
+pub fn button_change(button: &mut Button, measured_level: Level, now_ms: u64) -> Option<bool> {
+    let (next_button, changed) = button.update(measured_level, now_ms);
+    *button = next_button;
+    changed.then(|| button.is_pressed())
 }
