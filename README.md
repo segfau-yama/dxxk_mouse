@@ -52,74 +52,81 @@ dick_mouse
 
 ```mermaid
 flowchart TD
-  subgraph HidInput["HID input"]
-    direction LR
+  subgraph Mode["mode"]
+    direction TB
+    ModeGpio["PERIPHERAL: GPIO21 slide switch"] --> ModeTask["TASK: mode_change_task"]
+    ModeTask --> GameMode["STATE: game mode"]
+  end
+
+  subgraph Keyboard["keyboard"]
+    direction TB
     ShortcutGpio["PERIPHERAL: GPIO6/7 shortcut buttons"]
     PushGpio["PERIPHERAL: GPIO18 joystick push"]
-    ModeGpio["PERIPHERAL: GPIO21 slide switch"]
+    KeyboardTask["TASK: keyboard_task"]
+    KeyboardReports["CHANNEL: USB_KEYBOARD_REPORTS"]
+    ShortcutGpio --> KeyboardTask
+    PushGpio --> KeyboardTask
+    KeyboardTask --> KeyboardReports
+  end
+
+  subgraph Mouse["mouse"]
+    direction TB
     ClickGpio["PERIPHERAL: GPIO41/42 click buttons"]
     JoystickAdc["PERIPHERAL: ADC1 GPIO1/2 joystick"]
     ScrollPcnt["PERIPHERAL: PCNT0 GPIO11/12 scroll encoder"]
-  end
-
-  subgraph HidTasks["HID tasks"]
-    direction LR
-    KeyboardTask["TASK: keyboard_task"]
-    ModeTask["TASK: mode_change_task"]
     MouseTask["TASK: mouse_task"]
+    MouseReports["CHANNEL: USB_MOUSE_REPORTS"]
+    ClickGpio --> MouseTask
+    JoystickAdc --> MouseTask
+    ScrollPcnt --> MouseTask
+    MouseTask --> MouseReports
   end
 
-  ShortcutGpio --> KeyboardTask
-  PushGpio --> KeyboardTask
-  ModeGpio --> ModeTask
-  ClickGpio --> MouseTask
-  JoystickAdc --> MouseTask
-  ScrollPcnt --> MouseTask
-
-  ModeTask --> GameMode["STATE: game mode"]
-  GameMode -.-> KeyboardTask
-  GameMode -.-> MouseTask
-
-  KeyboardTask --> KeyboardReports["CHANNEL: USB_KEYBOARD_REPORTS"]
-  MouseTask --> MouseReports["CHANNEL: USB_MOUSE_REPORTS"]
-
-  subgraph AudioPath["Audio path"]
-    direction LR
-    subgraph MicrophonePath["microphone"]
-      direction TB
-      I2sMic["PERIPHERAL: I2S0 RX microphone"] --> MicrophoneTask["TASK: microphone_task"]
-      MicMuteGpio["PERIPHERAL: GPIO4 microphone mute"] --> MicrophoneTask
-      MicrophoneTask --> MicrophoneAudio["CHANNEL: MICROPHONE_AUDIO"]
-    end
-
-    subgraph SpeakerPath["speaker"]
-      direction TB
-      SpeakerAudio["CHANNEL: SPEAKER_AUDIO"] --> SpeakerTask["TASK: speaker_task"]
-      SpeakerMuteGpio["PERIPHERAL: GPIO5 speaker mute"] --> SpeakerTask
-      SpeakerTask --> I2sSpeaker["PERIPHERAL: I2S0 TX speaker"]
-    end
+  subgraph Microphone["microphone"]
+    direction TB
+    I2sMic["PERIPHERAL: I2S0 RX microphone"]
+    MicMuteGpio["PERIPHERAL: GPIO4 microphone mute"]
+    MicrophoneTask["TASK: microphone_task"]
+    MicrophoneAudio["CHANNEL: MICROPHONE_AUDIO"]
+    I2sMic --> MicrophoneTask
+    MicMuteGpio --> MicrophoneTask
+    MicrophoneTask --> MicrophoneAudio
   end
 
-  KeyboardReports --> UsbTask["TASK: usb_task"]
-  MouseReports --> UsbTask
-  MicrophoneAudio --> UsbTask
-  UsbTask --> SpeakerAudio
+  subgraph Speaker["speaker"]
+    direction TB
+    SpeakerAudio["CHANNEL: SPEAKER_AUDIO"]
+    SpeakerMuteGpio["PERIPHERAL: GPIO5 speaker mute"]
+    SpeakerTask["TASK: speaker_task"]
+    I2sSpeaker["PERIPHERAL: I2S0 TX speaker"]
+    SpeakerAudio --> SpeakerTask
+    SpeakerMuteGpio --> SpeakerTask
+    SpeakerTask --> I2sSpeaker
+  end
 
-  subgraph UsbClasses["USB classes"]
+  UsbTask["TASK: usb_task"]
+
+  subgraph Usb["usb"]
     direction LR
     UsbHid["USB: HID keyboard / mouse"]
     UsbMic["USB: UAC microphone"]
     UsbSpeaker["USB: UAC speaker"]
+    UsbPeripheral["PERIPHERAL: USB0 GPIO19/20"]
+    UsbHid --> UsbPeripheral
+    UsbMic --> UsbPeripheral
+    UsbPeripheral --> UsbSpeaker
   end
-
-  UsbPeripheral["PERIPHERAL: USB0 GPIO19/20"]
 
   UsbTask --> UsbHid
   UsbTask --> UsbMic
   UsbSpeaker --> UsbTask
-  UsbHid --> UsbPeripheral
-  UsbMic --> UsbPeripheral
-  UsbPeripheral --> UsbSpeaker
+
+  GameMode -.-> KeyboardTask
+  GameMode -.-> MouseTask
+  KeyboardReports --> UsbTask
+  MouseReports --> UsbTask
+  MicrophoneAudio --> UsbTask
+  UsbTask --> SpeakerAudio
 
   class ShortcutGpio,PushGpio,ModeGpio,ClickGpio,JoystickAdc,ScrollPcnt,MicMuteGpio,I2sMic,SpeakerMuteGpio,I2sSpeaker,UsbPeripheral peripheral
   class KeyboardTask,ModeTask,MouseTask,MicrophoneTask,SpeakerTask,UsbTask task
