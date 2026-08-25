@@ -74,3 +74,8 @@ harness = false
 name = "main"
 path = "tests/main.rs"
 harness = false
+
+[[test]]
+name = "tasks"
+path = "tests/tasks/mod.rs"
+harness = false

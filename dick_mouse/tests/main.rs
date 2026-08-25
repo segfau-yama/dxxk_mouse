@@ -16,13 +16,16 @@ mod tests {
         timer::timg::TimerGroup,
     };
 
+    const AUDIO_FRAME_BYTES: usize = 48 * core::mem::size_of::<i16>();
+
     #[test]
     fn mainで使うperipheralを初期化できる() {
         let peripherals = esp_hal::init(esp_hal::Config::default());
         let sw_int = SoftwareInterruptControl::new(peripherals.SW_INTERRUPT);
         let timg0 = TimerGroup::new(peripherals.TIMG0);
         let _pcnt = Pcnt::new(peripherals.PCNT);
-        let (rx_descriptors, tx_descriptors) = esp_hal::dma_descriptors!(96, 96);
+        let (rx_descriptors, tx_descriptors) =
+            esp_hal::dma_descriptors!(AUDIO_FRAME_BYTES, AUDIO_FRAME_BYTES);
         let i2s = I2s::new(
             peripherals.I2S0,
             peripherals.DMA_CH0,

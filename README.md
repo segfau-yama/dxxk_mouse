@@ -51,30 +51,53 @@ dick_mouse
 
 ```mermaid
 flowchart TD
-  GPIO[GPIO buttons / switch / joystick / encoder] --> KeyboardTask[keyboard_task]
-  GPIO --> MouseTask[mouse_task]
-  GPIO --> ModeTask[mode_change_task]
+  ShortcutGpio["PERIPHERAL: GPIO6/7 shortcut buttons"] --> KeyboardTask["TASK: keyboard_task"]
+  PushGpio["PERIPHERAL: GPIO18 joystick push"] --> KeyboardTask
+  ModeGpio["PERIPHERAL: GPIO21 slide switch"] --> ModeTask["TASK: mode_change_task"]
 
-  KeyboardTask --> KeyboardReports[USB_KEYBOARD_REPORTS]
-  MouseTask --> MouseReports[USB_MOUSE_REPORTS]
-  ModeTask --> GameMode[game mode state]
+  ClickGpio["PERIPHERAL: GPIO41/42 click buttons"] --> MouseTask["TASK: mouse_task"]
+  JoystickAdc["PERIPHERAL: ADC1 GPIO1/2 joystick"] --> MouseTask
+  ScrollPcnt["PERIPHERAL: PCNT0 GPIO11/12 scroll encoder"] --> MouseTask
 
-  KeyboardReports --> UsbTask[usb_task]
-  MouseReports --> UsbTask
+  MicMuteGpio["PERIPHERAL: GPIO4 microphone mute"] --> MicrophoneTask["TASK: microphone_task"]
+  I2sMic["PERIPHERAL: I2S0 RX microphone"] --> MicrophoneTask
+  SpeakerMuteGpio["PERIPHERAL: GPIO5 speaker mute"] --> SpeakerTask["TASK: speaker_task"]
+  SpeakerTask --> I2sSpeaker["PERIPHERAL: I2S0 TX speaker"]
+
+  KeyboardTask --> KeyboardReports["CHANNEL: USB_KEYBOARD_REPORTS"]
+  MouseTask --> MouseReports["CHANNEL: USB_MOUSE_REPORTS"]
+  ModeTask --> GameMode["STATE: game mode"]
   GameMode --> KeyboardTask
   GameMode --> MouseTask
 
-  I2sMic[I2S microphone] --> MicrophoneTask[microphone_task]
-  MicrophoneTask --> MicrophoneAudio[MICROPHONE_AUDIO]
+  MicrophoneTask --> MicrophoneAudio["CHANNEL: MICROPHONE_AUDIO"]
+  UsbTask["TASK: usb_task"] --> SpeakerAudio["CHANNEL: SPEAKER_AUDIO"]
+  SpeakerAudio --> SpeakerTask
+
+  KeyboardReports --> UsbTask
+  MouseReports --> UsbTask
   MicrophoneAudio --> UsbTask
 
-  UsbTask --> SpeakerAudio[SPEAKER_AUDIO]
-  SpeakerAudio --> SpeakerTask[speaker_task]
-  SpeakerTask --> I2sSpeaker[I2S speaker]
+  UsbTask --> UsbHid["USB: HID keyboard / mouse"]
+  UsbTask --> UsbMic["USB: UAC microphone"]
+  UsbSpeaker["USB: UAC speaker"] --> UsbTask
+  UsbHardware["HW: USB0 GPIO19/20"] --> UsbSpeaker
+  UsbHid --> UsbHardware
+  UsbMic --> UsbHardware
 
-  UsbTask --> UsbHid[USB HID keyboard / mouse]
-  UsbTask --> UsbMic[USB UAC microphone]
-  UsbSpeaker[USB UAC speaker] --> UsbTask
+  class ShortcutGpio,PushGpio,ModeGpio,ClickGpio,JoystickAdc,ScrollPcnt,MicMuteGpio,I2sMic,SpeakerMuteGpio,I2sSpeaker peripheral
+  class KeyboardTask,ModeTask,MouseTask,MicrophoneTask,SpeakerTask,UsbTask task
+  class KeyboardReports,MouseReports,MicrophoneAudio,SpeakerAudio channel
+  class GameMode state
+  class UsbHid,UsbMic,UsbSpeaker usb
+  class UsbHardware hardware
+
+  classDef peripheral fill:#ddf4ff,stroke:#0969da,color:#24292f
+  classDef task fill:#dafbe1,stroke:#1a7f37,color:#24292f
+  classDef channel fill:#fff8c5,stroke:#9a6700,color:#24292f
+  classDef state fill:#ffebe9,stroke:#cf222e,color:#24292f
+  classDef usb fill:#fbefff,stroke:#8250df,color:#24292f
+  classDef hardware fill:#f6f8fa,stroke:#57606a,color:#24292f
 ```
 
 ## 実装概要
