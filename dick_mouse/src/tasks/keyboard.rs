@@ -1,90 +1,50 @@
-use core::sync::atomic::Ordering;
-
 use dick_mouse::device::{Button, button::button_change};
 use embassy_time::{Duration, Timer};
 use esp_hal::{
     gpio::{AnyPin, Input, InputConfig, Level, Pull},
     time::Instant,
 };
-use usbd_hid::descriptor::{KeyboardReport, KeyboardUsage};
 
 use super::{
-    game_hid::{GAME_MODE, send_game_key},
-    usb::{USB_HID_POLL_MS, USB_KEYBOARD_REPORTS},
+    hid::{KEYBOARD_REPORTS, KeyboardInput},
+    usb::USB_HID_POLL_MS,
 };
 
 #[embassy_executor::task]
 pub(crate) async fn keyboard_task(
-    screenshot_gpio: AnyPin<'static>,
+    joystick_button_gpio: AnyPin<'static>,
     back_gpio: AnyPin<'static>,
     forward_gpio: AnyPin<'static>,
 ) {
-    let screenshot_input = Input::new(screenshot_gpio, InputConfig::default().with_pull(Pull::Up));
+    let joystick_button_input = Input::new(
+        joystick_button_gpio,
+        InputConfig::default().with_pull(Pull::Up),
+    );
     let back_input = Input::new(back_gpio, InputConfig::default().with_pull(Pull::Up));
     let forward_input = Input::new(forward_gpio, InputConfig::default().with_pull(Pull::Up));
-    let mut screenshot_button = Button::new(screenshot_input.level(), Level::Low, 5);
+    let mut joystick_button = Button::new(joystick_button_input.level(), Level::Low, 5);
     let mut back_button = Button::new(back_input.level(), Level::Low, 5);
     let mut forward_button = Button::new(forward_input.level(), Level::Low, 5);
-    let mut game_mode_was = false;
+    let mut first = true;
 
     loop {
         let now_ms = Instant::now().duration_since_epoch().as_millis();
-        let game_mode = GAME_MODE.load(Ordering::Relaxed);
+        let joystick_changed =
+            button_change(&mut joystick_button, joystick_button_input.level(), now_ms).is_some();
+        let back_changed = button_change(&mut back_button, back_input.level(), now_ms).is_some();
+        let forward_changed =
+            button_change(&mut forward_button, forward_input.level(), now_ms).is_some();
 
-        for (button, input, report, game_key) in [
-            (
-                &mut screenshot_button,
-                &screenshot_input,
-                KeyboardReport {
-                    modifier: 0,
-                    reserved: 0,
-                    leds: 0,
-                    keycodes: [KeyboardUsage::KeyboardPrintScreen as u8, 0, 0, 0, 0, 0],
-                },
-                KeyboardUsage::KeyboardSs,
-            ),
-            (
-                &mut back_button,
-                &back_input,
-                KeyboardReport {
-                    modifier: 0x04,
-                    reserved: 0,
-                    leds: 0,
-                    keycodes: [KeyboardUsage::KeyboardLeftArrow as u8, 0, 0, 0, 0, 0],
-                },
-                KeyboardUsage::KeyboardSpacebar,
-            ),
-            (
-                &mut forward_button,
-                &forward_input,
-                KeyboardReport {
-                    modifier: 0x04,
-                    reserved: 0,
-                    leds: 0,
-                    keycodes: [KeyboardUsage::KeyboardRightArrow as u8, 0, 0, 0, 0, 0],
-                },
-                KeyboardUsage::KeyboardEnter,
-            ),
-        ] {
-            if game_mode && game_mode != game_mode_was && button.is_pressed() {
-                send_game_key(game_key, true).await;
-            }
-
-            if let Some(pressed) = button_change(button, input.level(), now_ms) {
-                if game_mode {
-                    send_game_key(game_key, pressed).await;
-                } else {
-                    USB_KEYBOARD_REPORTS
-                        .send(if pressed {
-                            report
-                        } else {
-                            KeyboardReport::default()
-                        })
-                        .await;
-                }
-            }
+        if first || joystick_changed || back_changed || forward_changed {
+            first = false;
+            KEYBOARD_REPORTS
+                .send(KeyboardInput {
+                    joystick_pressed: joystick_button.is_pressed(),
+                    back_pressed: back_button.is_pressed(),
+                    forward_pressed: forward_button.is_pressed(),
+                })
+                .await;
         }
-        game_mode_was = game_mode;
 
         Timer::after(Duration::from_millis(u64::from(USB_HID_POLL_MS))).await;
     }

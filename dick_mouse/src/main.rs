@@ -55,8 +55,7 @@ async fn main(spawner: Spawner) {
     let usb = Usb::new(peripherals.USB0, peripherals.GPIO20, peripherals.GPIO19);
 
     spawner.spawn(
-        tasks::mode_change::mode_change_task(peripherals.GPIO21.degrade())
-            .expect("failed to create mode change task"),
+        tasks::hid::hid_task(peripherals.GPIO21.degrade()).expect("failed to create HID task"),
     );
     spawner.spawn(
         tasks::mouse::mouse_task(

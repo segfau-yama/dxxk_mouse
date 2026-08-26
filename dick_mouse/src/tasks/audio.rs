@@ -12,9 +12,9 @@ pub(crate) const AUDIO_FRAME_SAMPLES: usize = 48;
 pub(crate) const AUDIO_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i16>();
 pub(crate) type AudioFrame = [i16; AUDIO_FRAME_SAMPLES];
 
-pub(crate) static MICROPHONE_AUDIO: Channel<CriticalSectionRawMutex, AudioFrame, 2> =
+pub(crate) static MICROPHONE_FRAMES: Channel<CriticalSectionRawMutex, AudioFrame, 2> =
     Channel::new();
-pub(crate) static SPEAKER_AUDIO: Channel<CriticalSectionRawMutex, AudioFrame, 2> = Channel::new();
+pub(crate) static SPEAKER_FRAMES: Channel<CriticalSectionRawMutex, AudioFrame, 2> = Channel::new();
 
 pub(crate) fn bytes_to_audio_frame(bytes: &[u8]) -> AudioFrame {
     let mut frame = [0; AUDIO_FRAME_SAMPLES];
@@ -28,7 +28,6 @@ pub(crate) fn bytes_to_audio_frame(bytes: &[u8]) -> AudioFrame {
 
 #[embassy_executor::task]
 pub(crate) async fn microphone_task(mut i2s_rx: I2sRx<'static, Async>, mute_gpio: AnyPin<'static>) {
-    let mut microphone = Microphone::new([0; AUDIO_FRAME_SAMPLES]);
     let mute_input = Input::new(mute_gpio, InputConfig::default().with_pull(Pull::Up));
     let mut mute_button = Button::new(mute_input.level(), Level::Low, 5);
     let mut muted = false;
@@ -47,8 +46,8 @@ pub(crate) async fn microphone_task(mut i2s_rx: I2sRx<'static, Async>, mute_gpio
             } else {
                 bytes_to_audio_frame(&bytes)
             };
-            microphone = microphone.update(frame);
-            MICROPHONE_AUDIO.send(*microphone.buffer()).await;
+            let microphone = Microphone::new(frame);
+            MICROPHONE_FRAMES.send(*microphone.buffer()).await;
         }
 
         Timer::after(Duration::from_millis(1)).await;
@@ -57,7 +56,6 @@ pub(crate) async fn microphone_task(mut i2s_rx: I2sRx<'static, Async>, mute_gpio
 
 #[embassy_executor::task]
 pub(crate) async fn speaker_task(mut i2s_tx: I2sTx<'static, Async>, mute_gpio: AnyPin<'static>) {
-    let mut speaker = Speaker::new([0; AUDIO_FRAME_SAMPLES]);
     let mute_input = Input::new(mute_gpio, InputConfig::default().with_pull(Pull::Up));
     let mut mute_button = Button::new(mute_input.level(), Level::Low, 5);
     let mut muted = false;
@@ -68,7 +66,7 @@ pub(crate) async fn speaker_task(mut i2s_tx: I2sTx<'static, Async>, mute_gpio: A
             muted = !muted;
         }
 
-        let pc_frame = SPEAKER_AUDIO.receive().await;
+        let pc_frame = SPEAKER_FRAMES.receive().await;
         let now_ms = Instant::now().duration_since_epoch().as_millis();
         if button_change(&mut mute_button, mute_input.level(), now_ms).unwrap_or(false) {
             muted = !muted;
@@ -79,7 +77,7 @@ pub(crate) async fn speaker_task(mut i2s_tx: I2sTx<'static, Async>, mute_gpio: A
         } else {
             pc_frame
         };
-        speaker = speaker.update(frame);
+        let speaker = Speaker::new(frame);
         let mut bytes = [0; AUDIO_FRAME_BYTES];
 
         for (sample, chunk) in speaker.buffer().iter().zip(bytes.chunks_exact_mut(2)) {

@@ -30,9 +30,8 @@ dick_mouse
 │   │   └── speaker.rs
 │   └── tasks
 │       ├── audio.rs
-│       ├── game_hid.rs
+│       ├── hid.rs
 │       ├── keyboard.rs
-│       ├── mode_change.rs
 │       ├── mouse.rs
 │       └── usb.rs
 └── tests
@@ -54,8 +53,8 @@ dick_mouse
 flowchart TD
   subgraph Mode["mode"]
     direction TB
-    ModeGpio["PERIPHERAL: GPIO21 slide switch"] --> ModeTask["TASK: mode_change_task"]
-    ModeTask --> GameMode["STATE: game mode"]
+    UsbHidReports["CHANNEL: USB_HID_REPORTS"]
+    ModeGpio["PERIPHERAL: GPIO21 slide switch"] --> HidTask["TASK: hid_task"]
   end
 
   subgraph Keyboard["keyboard"]
@@ -63,10 +62,10 @@ flowchart TD
     ShortcutGpio["PERIPHERAL: GPIO6/7 shortcut buttons"]
     PushGpio["PERIPHERAL: GPIO18 joystick push"]
     KeyboardTask["TASK: keyboard_task"]
-    KeyboardReports["CHANNEL: USB_KEYBOARD_REPORTS"]
+    KeyboardReports["CHANNEL: KEYBOARD_REPORTS"]
     ShortcutGpio --> KeyboardTask
     PushGpio --> KeyboardTask
-    KeyboardTask --> KeyboardReports
+    
   end
 
   subgraph Mouse["mouse"]
@@ -75,11 +74,11 @@ flowchart TD
     JoystickAdc["PERIPHERAL: ADC1 GPIO1/2 joystick"]
     ScrollPcnt["PERIPHERAL: PCNT0 GPIO11/12 scroll encoder"]
     MouseTask["TASK: mouse_task"]
-    MouseReports["CHANNEL: USB_MOUSE_REPORTS"]
+    MouseReports["CHANNEL: MOUSE_REPORTS"]
     ClickGpio --> MouseTask
     JoystickAdc --> MouseTask
     ScrollPcnt --> MouseTask
-    MouseTask --> MouseReports
+    
   end
 
   subgraph Microphone["microphone"]
@@ -87,19 +86,19 @@ flowchart TD
     I2sMic["PERIPHERAL: I2S0 RX microphone"]
     MicMuteGpio["PERIPHERAL: GPIO4 microphone mute"]
     MicrophoneTask["TASK: microphone_task"]
-    MicrophoneAudio["CHANNEL: MICROPHONE_AUDIO"]
+    MicrophoneFrames["CHANNEL: MICROPHONE_FRAMES"]
     I2sMic --> MicrophoneTask
     MicMuteGpio --> MicrophoneTask
-    MicrophoneTask --> MicrophoneAudio
+    MicrophoneTask --> MicrophoneFrames
   end
 
   subgraph Speaker["speaker"]
     direction TB
-    SpeakerAudio["CHANNEL: SPEAKER_AUDIO"]
+    SpeakerFrames["CHANNEL: SPEAKER_FRAMES"]
     SpeakerMuteGpio["PERIPHERAL: GPIO5 speaker mute"]
     SpeakerTask["TASK: speaker_task"]
     I2sSpeaker["PERIPHERAL: I2S0 TX speaker"]
-    SpeakerAudio --> SpeakerTask
+    SpeakerFrames --> SpeakerTask
     SpeakerMuteGpio --> SpeakerTask
     SpeakerTask --> I2sSpeaker
   end
@@ -121,23 +120,23 @@ flowchart TD
   UsbTask --> UsbMic
   UsbSpeaker --> UsbTask
 
-  GameMode -.-> KeyboardTask
-  GameMode -.-> MouseTask
-  KeyboardReports --> UsbTask
-  MouseReports --> UsbTask
-  MicrophoneAudio --> UsbTask
-  UsbTask --> SpeakerAudio
+  KeyboardTask --> KeyboardReports
+  MouseTask --> MouseReports
+  KeyboardReports --> HidTask
+  MouseReports --> HidTask
+  HidTask --> UsbHidReports
+  UsbHidReports --> UsbTask
+  MicrophoneFrames --> UsbTask
+  UsbTask --> SpeakerFrames
 
   class ShortcutGpio,PushGpio,ModeGpio,ClickGpio,JoystickAdc,ScrollPcnt,MicMuteGpio,I2sMic,SpeakerMuteGpio,I2sSpeaker,UsbPeripheral peripheral
-  class KeyboardTask,ModeTask,MouseTask,MicrophoneTask,SpeakerTask,UsbTask task
-  class KeyboardReports,MouseReports,MicrophoneAudio,SpeakerAudio channel
-  class GameMode state
+  class KeyboardTask,HidTask,MouseTask,MicrophoneTask,SpeakerTask,UsbTask task
+  class KeyboardReports,MouseReports,UsbHidReports,MicrophoneFrames,SpeakerFrames channel
   class UsbHid,UsbMic,UsbSpeaker usb
 
   classDef peripheral fill:#ddf4ff,stroke:#0969da,color:#24292f
   classDef task fill:#dafbe1,stroke:#1a7f37,color:#24292f
   classDef channel fill:#fff8c5,stroke:#9a6700,color:#24292f
-  classDef state fill:#ffebe9,stroke:#cf222e,color:#24292f
   classDef usb fill:#fbefff,stroke:#8250df,color:#24292f
 ```
 
@@ -159,11 +158,10 @@ GPIO や ADC/PCNT/I2S peripheral は task 側が所有し、device 構造体は�
 
 | task | 入力 | 出力 |
 | --- | --- | --- |
-| `mouse_task` | `GPIO13/14` buttons, `GPIO1/2` joystick, `PCNT0 GPIO11/12` scroll encoder | `USB_MOUSE_REPORTS` |
-| `keyboard_task` | `GPIO18` joystick push, `GPIO6/7` shortcut buttons | `USB_KEYBOARD_REPORTS` |
-| `mode_change_task` | `GPIO21` slide switch | game mode flag |
-| `game` | game mode state/key report helper | `USB_KEYBOARD_REPORTS` |
-| `usb_task` | HID report channel | USB HID keyboard/mouse |
+| `mouse_task` | `GPIO41/42` buttons, `GPIO1/2` joystick, `PCNT0 GPIO11/12` scroll encoder | `MOUSE_REPORTS` |
+| `keyboard_task` | `GPIO18` joystick push, `GPIO6/7` shortcut buttons | `KEYBOARD_REPORTS` |
+| `hid_task` | `GPIO21` slide switch, keyboard/mouse report channel | `USB_HID_REPORTS` |
+| `usb_task` | `USB_HID_REPORTS` | USB HID keyboard/mouse |
 
 キーボードボタンは以下です。
 

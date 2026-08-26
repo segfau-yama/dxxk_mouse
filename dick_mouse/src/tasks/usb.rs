@@ -1,7 +1,4 @@
-use embassy_futures::{
-    join::{join, join5},
-    select::{Either, select},
-};
+use embassy_futures::join::{join, join5};
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_time::{Duration, Timer};
 use embassy_usb::{
@@ -27,7 +24,7 @@ use esp_hal::otg_fs::{
 use static_cell::StaticCell;
 use usbd_hid::descriptor::{KeyboardReport, MouseReport};
 
-use super::audio::{AUDIO_FRAME_BYTES, MICROPHONE_AUDIO, SPEAKER_AUDIO, bytes_to_audio_frame};
+use super::audio::{AUDIO_FRAME_BYTES, MICROPHONE_FRAMES, SPEAKER_FRAMES, bytes_to_audio_frame};
 
 pub(crate) const USB_HID_POLL_MS: u8 = 10;
 const USB_HID_REPORT_BYTES: usize = 9;
@@ -52,9 +49,12 @@ const USB_KEYBOARD_MOUSE_REPORT_DESCRIPTOR: &[u8] = &[
     0x02, 0x81, 0x06, 0xc0, 0xc0,
 ];
 
-pub(crate) static USB_KEYBOARD_REPORTS: Channel<CriticalSectionRawMutex, KeyboardReport, 4> =
-    Channel::new();
-pub(crate) static USB_MOUSE_REPORTS: Channel<CriticalSectionRawMutex, MouseReport, 4> =
+pub(crate) enum UsbHidReport {
+    Keyboard(KeyboardReport),
+    Mouse(MouseReport),
+}
+
+pub(crate) static USB_HID_REPORTS: Channel<CriticalSectionRawMutex, UsbHidReport, 4> =
     Channel::new();
 static USB_EP_OUT_BUFFER: StaticCell<[u8; USB_EP_OUT_BUFFER_SIZE]> = StaticCell::new();
 static USB_CONFIG_DESCRIPTOR: StaticCell<[u8; USB_CONFIG_DESCRIPTOR_SIZE]> = StaticCell::new();
@@ -136,7 +136,7 @@ pub(crate) async fn usb_task(usb: Usb<'static>) {
 
                         match speaker_stream.read_packet(&mut packet).await {
                             Ok(size) if size > 0 => {
-                                SPEAKER_AUDIO
+                                SPEAKER_FRAMES
                                     .send(bytes_to_audio_frame(&packet[..size]))
                                     .await;
                             }
@@ -167,7 +167,7 @@ pub(crate) async fn usb_task(usb: Usb<'static>) {
                     microphone_audio.wait_enabled().await;
 
                     loop {
-                        let frame = MICROPHONE_AUDIO.receive().await;
+                        let frame = MICROPHONE_FRAMES.receive().await;
                         let mut bytes = [0; USB_AUDIO_MAX_PACKET_BYTES];
 
                         for (sample, chunk) in frame.iter().zip(bytes.chunks_exact_mut(4)) {
@@ -203,10 +203,8 @@ pub(crate) async fn usb_task(usb: Usb<'static>) {
                     hid_writer.ready().await;
 
                     loop {
-                        match select(USB_KEYBOARD_REPORTS.receive(), USB_MOUSE_REPORTS.receive())
-                            .await
-                        {
-                            Either::First(report) => {
+                        match USB_HID_REPORTS.receive().await {
+                            UsbHidReport::Keyboard(report) => {
                                 let bytes = [
                                     USB_KEYBOARD_REPORT_ID,
                                     report.modifier,
@@ -223,7 +221,7 @@ pub(crate) async fn usb_task(usb: Usb<'static>) {
                                     break;
                                 }
                             }
-                            Either::Second(report) => {
+                            UsbHidReport::Mouse(report) => {
                                 let bytes = [
                                     USB_MOUSE_REPORT_ID,
                                     report.buttons,
