@@ -12,23 +12,16 @@ embassy-executor = { version = "0.10.0", default-features = false }
 embassy-futures = { version = "0.1.2", default-features = false }
 embassy-sync = { version = "0.8.0", default-features = false }
 embassy-time = { version = "0.5.1", default-features = false }
-embassy-usb = { git = "https://github.com/embassy-rs/embassy", rev = "89f0ce53bb64d827a00fec5222df4e831b6d541b", default-features = false, features = ["max-interface-count-8", "usbd-hid"] }
+embassy-usb = { version = "0.5.1", default-features = false, features = ["max-interface-count-8", "usbd-hid"] }
 esp-backtrace = { version = "0.19.0", default-features = false, features = ["esp32s3", "panic-handler", "println"] }
 esp-bootloader-esp-idf = { version = "0.5.0", default-features = false, features = ["esp32s3"] }
 esp-hal = { version = "1.1.1", default-features = false, features = ["esp32s3", "rt", "unstable"] }
 esp-rtos = { version = "0.3.0", default-features = false, features = ["embassy", "esp32s3"] }
 static_cell = { version = "2.1.1", default-features = false }
-usbd-hid = { version = "0.10.1", default-features = false }
+usbd-hid = { version = "0.8.2", default-features = false }
 
 [dev-dependencies]
 embedded-test = { version = "0.7.2", features = ["xtensa-semihosting"] }
-
-[patch.crates-io]
-embassy-futures = { git = "https://github.com/embassy-rs/embassy", rev = "89f0ce53bb64d827a00fec5222df4e831b6d541b" }
-embassy-sync = { git = "https://github.com/embassy-rs/embassy", rev = "89f0ce53bb64d827a00fec5222df4e831b6d541b" }
-embassy-time = { git = "https://github.com/embassy-rs/embassy", rev = "89f0ce53bb64d827a00fec5222df4e831b6d541b" }
-embassy-time-driver = { git = "https://github.com/embassy-rs/embassy", rev = "89f0ce53bb64d827a00fec5222df4e831b6d541b" }
-embassy-usb-driver = { git = "https://github.com/embassy-rs/embassy", rev = "89f0ce53bb64d827a00fec5222df4e831b6d541b" }
 
 [lib]
 harness = false
@@ -53,16 +46,6 @@ harness = false
 [[test]]
 name = "joystick"
 path = "tests/device/joystick.rs"
-harness = false
-
-[[test]]
-name = "microphone"
-path = "tests/device/microphone.rs"
-harness = false
-
-[[test]]
-name = "speaker"
-path = "tests/device/speaker.rs"
 harness = false
 
 [[test]]

@@ -1,19 +1,28 @@
 # dxxk_mouse
 
-ESP32-S3 上で動作する Rust 製 USB 入力デバイスの実験用リポジトリです。
+CH32V203K8T6 上で動作する Rust 製 USB 入力デバイスです。
 
-ファームウェアは、USB HID のキーボードとマウス、USB Audio Class 1（UAC1）のマイクとスピーカーを一つの USB デバイスとして提供します。
+ファームウェアは、USB HID のキーボードとマウスを一つの USB デバイスとして提供します。
+
+USB Audio と I2S を使うマイクおよびスピーカーは対象外です。
+
+> [!NOTE]
+> この README は CH32V203K8T6 への移植後の構成を示します。
+> ソースコードとビルド設定の移植は完了していません。
 
 ## 対象環境
 
 | 項目 | 構成 |
 | --- | --- |
-| MCU | ESP32-S3 |
-| Rust target | `xtensa-esp32s3-none-elf` |
-| HAL | `esp-hal` |
-| async runtime | Embassy、`esp-rtos` |
-| USB | `embassy-usb` |
-| 実機テスト | `embedded-test`、`probe-rs` |
+| MCU | CH32V203K8T6（LQFP32） |
+| CPU | QingKe V4B（RISC-V） |
+| Flash | 64 KiB |
+| RAM | 20 KiB |
+| Rust target | `riscv32imc-unknown-none-elf` |
+| HAL | `ch32-hal`（`ch32v203k8t6` feature） |
+| async runtime | Embassy、`qingke-rt` |
+| USB | `embassy-usb`、`ch32-hal::usbd` |
+| 書き込み | `wlink`、WCH-Link |
 
 ## ディレクトリ構成
 
@@ -27,11 +36,8 @@ dick_mouse
 │   ├── device
 │   │   ├── button.rs
 │   │   ├── encoder.rs
-│   │   ├── joystick.rs
-│   │   ├── microphone.rs
-│   │   └── speaker.rs
+│   │   └── joystick.rs
 │   └── tasks
-│       ├── audio.rs
 │       ├── hid.rs
 │       ├── keyboard.rs
 │       ├── mouse.rs
@@ -40,9 +46,7 @@ dick_mouse
     ├── device
     │   ├── button.rs
     │   ├── encoder.rs
-    │   ├── joystick.rs
-    │   ├── microphone.rs
-    │   └── speaker.rs
+    │   └── joystick.rs
     ├── main.rs
     ├── reexports.rs
     └── tasks
@@ -56,13 +60,13 @@ flowchart TD
   subgraph Mode["mode"]
     direction TB
     UsbHidReports["CHANNEL: USB_HID_REPORTS"]
-    ModeGpio["PERIPHERAL: GPIO21 slide switch"] --> HidTask["TASK: hid_task"]
+    ModeGpio["PERIPHERAL: GPIO PB0 slide switch"] --> HidTask["TASK: hid_task"]
   end
 
   subgraph Keyboard["keyboard"]
     direction TB
-    ShortcutGpio["PERIPHERAL: GPIO6/7 shortcut buttons"]
-    PushGpio["PERIPHERAL: GPIO42 joystick push"]
+    ShortcutGpio["PERIPHERAL: GPIO PA4/PA5 shortcut buttons"]
+    PushGpio["PERIPHERAL: GPIO PB1 joystick push"]
     KeyboardTask["TASK: keyboard_task"]
     KeyboardReports["CHANNEL: KEYBOARD_REPORTS"]
     ShortcutGpio --> KeyboardTask
@@ -71,40 +75,14 @@ flowchart TD
 
   subgraph Mouse["mouse"]
     direction TB
-    ClickGpio["PERIPHERAL: GPIO38/39 click buttons"]
-    JoystickAdc["PERIPHERAL: ADC1 GPIO1/2 joystick"]
-    ScrollPcnt["PERIPHERAL: PCNT0 GPIO11/12 scroll encoder"]
+    ClickGpio["PERIPHERAL: GPIO PB6/PB7 click buttons"]
+    JoystickAdc["PERIPHERAL: ADC1 PA0/PA1 joystick"]
+    ScrollTimer["PERIPHERAL: TIM3 PA6/PA7 scroll encoder"]
     MouseTask["TASK: mouse_task"]
     MouseReports["CHANNEL: MOUSE_REPORTS"]
     ClickGpio --> MouseTask
     JoystickAdc --> MouseTask
-    ScrollPcnt --> MouseTask
-  end
-
-  subgraph Microphone["microphone"]
-    direction TB
-    I2sMic["PERIPHERAL: I2S0 RX microphone"]
-    MicMuteGpio["PERIPHERAL: GPIO4 microphone mute"]
-    MicVolumePcnt["PERIPHERAL: PCNT1 GPIO13/14 volume encoder"]
-    MicrophoneTask["TASK: microphone_task"]
-    MicrophoneFrames["CHANNEL: MICROPHONE_FRAMES"]
-    I2sMic --> MicrophoneTask
-    MicMuteGpio --> MicrophoneTask
-    MicVolumePcnt --> MicrophoneTask
-    MicrophoneTask --> MicrophoneFrames
-  end
-
-  subgraph Speaker["speaker"]
-    direction TB
-    SpeakerFrames["CHANNEL: SPEAKER_FRAMES"]
-    SpeakerMuteGpio["PERIPHERAL: GPIO5 speaker mute"]
-    SpeakerVolumePcnt["PERIPHERAL: PCNT2 GPIO40/41 volume encoder"]
-    SpeakerTask["TASK: speaker_task"]
-    I2sSpeaker["PERIPHERAL: I2S0 TX speaker"]
-    SpeakerFrames --> SpeakerTask
-    SpeakerMuteGpio --> SpeakerTask
-    SpeakerVolumePcnt --> SpeakerTask
-    SpeakerTask --> I2sSpeaker
+    ScrollTimer --> MouseTask
   end
 
   UsbTask["TASK: usb_task"]
@@ -112,17 +90,11 @@ flowchart TD
   subgraph Usb["usb"]
     direction LR
     UsbHid["USB: HID keyboard / mouse"]
-    UsbMic["USB: UAC microphone"]
-    UsbSpeaker["USB: UAC speaker"]
-    UsbPeripheral["PERIPHERAL: USB0 GPIO19/20"]
+    UsbPeripheral["PERIPHERAL: USBD PA11/PA12"]
     UsbHid --> UsbPeripheral
-    UsbMic --> UsbPeripheral
-    UsbPeripheral --> UsbSpeaker
   end
 
   UsbTask --> UsbHid
-  UsbTask --> UsbMic
-  UsbSpeaker --> UsbTask
 
   KeyboardTask --> KeyboardReports
   MouseTask --> MouseReports
@@ -130,13 +102,11 @@ flowchart TD
   MouseReports --> HidTask
   HidTask --> UsbHidReports
   UsbHidReports --> UsbTask
-  MicrophoneFrames --> UsbTask
-  UsbTask --> SpeakerFrames
 
-  class ShortcutGpio,PushGpio,ModeGpio,ClickGpio,JoystickAdc,ScrollPcnt,MicMuteGpio,MicVolumePcnt,I2sMic,SpeakerMuteGpio,SpeakerVolumePcnt,I2sSpeaker,UsbPeripheral peripheral
-  class KeyboardTask,HidTask,MouseTask,MicrophoneTask,SpeakerTask,UsbTask task
-  class KeyboardReports,MouseReports,UsbHidReports,MicrophoneFrames,SpeakerFrames channel
-  class UsbHid,UsbMic,UsbSpeaker usb
+  class ShortcutGpio,PushGpio,ModeGpio,ClickGpio,JoystickAdc,ScrollTimer,UsbPeripheral peripheral
+  class KeyboardTask,HidTask,MouseTask,UsbTask task
+  class KeyboardReports,MouseReports,UsbHidReports channel
+  class UsbHid usb
 
   classDef peripheral fill:#ddf4ff,stroke:#0969da,color:#24292f
   classDef task fill:#dafbe1,stroke:#1a7f37,color:#24292f
@@ -151,38 +121,23 @@ flowchart TD
 | 型 | 入力 | 責務 |
 | --- | --- | --- |
 | `Button` | GPIO level、時刻 | active level、debounce、押下状態を保持する |
-| `RotaryEncoder` | PCNT count、時刻 | count を安定化し、detent 算出に使う値を保持する |
+| `RotaryEncoder` | TIM3 count、時刻 | count を安定化し、detent 算出に使う値を保持する |
 | `Joystick` | X/Y の ADC 値 | 初期位置を中心として X/Y の差分を計算する |
-| `Microphone` | I2S RX frame | USB マイクへ送る音声フレームを保持する |
-| `Speaker` | USB speaker frame | I2S TX へ送る音声フレームを保持する |
 
-各構造体は setter や `&mut self` を持たず、`update(self) -> Self` または `new()` で新しい状態を返します。
+各構造体は setter や `&mut self` を持たず、`update(self) -> Self` で新しい状態を返します。
 
 ### task のデータフロー
-
-USB HID と USB Audio は、同じ列で入力、処理、出力を示します。
-
-#### USB HID
 
 | task | 入力 | 処理 | 出力 |
 | --- | --- | --- | --- |
 | `keyboard_task` | joystick push、Back、Forward の GPIO | `Button` を更新し、ボタン状態を集約する | `KEYBOARD_REPORTS` |
-| `mouse_task` | click の GPIO、joystick の ADC、encoder の PCNT | `Button`、`Joystick`、`RotaryEncoder` を更新し、マウス入力を集約する | `MOUSE_REPORTS` |
+| `mouse_task` | click の GPIO、joystick の ADC、encoder の TIM3 count | `Button`、`Joystick`、`RotaryEncoder` を更新し、マウス入力を集約する | `MOUSE_REPORTS` |
 | `hid_task` | mode GPIO、`KEYBOARD_REPORTS`、`MOUSE_REPORTS` | mode に応じて入力を keyboard または mouse report に変換する | `USB_HID_REPORTS` |
 | `usb_task` | `USB_HID_REPORTS` | report ID を付けて HID endpoint へ書き込む | USB HID keyboard、mouse |
 
-#### USB Audio
-
-| task | 入力 | 処理 | 出力 |
-| --- | --- | --- | --- |
-| `microphone_task` | I2S RX、mute GPIO、volume encoder の PCNT | mute と音量を反映し、PCM byte 列を音声フレームへ変換する | `MICROPHONE_FRAMES` |
-| `usb_task`（microphone） | `MICROPHONE_FRAMES` | mono sample を左右へ複製し、UAC1 packet を組み立てる | USB UAC1 microphone |
-| `usb_task`（speaker） | USB UAC1 speaker | UAC1 packet を音声フレームへ変換する | `SPEAKER_FRAMES` |
-| `speaker_task` | `SPEAKER_FRAMES`、mute GPIO、volume encoder の PCNT | mute と音量を反映し、音声フレームを PCM byte 列へ変換する | I2S TX |
-
 ## 入力割り当て
 
-`GPIO21` のスライドスイッチに応じて、`hid_task` が通常モードとゲームモードを切り替えます。
+`PB0` のスライドスイッチに応じて、`hid_task` が通常モードとゲームモードを切り替えます。
 
 | 入力 | 通常モード | ゲームモード |
 | --- | --- | --- |
@@ -196,59 +151,46 @@ USB HID と USB Audio は、同じ列で入力、処理、出力を示します�
 
 ゲームモードでは joystick の X/Y 差分が `512` を超えた方向をキー入力へ変換します。
 
-同時押しが HID keyboard の上限を超えた場合は、実装上の割り当て順で先頭の 6 キーを送信します。
+同時押しが HID keyboard の上限を超えた場合は、割り当て順で先頭の 6 キーを送信します。
 
 ## USB インターフェース
 
 | インターフェース | USB class | 方向 | データ形式 |
 | --- | --- | --- | --- |
-| Keyboard | HID、report ID `1` | ESP32-S3 から PC | modifier、6 keycodes |
-| Mouse | HID、report ID `2` | ESP32-S3 から PC | buttons、X/Y、wheel、pan |
-| Microphone | UAC1 source | ESP32-S3 から PC | 48 kHz、16-bit、stereo |
-| Speaker | UAC1 speaker | PC から ESP32-S3 | 48 kHz、16-bit、mono（Left Front） |
-
-I2S は RX、TX ともに 48 kHz、16-bit、mono で動作します。
-
-USB microphone には、I2S RX の mono sample を左右の channel へ複製して送信します。
+| Keyboard | HID、report ID `1` | CH32V203K8T6 から PC | modifier、6 keycodes |
+| Mouse | HID、report ID `2` | CH32V203K8T6 から PC | buttons、X/Y、wheel、pan |
 
 ## ピン割り当て
 
-| 機能 | 信号 | peripheral | GPIO | 所有する task |
+| 機能 | 信号 | peripheral | 端子 | 所有する task |
 | --- | --- | --- | --- | --- |
-| Mode | slide switch | GPIO | `GPIO21` | `hid_task` |
-| Keyboard | joystick push | GPIO | `GPIO42` | `keyboard_task` |
-| Keyboard | Back button | GPIO | `GPIO6` | `keyboard_task` |
-| Keyboard | Forward button | GPIO | `GPIO7` | `keyboard_task` |
-| Mouse | joystick X | ADC1 | `GPIO1` | `mouse_task` |
-| Mouse | joystick Y | ADC1 | `GPIO2` | `mouse_task` |
-| Mouse | scroll encoder A | PCNT0 | `GPIO11` | `mouse_task` |
-| Mouse | scroll encoder B | PCNT0 | `GPIO12` | `mouse_task` |
-| Mouse | left click | GPIO | `GPIO38` | `mouse_task` |
-| Mouse | right click | GPIO | `GPIO39` | `mouse_task` |
-| Microphone | mute button | GPIO | `GPIO4` | `microphone_task` |
-| Microphone | volume encoder A | PCNT1 | `GPIO13` | `microphone_task` |
-| Microphone | volume encoder B | PCNT1 | `GPIO14` | `microphone_task` |
-| Microphone | BCLK | I2S0 RX | `GPIO15` | `microphone_task` |
-| Microphone | WS | I2S0 RX | `GPIO16` | `microphone_task` |
-| Microphone | DIN | I2S0 RX | `GPIO17` | `microphone_task` |
-| Speaker | mute button | GPIO | `GPIO5` | `speaker_task` |
-| Speaker | volume encoder A | PCNT2 | `GPIO40` | `speaker_task` |
-| Speaker | volume encoder B | PCNT2 | `GPIO41` | `speaker_task` |
-| Speaker | BCLK | I2S0 TX | `GPIO8` | `speaker_task` |
-| Speaker | WS | I2S0 TX | `GPIO9` | `speaker_task` |
-| Speaker | DOUT | I2S0 TX | `GPIO10` | `speaker_task` |
-| USB | D- | USB0 | `GPIO19` | `usb_task` |
-| USB | D+ | USB0 | `GPIO20` | `usb_task` |
+| Mode | slide switch | GPIO | `PB0` | `hid_task` |
+| Keyboard | joystick push | GPIO | `PB1` | `keyboard_task` |
+| Keyboard | Back button | GPIO | `PA4` | `keyboard_task` |
+| Keyboard | Forward button | GPIO | `PA5` | `keyboard_task` |
+| Mouse | joystick X | ADC1 IN0 | `PA0` | `mouse_task` |
+| Mouse | joystick Y | ADC1 IN1 | `PA1` | `mouse_task` |
+| Mouse | scroll encoder A | TIM3 CH1 | `PA6` | `mouse_task` |
+| Mouse | scroll encoder B | TIM3 CH2 | `PA7` | `mouse_task` |
+| Mouse | left click | GPIO | `PB6` | `mouse_task` |
+| Mouse | right click | GPIO | `PB7` | `mouse_task` |
+| USB | D- | USBD DM | `PA11` | `usb_task` |
+| USB | D+ | USBD DP | `PA12` | `usb_task` |
 
-I2S RX と I2S TX は `I2S0` と `DMA_CH0` を共有します。
+`PA11` と `PA12` は USBD に使用するため、汎用入出力には割り当てません。
 
-マイクとスピーカーの音量は起動時を 100% とし、エンコーダーの 1 detent ごとに 5% ずつ、0% から 100% の範囲で変更します。
-
-`GPIO0/3/45/46` は strapping、`GPIO43/44` は UART0、`GPIO19/20` は USB に使われるため、汎用入力には割り当てていません。
-
-`GPIO39/40/41/42` は外部 JTAG の既定信号と重なるため、現在の入力配線と外部 JTAG は同時に使用できません。
+`PA13` と `PA14` は WCH-Link のデバッグ端子として確保します。
 
 ## ビルドと書き込み
+
+Rust target と書き込みツールをインストールします。
+
+```sh
+rustup target add riscv32imc-unknown-none-elf
+cargo install wlink
+```
+
+ファームウェアをビルドし、WCH-Link から書き込みます。
 
 ```sh
 cd dick_mouse
@@ -256,33 +198,23 @@ cargo check
 cargo run --release
 ```
 
-通常実行時の runner は `.cargo/config.toml` に定義した `espflash flash` です。
+通常実行時の runner には、`.cargo/config.toml` で `wlink -v flash` を指定します。
 
-## 実機テスト
-
-テストはホスト PC 上の unit test ではなく、ESP32-S3 実機上で動作する `embedded-test` 形式です。
-
-```sh
-cargo test-hil
-```
-
-`cargo test-hil` は `.cargo/config.toml` の alias で、runner を `probe-rs run --chip esp32s3` に上書きします。
+## テスト
 
 | test target | 検証対象 |
 | --- | --- |
 | `button` | debounce と押下状態 |
 | `encoder` | count の安定化 |
 | `joystick` | 中心位置からの X/Y 差分 |
-| `microphone` | microphone frame の状態型 |
-| `speaker` | speaker frame の状態型 |
 | `reexports` | `device` 型の公開 API |
-| `tasks` | PCM 変換、HID report 変換、task の入口 |
+| `tasks` | HID report 変換と task の入口 |
 | `main` | firmware で使う peripheral の初期化 |
 
-`tests/` 配下の各ファイルは `Cargo.toml` の `[[test]]` で明示し、ESP32-S3 上の結合テストとして実行します。
+CH32V203K8T6 の実機テスト用 runner は、ソースコードの移植時に設定します。
 
 ## 制約
 
-- ビルドには `xtensa-esp32s3-none-elf` target に対応した Rust 環境が必要です。
-- 実機テストには `probe-rs` がデバイスへアクセスできる権限が必要です。
-- `embassy-usb` は UAC1 source を使うため、Embassy の git revision に固定しています。
+- `ch32-hal` は開発中であり、USB の動作は実機で確認する必要があります。
+- ROM と RAM の分割設定は、リンカースクリプトが前提とする構成に合わせます。
+- USB Audio、I2S、マイク、スピーカーには対応しません。

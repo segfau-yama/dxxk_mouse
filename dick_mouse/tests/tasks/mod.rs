@@ -16,26 +16,6 @@ mod tests {
     use usbd_hid::descriptor::KeyboardUsage;
 
     #[test]
-    fn audio_moduleはframe変換とtask入口を持つ() {
-        let frame = tasks::audio::bytes_to_audio_frame(&[0x34, 0x12, 0xfe, 0xff]);
-        let mut samples = [0; tasks::audio::AUDIO_FRAME_SAMPLES];
-        samples[0] = 20_000;
-        samples[1] = -20_000;
-        tasks::audio::apply_volume(&mut samples, 50);
-
-        assert_eq!(tasks::audio::AUDIO_FRAME_BYTES, 96);
-        assert_eq!(frame[0], 0x1234);
-        assert_eq!(frame[1], -2);
-        assert_eq!(frame[2], 0);
-        assert_eq!(samples[0], 10_000);
-        assert_eq!(samples[1], -10_000);
-        assert_eq!(tasks::audio::volume_after_detents(95, 2), 100);
-        assert_eq!(tasks::audio::volume_after_detents(5, -2), 0);
-        let _ = tasks::audio::microphone_task;
-        let _ = tasks::audio::speaker_task;
-    }
-
-    #[test]
     fn hid_moduleは通常入力とgame入力をreportへ変換する() {
         let keyboard = tasks::hid::KeyboardInput {
             joystick_pressed: true,
