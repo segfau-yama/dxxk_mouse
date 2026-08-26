@@ -62,7 +62,7 @@ flowchart TD
   subgraph Keyboard["keyboard"]
     direction TB
     ShortcutGpio["PERIPHERAL: GPIO6/7 shortcut buttons"]
-    PushGpio["PERIPHERAL: GPIO18 joystick push"]
+    PushGpio["PERIPHERAL: GPIO42 joystick push"]
     KeyboardTask["TASK: keyboard_task"]
     KeyboardReports["CHANNEL: KEYBOARD_REPORTS"]
     ShortcutGpio --> KeyboardTask
@@ -71,7 +71,7 @@ flowchart TD
 
   subgraph Mouse["mouse"]
     direction TB
-    ClickGpio["PERIPHERAL: GPIO41/42 click buttons"]
+    ClickGpio["PERIPHERAL: GPIO38/39 click buttons"]
     JoystickAdc["PERIPHERAL: ADC1 GPIO1/2 joystick"]
     ScrollPcnt["PERIPHERAL: PCNT0 GPIO11/12 scroll encoder"]
     MouseTask["TASK: mouse_task"]
@@ -85,10 +85,12 @@ flowchart TD
     direction TB
     I2sMic["PERIPHERAL: I2S0 RX microphone"]
     MicMuteGpio["PERIPHERAL: GPIO4 microphone mute"]
+    MicVolumePcnt["PERIPHERAL: PCNT1 GPIO13/14 volume encoder"]
     MicrophoneTask["TASK: microphone_task"]
     MicrophoneFrames["CHANNEL: MICROPHONE_FRAMES"]
     I2sMic --> MicrophoneTask
     MicMuteGpio --> MicrophoneTask
+    MicVolumePcnt --> MicrophoneTask
     MicrophoneTask --> MicrophoneFrames
   end
 
@@ -96,10 +98,12 @@ flowchart TD
     direction TB
     SpeakerFrames["CHANNEL: SPEAKER_FRAMES"]
     SpeakerMuteGpio["PERIPHERAL: GPIO5 speaker mute"]
+    SpeakerVolumePcnt["PERIPHERAL: PCNT2 GPIO40/41 volume encoder"]
     SpeakerTask["TASK: speaker_task"]
     I2sSpeaker["PERIPHERAL: I2S0 TX speaker"]
     SpeakerFrames --> SpeakerTask
     SpeakerMuteGpio --> SpeakerTask
+    SpeakerVolumePcnt --> SpeakerTask
     SpeakerTask --> I2sSpeaker
   end
 
@@ -129,7 +133,7 @@ flowchart TD
   MicrophoneFrames --> UsbTask
   UsbTask --> SpeakerFrames
 
-  class ShortcutGpio,PushGpio,ModeGpio,ClickGpio,JoystickAdc,ScrollPcnt,MicMuteGpio,I2sMic,SpeakerMuteGpio,I2sSpeaker,UsbPeripheral peripheral
+  class ShortcutGpio,PushGpio,ModeGpio,ClickGpio,JoystickAdc,ScrollPcnt,MicMuteGpio,MicVolumePcnt,I2sMic,SpeakerMuteGpio,SpeakerVolumePcnt,I2sSpeaker,UsbPeripheral peripheral
   class KeyboardTask,HidTask,MouseTask,MicrophoneTask,SpeakerTask,UsbTask task
   class KeyboardReports,MouseReports,UsbHidReports,MicrophoneFrames,SpeakerFrames channel
   class UsbHid,UsbMic,UsbSpeaker usb
@@ -171,10 +175,10 @@ USB HID と USB Audio は、同じ列で入力、処理、出力を示します�
 
 | task | 入力 | 処理 | 出力 |
 | --- | --- | --- | --- |
-| `microphone_task` | I2S RX、mute GPIO | mute 状態を反映し、PCM byte 列を音声フレームへ変換する | `MICROPHONE_FRAMES` |
+| `microphone_task` | I2S RX、mute GPIO、volume encoder の PCNT | mute と音量を反映し、PCM byte 列を音声フレームへ変換する | `MICROPHONE_FRAMES` |
 | `usb_task`（microphone） | `MICROPHONE_FRAMES` | mono sample を左右へ複製し、UAC1 packet を組み立てる | USB UAC1 microphone |
 | `usb_task`（speaker） | USB UAC1 speaker | UAC1 packet を音声フレームへ変換する | `SPEAKER_FRAMES` |
-| `speaker_task` | `SPEAKER_FRAMES`、mute GPIO | mute 状態を反映し、音声フレームを PCM byte 列へ変換する | I2S TX |
+| `speaker_task` | `SPEAKER_FRAMES`、mute GPIO、volume encoder の PCNT | mute と音量を反映し、音声フレームを PCM byte 列へ変換する | I2S TX |
 
 ## 入力割り当て
 
@@ -212,20 +216,24 @@ USB microphone には、I2S RX の mono sample を左右の channel へ複製し
 | 機能 | 信号 | peripheral | GPIO | 所有する task |
 | --- | --- | --- | --- | --- |
 | Mode | slide switch | GPIO | `GPIO21` | `hid_task` |
-| Keyboard | joystick push | GPIO | `GPIO18` | `keyboard_task` |
+| Keyboard | joystick push | GPIO | `GPIO42` | `keyboard_task` |
 | Keyboard | Back button | GPIO | `GPIO6` | `keyboard_task` |
 | Keyboard | Forward button | GPIO | `GPIO7` | `keyboard_task` |
 | Mouse | joystick X | ADC1 | `GPIO1` | `mouse_task` |
 | Mouse | joystick Y | ADC1 | `GPIO2` | `mouse_task` |
 | Mouse | scroll encoder A | PCNT0 | `GPIO11` | `mouse_task` |
 | Mouse | scroll encoder B | PCNT0 | `GPIO12` | `mouse_task` |
-| Mouse | left click | GPIO | `GPIO42` | `mouse_task` |
-| Mouse | right click | GPIO | `GPIO41` | `mouse_task` |
+| Mouse | left click | GPIO | `GPIO38` | `mouse_task` |
+| Mouse | right click | GPIO | `GPIO39` | `mouse_task` |
 | Microphone | mute button | GPIO | `GPIO4` | `microphone_task` |
+| Microphone | volume encoder A | PCNT1 | `GPIO13` | `microphone_task` |
+| Microphone | volume encoder B | PCNT1 | `GPIO14` | `microphone_task` |
 | Microphone | BCLK | I2S0 RX | `GPIO15` | `microphone_task` |
 | Microphone | WS | I2S0 RX | `GPIO16` | `microphone_task` |
 | Microphone | DIN | I2S0 RX | `GPIO17` | `microphone_task` |
 | Speaker | mute button | GPIO | `GPIO5` | `speaker_task` |
+| Speaker | volume encoder A | PCNT2 | `GPIO40` | `speaker_task` |
+| Speaker | volume encoder B | PCNT2 | `GPIO41` | `speaker_task` |
 | Speaker | BCLK | I2S0 TX | `GPIO8` | `speaker_task` |
 | Speaker | WS | I2S0 TX | `GPIO9` | `speaker_task` |
 | Speaker | DOUT | I2S0 TX | `GPIO10` | `speaker_task` |
@@ -234,9 +242,11 @@ USB microphone には、I2S RX の mono sample を左右の channel へ複製し
 
 I2S RX と I2S TX は `I2S0` と `DMA_CH0` を共有します。
 
+マイクとスピーカーの音量は起動時を 100% とし、エンコーダーの 1 detent ごとに 5% ずつ、0% から 100% の範囲で変更します。
+
 `GPIO0/3/45/46` は strapping、`GPIO43/44` は UART0、`GPIO19/20` は USB に使われるため、汎用入力には割り当てていません。
 
-`GPIO41/42` は外部 JTAG の既定信号と重なるため、現在の click button 配線と外部 JTAG は同時に使用できません。
+`GPIO39/40/41/42` は外部 JTAG の既定信号と重なるため、現在の入力配線と外部 JTAG は同時に使用できません。
 
 ## ビルドと書き込み
 

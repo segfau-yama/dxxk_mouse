@@ -1,4 +1,4 @@
-use dick_mouse::device::{Button, Joystick, RotaryEncoder, button::button_change};
+use dick_mouse::device::{Button, Joystick, RotaryEncoder};
 use embassy_time::{Duration, Timer};
 use esp_hal::{
     analog::adc::{Adc, AdcCalLine, AdcConfig, Attenuation},
@@ -65,8 +65,8 @@ pub(crate) async fn mouse_task(
         if detents != 0 {
             reported_count = reported_count.saturating_add(detents.saturating_mul(4));
         }
-        let _ = button_change(&mut left_button, left_input.level(), now_ms);
-        let _ = button_change(&mut right_button, right_input.level(), now_ms);
+        left_button = left_button.update(left_input.level(), now_ms);
+        right_button = right_button.update(right_input.level(), now_ms);
         joystick = joystick.update(adc.read_blocking(&mut x_pin), adc.read_blocking(&mut y_pin));
 
         let joystick_x = joystick.x();

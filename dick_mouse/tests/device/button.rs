@@ -9,27 +9,23 @@ esp_bootloader_esp_idf::esp_app_desc!();
 mod tests {
     use core::assert_eq;
 
-    use dick_mouse::device::{Button, button::button_change};
+    use dick_mouse::device::Button;
     use esp_hal::gpio::Level;
 
     #[test]
     fn updateはデバウンス後に押下状態へ変わる() {
         let button = Button::new(Level::High, Level::Low, 5);
-        let (button, changed) = button.update(Level::Low, 100);
-        let (next_button, next_changed) = button.update(Level::Low, 105);
+        let button = button.update(Level::Low, 100);
 
-        assert_eq!(changed, false);
-        assert_eq!(next_changed, true);
-        assert_eq!(next_button.level(), Level::Low);
-        assert!(next_button.is_pressed());
-    }
+        assert!(!button.changed());
 
-    #[test]
-    fn button_changeは状態を更新して変更後の押下状態を返す() {
-        let mut button = Button::new(Level::High, Level::Low, 5);
+        let button = button.update(Level::Low, 105);
 
-        assert_eq!(button_change(&mut button, Level::Low, 100), None);
-        assert_eq!(button_change(&mut button, Level::Low, 105), Some(true));
+        assert!(button.changed());
+        assert_eq!(button.level(), Level::Low);
         assert!(button.is_pressed());
+
+        let button = button.update(Level::Low, 106);
+        assert!(!button.changed());
     }
 }

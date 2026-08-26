@@ -1,4 +1,4 @@
-use dick_mouse::device::{Button, button::button_change};
+use dick_mouse::device::Button;
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_time::{Duration, Timer};
 use esp_hal::{
@@ -113,7 +113,8 @@ pub(crate) async fn hid_task(mode_gpio: AnyPin<'static>) {
     loop {
         let now_ms = Instant::now().duration_since_epoch().as_millis();
 
-        if let Some(enabled) = button_change(&mut mode_button, mode_input.level(), now_ms) {
+        mode_button = mode_button.update(mode_input.level(), now_ms);
+        if mode_button.changed() {
             USB_HID_REPORTS
                 .send(UsbHidReport::Keyboard(KeyboardReport::default()))
                 .await;
@@ -127,7 +128,7 @@ pub(crate) async fn hid_task(mode_gpio: AnyPin<'static>) {
                 }))
                 .await;
 
-            game_mode = enabled;
+            game_mode = mode_button.is_pressed();
             reported_game_keycodes = [0; 6];
             reported_mouse_buttons = 0;
 

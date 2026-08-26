@@ -1,4 +1,4 @@
-use dick_mouse::device::{Button, button::button_change};
+use dick_mouse::device::Button;
 use embassy_time::{Duration, Timer};
 use esp_hal::{
     gpio::{AnyPin, Input, InputConfig, Level, Pull},
@@ -29,13 +29,11 @@ pub(crate) async fn keyboard_task(
 
     loop {
         let now_ms = Instant::now().duration_since_epoch().as_millis();
-        let joystick_changed =
-            button_change(&mut joystick_button, joystick_button_input.level(), now_ms).is_some();
-        let back_changed = button_change(&mut back_button, back_input.level(), now_ms).is_some();
-        let forward_changed =
-            button_change(&mut forward_button, forward_input.level(), now_ms).is_some();
+        joystick_button = joystick_button.update(joystick_button_input.level(), now_ms);
+        back_button = back_button.update(back_input.level(), now_ms);
+        forward_button = forward_button.update(forward_input.level(), now_ms);
 
-        if first || joystick_changed || back_changed || forward_changed {
+        if first || joystick_button.changed() || back_button.changed() || forward_button.changed() {
             first = false;
             KEYBOARD_REPORTS
                 .send(KeyboardInput {

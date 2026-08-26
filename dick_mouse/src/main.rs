@@ -65,23 +65,35 @@ async fn main(spawner: Spawner) {
             peripherals.ADC1,
             peripherals.GPIO1,
             peripherals.GPIO2,
-            peripherals.GPIO42.degrade(),
-            peripherals.GPIO41.degrade(),
+            peripherals.GPIO38.degrade(),
+            peripherals.GPIO39.degrade(),
         )
         .expect("failed to create mouse task"),
     );
     spawner.spawn(
-        tasks::audio::microphone_task(i2s_rx, peripherals.GPIO4.degrade())
-            .expect("failed to create microphone task"),
+        tasks::audio::microphone_task(
+            i2s_rx,
+            peripherals.GPIO4.degrade(),
+            pcnt.unit1,
+            peripherals.GPIO13.degrade(),
+            peripherals.GPIO14.degrade(),
+        )
+        .expect("failed to create microphone task"),
     );
     spawner.spawn(tasks::usb::usb_task(usb).expect("failed to create usb task"));
     spawner.spawn(
-        tasks::audio::speaker_task(i2s_tx, peripherals.GPIO5.degrade())
-            .expect("failed to create speaker task"),
+        tasks::audio::speaker_task(
+            i2s_tx,
+            peripherals.GPIO5.degrade(),
+            pcnt.unit2,
+            peripherals.GPIO40.degrade(),
+            peripherals.GPIO41.degrade(),
+        )
+        .expect("failed to create speaker task"),
     );
     spawner.spawn(
         tasks::keyboard::keyboard_task(
-            peripherals.GPIO18.degrade(),
+            peripherals.GPIO42.degrade(),
             peripherals.GPIO6.degrade(),
             peripherals.GPIO7.degrade(),
         )
