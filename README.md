@@ -6,10 +6,6 @@ CH32V203K8T6 上で動作する Rust 製 USB 入力デバイスです。
 
 USB Audio と I2S を使うマイクおよびスピーカーは対象外です。
 
-> [!NOTE]
-> この README は CH32V203K8T6 への移植後の構成を示します。
-> ソースコードとビルド設定の移植は完了していません。
-
 ## 対象環境
 
 | 項目 | 構成 |
@@ -211,7 +207,7 @@ cargo run --release
 | `tasks` | HID report 変換と task の入口 |
 | `main` | firmware で使う peripheral の初期化 |
 
-CH32V203K8T6 の実機テスト用 runner は、ソースコードの移植時に設定します。
+テストをビルドする場合は `cargo test-hil --no-run`、WCH-Linkを接続して実行する場合は `cargo test-hil` を使います。
 
 ## 制約
 

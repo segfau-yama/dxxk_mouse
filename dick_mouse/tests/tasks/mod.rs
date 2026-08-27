@@ -2,8 +2,6 @@
 #![no_main]
 #![allow(unexpected_cfgs)]
 
-esp_bootloader_esp_idf::esp_app_desc!();
-
 #[path = "../../src/tasks/mod.rs"]
 mod tasks;
 

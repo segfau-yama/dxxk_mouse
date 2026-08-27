@@ -8,20 +8,18 @@ default = ["firmware-bin"]
 firmware-bin = []
 
 [dependencies]
-embassy-executor = { version = "0.10.0", default-features = false }
+ch32-hal = { git = "https://github.com/ch32-rs/ch32-hal.git", default-features = false, features = ["ch32v203k8t6", "embassy", "memory-x", "rt", "time-driver-tim2"] }
+embassy-executor = { version = "0.10.0", default-features = false, features = ["executor-thread", "platform-spin"] }
 embassy-futures = { version = "0.1.2", default-features = false }
 embassy-sync = { version = "0.8.0", default-features = false }
 embassy-time = { version = "0.5.1", default-features = false }
 embassy-usb = { version = "0.5.1", default-features = false, features = ["max-interface-count-8", "usbd-hid"] }
-esp-backtrace = { version = "0.19.0", default-features = false, features = ["esp32s3", "panic-handler", "println"] }
-esp-bootloader-esp-idf = { version = "0.5.0", default-features = false, features = ["esp32s3"] }
-esp-hal = { version = "1.1.1", default-features = false, features = ["esp32s3", "rt", "unstable"] }
-esp-rtos = { version = "0.3.0", default-features = false, features = ["embassy", "esp32s3"] }
-static_cell = { version = "2.1.1", default-features = false }
+panic-halt = "1.0.0"
+qingke-rt = "0.7"
 usbd-hid = { version = "0.8.2", default-features = false }
 
 [dev-dependencies]
-embedded-test = { version = "0.7.2", features = ["xtensa-semihosting"] }
+embedded-test = "0.7.2"
 
 [lib]
 harness = false
@@ -62,3 +60,16 @@ harness = false
 name = "tasks"
 path = "tests/tasks/mod.rs"
 harness = false
+
+[profile.dev]
+opt-level = "s"
+
+[profile.release]
+codegen-units = 1
+debug = 2
+debug-assertions = false
+incremental = false
+lto = "fat"
+opt-level = "s"
+overflow-checks = false
+strip = false

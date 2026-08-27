@@ -1,10 +1,10 @@
+use ch32_hal::{
+    Peri,
+    gpio::{AnyPin, Input, Level, Pull},
+};
 use dick_mouse::device::Button;
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
-use embassy_time::{Duration, Timer};
-use esp_hal::{
-    gpio::{AnyPin, Input, InputConfig, Level, Pull},
-    time::Instant,
-};
+use embassy_time::{Duration, Instant, Timer};
 use usbd_hid::descriptor::{KeyboardReport, KeyboardUsage, MouseReport};
 
 use super::usb::{USB_HID_POLL_MS, USB_HID_REPORTS, UsbHidReport};
@@ -101,9 +101,9 @@ pub(crate) fn mouse_report(input: MouseInput) -> MouseReport {
 }
 
 #[embassy_executor::task]
-pub(crate) async fn hid_task(mode_gpio: AnyPin<'static>) {
-    let mode_input = Input::new(mode_gpio, InputConfig::default().with_pull(Pull::Up));
-    let mut mode_button = Button::new(mode_input.level(), Level::Low, 5);
+pub(crate) async fn hid_task(mode_gpio: Peri<'static, AnyPin>) {
+    let mode_input = Input::new(mode_gpio, Pull::Up);
+    let mut mode_button = Button::new(mode_input.get_level(), Level::Low, 5);
     let mut game_mode = mode_button.is_pressed();
     let mut keyboard = KeyboardInput::default();
     let mut mouse = MouseInput::default();
@@ -111,9 +111,9 @@ pub(crate) async fn hid_task(mode_gpio: AnyPin<'static>) {
     let mut reported_mouse_buttons = 0;
 
     loop {
-        let now_ms = Instant::now().duration_since_epoch().as_millis();
+        let now_ms = Instant::now().as_millis();
 
-        mode_button = mode_button.update(mode_input.level(), now_ms);
+        mode_button = mode_button.update(mode_input.get_level(), now_ms);
         if mode_button.changed() {
             USB_HID_REPORTS
                 .send(UsbHidReport::Keyboard(KeyboardReport::default()))

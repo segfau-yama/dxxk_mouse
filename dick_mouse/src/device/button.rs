@@ -1,4 +1,4 @@
-use esp_hal::gpio::Level;
+use ch32_hal::gpio::Level;
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Button {

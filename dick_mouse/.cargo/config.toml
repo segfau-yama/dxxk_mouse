@@ -1,15 +1,8 @@
 [build]
-target = "xtensa-esp32s3-none-elf"
+target = "riscv32imc-unknown-none-elf"
 
-[unstable]
-build-std = ["core"]
-
-[target.xtensa-esp32s3-none-elf]
-runner = "espflash flash"
-rustflags = [
-    "-C",
-    "link-arg=-Tlinkall.x",
-]
+[target.riscv32imc-unknown-none-elf]
+runner = "wlink -v flash --enable-sdi-print --watch-serial"
 
 [alias]
 test-hil = [
@@ -17,7 +10,7 @@ test-hil = [
     "--tests",
     "--no-default-features",
     "--config",
-    "target.xtensa-esp32s3-none-elf.runner=\"probe-rs run --chip esp32s3\"",
+    "target.riscv32imc-unknown-none-elf.runner=\"probe-rs run --chip CH32V203K8T6\"",
     "--config",
-    "target.xtensa-esp32s3-none-elf.rustflags=[\"-C\",\"link-arg=-Tembedded-test.x\"]",
+    "target.riscv32imc-unknown-none-elf.rustflags=[\"-C\",\"link-arg=-Tlink.x\",\"-C\",\"link-arg=-Tembedded-test.x\"]",
 ]

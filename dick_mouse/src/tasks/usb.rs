@@ -1,24 +1,23 @@
+use ch32_hal::{
+    Peri, bind_interrupts, peripherals,
+    usbd::{Driver as UsbDriver, InterruptHandler},
+};
 use embassy_futures::join::join;
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_usb::{
     Builder as UsbBuilder, Config as UsbConfig,
-    class::hid::{
-        Config as UsbHidConfig, HidBootProtocol, HidSubclass, HidWriter, State as UsbHidState,
-    },
+    class::hid::{Config as UsbHidConfig, HidWriter, State as UsbHidState},
 };
-use esp_hal::otg_fs::{
-    Usb,
-    asynch::{Config as UsbDriverConfig, Driver as UsbDriver},
-};
-use static_cell::StaticCell;
 use usbd_hid::descriptor::{KeyboardReport, MouseReport};
+
+bind_interrupts!(struct Irqs {
+    USB_LP_CAN1_RX0 => InterruptHandler<peripherals::USBD>;
+});
 
 pub(crate) const USB_HID_POLL_MS: u8 = 10;
 const USB_HID_REPORT_BYTES: usize = 9;
-const USB_EP_OUT_BUFFER_SIZE: usize = 256;
-const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
-const USB_BOS_DESCRIPTOR_SIZE: usize = 128;
-const USB_MSOS_DESCRIPTOR_SIZE: usize = 128;
+const USB_CONFIG_DESCRIPTOR_SIZE: usize = 256;
+const USB_BOS_DESCRIPTOR_SIZE: usize = 64;
 const USB_CONTROL_BUFFER_SIZE: usize = 64;
 const USB_KEYBOARD_REPORT_ID: u8 = 1;
 const USB_MOUSE_REPORT_ID: u8 = 2;
@@ -41,20 +40,17 @@ pub(crate) enum UsbHidReport {
 
 pub(crate) static USB_HID_REPORTS: Channel<CriticalSectionRawMutex, UsbHidReport, 4> =
     Channel::new();
-static USB_EP_OUT_BUFFER: StaticCell<[u8; USB_EP_OUT_BUFFER_SIZE]> = StaticCell::new();
-static USB_CONFIG_DESCRIPTOR: StaticCell<[u8; USB_CONFIG_DESCRIPTOR_SIZE]> = StaticCell::new();
-static USB_BOS_DESCRIPTOR: StaticCell<[u8; USB_BOS_DESCRIPTOR_SIZE]> = StaticCell::new();
-static USB_MSOS_DESCRIPTOR: StaticCell<[u8; USB_MSOS_DESCRIPTOR_SIZE]> = StaticCell::new();
-static USB_CONTROL_BUFFER: StaticCell<[u8; USB_CONTROL_BUFFER_SIZE]> = StaticCell::new();
-static USB_HID_STATE: StaticCell<UsbHidState<'static>> = StaticCell::new();
-
 #[embassy_executor::task]
-pub(crate) async fn usb_task(usb: Usb<'static>) {
-    let driver = UsbDriver::new(
-        usb,
-        USB_EP_OUT_BUFFER.init([0; USB_EP_OUT_BUFFER_SIZE]),
-        UsbDriverConfig::default(),
-    );
+pub(crate) async fn usb_task(
+    usbd: Peri<'static, peripherals::USBD>,
+    dp: Peri<'static, peripherals::PA12>,
+    dm: Peri<'static, peripherals::PA11>,
+) {
+    let driver = UsbDriver::new(usbd, Irqs, dp, dm);
+    let mut config_descriptor = [0; USB_CONFIG_DESCRIPTOR_SIZE];
+    let mut bos_descriptor = [0; USB_BOS_DESCRIPTOR_SIZE];
+    let mut control_buffer = [0; USB_CONTROL_BUFFER_SIZE];
+    let mut hid_state = UsbHidState::new();
 
     let mut config = UsbConfig::new(0xc0de, 0x0001);
     config.manufacturer = Some("dick mouse");
@@ -64,22 +60,20 @@ pub(crate) async fn usb_task(usb: Usb<'static>) {
     let mut builder = UsbBuilder::new(
         driver,
         config,
-        USB_CONFIG_DESCRIPTOR.init([0; USB_CONFIG_DESCRIPTOR_SIZE]),
-        USB_BOS_DESCRIPTOR.init([0; USB_BOS_DESCRIPTOR_SIZE]),
-        USB_MSOS_DESCRIPTOR.init([0; USB_MSOS_DESCRIPTOR_SIZE]),
-        USB_CONTROL_BUFFER.init([0; USB_CONTROL_BUFFER_SIZE]),
+        &mut config_descriptor,
+        &mut bos_descriptor,
+        &mut [],
+        &mut control_buffer,
     );
 
     let mut hid_writer = HidWriter::<_, USB_HID_REPORT_BYTES>::new(
         &mut builder,
-        USB_HID_STATE.init(UsbHidState::new()),
+        &mut hid_state,
         UsbHidConfig {
             report_descriptor: USB_KEYBOARD_MOUSE_REPORT_DESCRIPTOR,
             request_handler: None,
             poll_ms: USB_HID_POLL_MS,
             max_packet_size: USB_HID_REPORT_BYTES as u16,
-            hid_subclass: HidSubclass::No,
-            hid_boot_protocol: HidBootProtocol::None,
         },
     );
     let mut device = builder.build();

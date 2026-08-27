@@ -2,49 +2,40 @@
 #![no_main]
 
 use embassy_executor::Spawner;
-use esp_backtrace as _;
-use esp_hal::{
-    gpio::Pin, interrupt::software::SoftwareInterruptControl, otg_fs::Usb, pcnt::Pcnt,
-    timer::timg::TimerGroup,
-};
-
-esp_bootloader_esp_idf::esp_app_desc!();
+use panic_halt as _;
 
 mod tasks;
 
-#[esp_rtos::main]
+#[embassy_executor::main(entry = "ch32_hal::entry")]
 async fn main(spawner: Spawner) {
-    let peripherals = esp_hal::init(esp_hal::Config::default());
+    let peripherals = ch32_hal::init(ch32_hal::Config {
+        rcc: ch32_hal::rcc::Config::SYSCLK_FREQ_144MHZ_HSI,
+        ..Default::default()
+    });
 
-    let sw_int = SoftwareInterruptControl::new(peripherals.SW_INTERRUPT);
-    let timg0 = TimerGroup::new(peripherals.TIMG0);
-    esp_rtos::start(timg0.timer0, sw_int.software_interrupt0);
-
-    let pcnt = Pcnt::new(peripherals.PCNT);
-    let usb = Usb::new(peripherals.USB0, peripherals.GPIO20, peripherals.GPIO19);
-
-    spawner.spawn(
-        tasks::hid::hid_task(peripherals.GPIO21.degrade()).expect("failed to create HID task"),
-    );
+    spawner.spawn(tasks::hid::hid_task(peripherals.PB0.into()).expect("failed to create HID task"));
     spawner.spawn(
         tasks::mouse::mouse_task(
-            pcnt.unit0,
-            peripherals.GPIO11.degrade(),
-            peripherals.GPIO12.degrade(),
+            peripherals.TIM3,
+            peripherals.PA6,
+            peripherals.PA7,
             peripherals.ADC1,
-            peripherals.GPIO1,
-            peripherals.GPIO2,
-            peripherals.GPIO38.degrade(),
-            peripherals.GPIO39.degrade(),
+            peripherals.PA0,
+            peripherals.PA1,
+            peripherals.PB6.into(),
+            peripherals.PB7.into(),
         )
         .expect("failed to create mouse task"),
     );
-    spawner.spawn(tasks::usb::usb_task(usb).expect("failed to create usb task"));
+    spawner.spawn(
+        tasks::usb::usb_task(peripherals.USBD, peripherals.PA12, peripherals.PA11)
+            .expect("failed to create USB task"),
+    );
     spawner.spawn(
         tasks::keyboard::keyboard_task(
-            peripherals.GPIO42.degrade(),
-            peripherals.GPIO6.degrade(),
-            peripherals.GPIO7.degrade(),
+            peripherals.PB1.into(),
+            peripherals.PA4.into(),
+            peripherals.PA5.into(),
         )
         .expect("failed to create keyboard task"),
     );
