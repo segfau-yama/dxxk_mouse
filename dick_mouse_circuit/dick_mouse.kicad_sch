@@ -6528,6 +6528,16 @@
 	)
 	(wire
 		(pts
+			(xy 254 48.26) (xy 254 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "122a733c-a12d-48e9-91d6-e9b58eda41b4")
+	)
+	(wire
+		(pts
 			(xy 62.23 36.83) (xy 63.5 36.83)
 		)
 		(stroke
@@ -6588,16 +6598,6 @@
 	)
 	(wire
 		(pts
-			(xy 260.35 149.86) (xy 260.35 152.4)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1a247c11-cabd-47fd-85f0-30fe2693e434")
-	)
-	(wire
-		(pts
 			(xy 50.8 152.4) (xy 52.07 152.4)
 		)
 		(stroke
@@ -6645,6 +6645,16 @@
 			(type default)
 		)
 		(uuid "1d443586-4697-4340-bab7-6b631dd84fa0")
+	)
+	(wire
+		(pts
+			(xy 254 35.56) (xy 254 40.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1d93cc48-6324-400f-b7e7-247548cae344")
 	)
 	(wire
 		(pts
@@ -6885,16 +6895,6 @@
 			(type default)
 		)
 		(uuid "32c6f961-abd6-40fd-9d51-a39a2fd2c9c3")
-	)
-	(wire
-		(pts
-			(xy 254 139.7) (xy 260.35 139.7)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "32d778cb-31af-45b4-b4d9-a16ba6297384")
 	)
 	(wire
 		(pts
@@ -7738,16 +7738,6 @@
 	)
 	(wire
 		(pts
-			(xy 254 152.4) (xy 260.35 152.4)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "83ba4b65-0f9e-4bdc-9a40-2a5e2aff2423")
-	)
-	(wire
-		(pts
 			(xy 127 40.64) (xy 127 38.1)
 		)
 		(stroke
@@ -8438,16 +8428,6 @@
 	)
 	(wire
 		(pts
-			(xy 260.35 139.7) (xy 260.35 142.24)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c8800632-b6fc-4b3a-bf09-e29bdae0fef5")
-	)
-	(wire
-		(pts
 			(xy 63.5 190.5) (xy 62.23 190.5)
 		)
 		(stroke
@@ -9096,16 +9076,6 @@
 		)
 		(uuid "1ca84adc-93a8-4927-92df-0d09e7fae1a2")
 	)
-	(label "CAPP"
-		(at 203.2 110.49 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "1f1a7850-9f56-44df-a3d4-fcd31ae13869")
-	)
 	(label "AUDIO_RIGHT"
 		(at 247.65 193.04 0)
 		(effects
@@ -9195,16 +9165,6 @@
 			(justify right bottom)
 		)
 		(uuid "331651f3-8bcf-4cd9-b401-805517706227")
-	)
-	(label "CAPM"
-		(at 203.2 118.11 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "37a20031-1d05-4a83-a240-f4a3f9126d16")
 	)
 	(label "IO21"
 		(at 139.7 119.38 0)
@@ -9386,16 +9346,6 @@
 		)
 		(uuid "6ad175a7-6d8e-43b9-8fec-1c4168fa65f1")
 	)
-	(label "CAPP"
-		(at 254 152.4 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "6eb04f73-82fb-4937-9984-30ec29486bb4")
-	)
 	(label "IO38"
 		(at 381 43.18 0)
 		(effects
@@ -9525,16 +9475,6 @@
 			(justify left bottom)
 		)
 		(uuid "9775364d-44e4-4096-97b1-85dc6c8e7e10")
-	)
-	(label "CAPM"
-		(at 254 139.7 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "984329ef-f47d-4988-a976-b719faa8ef1c")
 	)
 	(label "CPVDD"
 		(at 181.61 95.25 90)
@@ -10066,7 +10006,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "04519b15-1b0e-457a-94af-43b041be02aa")
-		(property "Reference" "#PWR056"
+		(property "Reference" "#PWR058"
 			(at 342.9 119.38 0)
 			(hide yes)
 			(show_name no)
@@ -10126,7 +10066,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR056")
+					(reference "#PWR058")
 					(unit 1)
 				)
 			)
@@ -10222,7 +10162,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0abf1d12-5133-453c-ad13-7a3210818efe")
-		(property "Reference" "#PWR058"
+		(property "Reference" "#PWR060"
 			(at 342.9 245.11 0)
 			(hide yes)
 			(show_name no)
@@ -10282,7 +10222,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR058")
+					(reference "#PWR060")
 					(unit 1)
 				)
 			)
@@ -10300,7 +10240,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0b047484-7448-4faf-ada8-3be9a0ba4f0a")
-		(property "Reference" "#PWR049"
+		(property "Reference" "#PWR051"
 			(at 336.55 189.23 0)
 			(hide yes)
 			(show_name no)
@@ -10360,7 +10300,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR049")
+					(reference "#PWR051")
 					(unit 1)
 				)
 			)
@@ -10439,6 +10379,88 @@
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
 					(reference "#PWR017")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 203.2 114.3 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0b8d0625-b433-4b27-aed9-caac46a4ca0a")
+		(property "Reference" "C19"
+			(at 207.01 113.0299 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2.2u"
+			(at 207.01 115.5699 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 204.1652 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 203.2 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 203.2 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "566ed467-9dca-4797-93c1-2dbefcc29aa5")
+		)
+		(pin "1"
+			(uuid "2388982a-54f0-45a3-8296-c2d119562fcc")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "C19")
 					(unit 1)
 				)
 			)
@@ -10534,7 +10556,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "124e2c71-e152-44ad-bfa9-64dbe369625d")
-		(property "Reference" "C19"
+		(property "Reference" "C20"
 			(at 276.86 105.7909 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10598,89 +10620,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "C19")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 260.35 146.05 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "14a4c7ef-bd62-4e45-a877-1ea4cedf5337")
-		(property "Reference" "C18"
-			(at 264.16 144.7799 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "2.2u"
-			(at 264.16 147.3199 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 261.3152 149.86 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 260.35 146.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor"
-			(at 260.35 146.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "f8cc7e31-86df-4327-ab6c-3aa6ac88bac5")
-		)
-		(pin "1"
-			(uuid "3e4ba0e3-7af1-451f-94b5-771330ae8eb4")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "C18")
+					(reference "C20")
 					(unit 1)
 				)
 			)
@@ -11092,7 +11032,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "23ccb65b-5e23-4398-99cc-a1c4f1f7dbae")
-		(property "Reference" "#PWR054"
+		(property "Reference" "#PWR056"
 			(at 342.9 69.85 0)
 			(hide yes)
 			(show_name no)
@@ -11152,7 +11092,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR054")
+					(reference "#PWR056")
 					(unit 1)
 				)
 			)
@@ -11348,7 +11288,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2b319833-266b-46c0-a26c-c937e6768202")
-		(property "Reference" "#PWR055"
+		(property "Reference" "#PWR057"
 			(at 342.9 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -11408,7 +11348,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR055")
+					(reference "#PWR057")
 					(unit 1)
 				)
 			)
@@ -11998,7 +11938,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "41749602-df01-4fa9-a5fd-c77f7d062525")
-		(property "Reference" "C17"
+		(property "Reference" "C18"
 			(at 264.16 106.6799 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12062,7 +12002,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "C17")
+					(reference "C18")
 					(unit 1)
 				)
 			)
@@ -12598,7 +12538,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "54ff47a3-fe0b-4bc4-94c0-96d088a08bc9")
-		(property "Reference" "#PWR045"
+		(property "Reference" "#PWR047"
 			(at 273.05 105.41 0)
 			(hide yes)
 			(show_name no)
@@ -12658,7 +12598,89 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR045")
+					(reference "#PWR047")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 254 44.45 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "55ec037e-252e-4192-96cc-23feadfcf096")
+		(property "Reference" "C17"
+			(at 257.81 43.1799 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2.2u"
+			(at 257.81 45.7199 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 254.9652 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 254 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 254 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f999eec4-804f-42ec-83ab-2fd196a4c709")
+		)
+		(pin "2"
+			(uuid "19f4d046-188b-404d-8c46-0310ad942fd1")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "C17")
 					(unit 1)
 				)
 			)
@@ -12754,7 +12776,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "595cd961-a66f-43fd-9871-d96d3f9e3bad")
-		(property "Reference" "#PWR048"
+		(property "Reference" "#PWR050"
 			(at 336.55 171.45 0)
 			(hide yes)
 			(show_name no)
@@ -12814,7 +12836,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR048")
+					(reference "#PWR050")
 					(unit 1)
 				)
 			)
@@ -13284,6 +13306,84 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 254 53.34 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "651732f3-493a-421e-b560-a517fbe59458")
+		(property "Reference" "#PWR046"
+			(at 254 59.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 254 58.42 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 254 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 254 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 254 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a7554ef0-f99a-4bdb-aa65-7a6765c0e866")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "#PWR046")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector_Generic:Conn_01x05")
 		(at 355.6 184.15 0)
 		(unit 1)
@@ -13464,7 +13564,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6a72a54d-18d7-41cc-81eb-a23cc5d5ca19")
-		(property "Reference" "#PWR053"
+		(property "Reference" "#PWR055"
 			(at 342.9 44.45 0)
 			(hide yes)
 			(show_name no)
@@ -13524,7 +13624,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR053")
+					(reference "#PWR055")
 					(unit 1)
 				)
 			)
@@ -13699,7 +13799,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6dc1c5ee-5c74-4815-84f1-70e6a9dd5569")
-		(property "Reference" "#PWR057"
+		(property "Reference" "#PWR059"
 			(at 342.9 144.78 0)
 			(hide yes)
 			(show_name no)
@@ -13759,7 +13859,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR057")
+					(reference "#PWR059")
 					(unit 1)
 				)
 			)
@@ -15136,7 +15236,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "470"
 			(at 22.86 210.8199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16384,7 +16484,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a445a102-e07e-4b44-b13b-9c0e7ccc3762")
-		(property "Reference" "#PWR051"
+		(property "Reference" "#PWR053"
 			(at 336.55 209.55 0)
 			(hide yes)
 			(show_name no)
@@ -16444,7 +16544,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR051")
+					(reference "#PWR053")
 					(unit 1)
 				)
 			)
@@ -16622,7 +16722,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "aba4d7dd-491c-455c-8cce-0f1b79b541b8")
-		(property "Reference" "#PWR050"
+		(property "Reference" "#PWR052"
 			(at 336.55 196.85 0)
 			(hide yes)
 			(show_name no)
@@ -16682,7 +16782,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR050")
+					(reference "#PWR052")
 					(unit 1)
 				)
 			)
@@ -16789,7 +16889,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "470"
 			(at 22.86 172.7199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17559,7 +17659,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c3922e10-a83a-4dd7-aba4-a13b7ebde4fc")
-		(property "Reference" "#PWR047"
+		(property "Reference" "#PWR049"
 			(at 336.55 163.83 0)
 			(hide yes)
 			(show_name no)
@@ -17619,7 +17719,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR047")
+					(reference "#PWR049")
 					(unit 1)
 				)
 			)
@@ -17793,7 +17893,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c9a46836-dc41-4653-beb0-d96fe155d3c5")
-		(property "Reference" "#PWR052"
+		(property "Reference" "#PWR054"
 			(at 336.55 220.98 0)
 			(hide yes)
 			(show_name no)
@@ -17853,7 +17953,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR052")
+					(reference "#PWR054")
 					(unit 1)
 				)
 			)
@@ -18536,6 +18636,84 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+5V")
+		(at 254 35.56 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ddeea135-ad9d-4564-9b20-7b33dc90dd80")
+		(property "Reference" "#PWR045"
+			(at 254 39.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+5V"
+			(at 254 30.48 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 254 35.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 254 35.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 254 35.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "218ce359-b49f-4656-b6c8-411d182afe06")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "#PWR045")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 63.5 177.8 0)
 		(unit 1)
@@ -18979,7 +19157,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e940e56a-963d-48cb-9dbe-19951d1c813c")
-		(property "Reference" "#PWR046"
+		(property "Reference" "#PWR048"
 			(at 273.05 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -19039,7 +19217,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR046")
+					(reference "#PWR048")
 					(unit 1)
 				)
 			)
