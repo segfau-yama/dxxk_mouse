@@ -175,10 +175,10 @@ USB HID と USB Audio は、同じ列で入力、処理、出力を示します�
 
 | task | 入力 | 処理 | 出力 |
 | --- | --- | --- | --- |
-| `microphone_task` | I2S RX、mute GPIO、volume encoder の PCNT | mute と音量を反映し、PCM byte 列を音声フレームへ変換する | `MICROPHONE_FRAMES` |
+| `microphone_task` | I2S RX、mute GPIO、volume encoder の PCNT | mute と音量を反映し、I2S frame を音声フレームへ変換する | `MICROPHONE_FRAMES` |
 | `usb_task`（microphone） | `MICROPHONE_FRAMES` | mono sample を左右へ複製し、UAC1 packet を組み立てる | USB UAC1 microphone |
 | `usb_task`（speaker） | USB UAC1 speaker | UAC1 packet を音声フレームへ変換する | `SPEAKER_FRAMES` |
-| `speaker_task` | `SPEAKER_FRAMES`、mute GPIO、volume encoder の PCNT | mute と音量を反映し、音声フレームを PCM byte 列へ変換する | I2S TX |
+| `speaker_task` | `SPEAKER_FRAMES`、mute GPIO、volume encoder の PCNT | mute と音量を反映し、音声フレームをI2S frameへ変換する | I2S TX |
 
 ## 入力割り当て
 
@@ -207,7 +207,8 @@ USB HID と USB Audio は、同じ列で入力、処理、出力を示します�
 | Microphone | UAC1 source | ESP32-S3 から PC | 48 kHz、16-bit、stereo |
 | Speaker | UAC1 speaker | PC から ESP32-S3 | 48 kHz、16-bit、mono（Left Front） |
 
-I2S は RX、TX ともに 48 kHz、16-bit、mono で動作します。
+I2S は RX、TX ともに 48 kHz、32-bit slot、mono で動作します。
+INMP441 の 24-bit データを RX で 16-bit PCM に変換し、USB へ送信します。
 
 USB microphone には、I2S RX の mono sample を左右の channel へ複製して送信します。
 

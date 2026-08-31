@@ -24,7 +24,7 @@ use esp_hal::otg_fs::{
 use static_cell::StaticCell;
 use usbd_hid::descriptor::{KeyboardReport, MouseReport};
 
-use super::audio::{AUDIO_FRAME_BYTES, MICROPHONE_FRAMES, SPEAKER_FRAMES, bytes_to_audio_frame};
+use super::audio::{AUDIO_FRAME_BYTES, AUDIO_FRAME_SAMPLES, MICROPHONE_FRAMES, SPEAKER_FRAMES};
 
 pub(crate) const USB_HID_POLL_MS: u8 = 10;
 const USB_HID_REPORT_BYTES: usize = 9;
@@ -136,9 +136,13 @@ pub(crate) async fn usb_task(usb: Usb<'static>) {
 
                         match speaker_stream.read_packet(&mut packet).await {
                             Ok(size) if size > 0 => {
-                                SPEAKER_FRAMES
-                                    .send(bytes_to_audio_frame(&packet[..size]))
-                                    .await;
+                                let mut frame = [0; AUDIO_FRAME_SAMPLES];
+                                for (sample, chunk) in
+                                    frame.iter_mut().zip(packet[..size].chunks_exact(2))
+                                {
+                                    *sample = i16::from_le_bytes([chunk[0], chunk[1]]);
+                                }
+                                SPEAKER_FRAMES.send(frame).await;
                             }
                             Ok(_) => {}
                             Err(_) => break,

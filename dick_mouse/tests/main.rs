@@ -16,7 +16,7 @@ mod tests {
         timer::timg::TimerGroup,
     };
 
-    const AUDIO_FRAME_BYTES: usize = 48 * core::mem::size_of::<i16>();
+    const I2S_FRAME_BYTES: usize = 48 * core::mem::size_of::<i32>();
 
     #[test]
     fn mainで使うperipheralを初期化できる() {
@@ -25,13 +25,13 @@ mod tests {
         let timg0 = TimerGroup::new(peripherals.TIMG0);
         let _pcnt = Pcnt::new(peripherals.PCNT);
         let (rx_descriptors, tx_descriptors) =
-            esp_hal::dma_descriptors!(AUDIO_FRAME_BYTES, AUDIO_FRAME_BYTES);
+            esp_hal::dma_descriptors!(I2S_FRAME_BYTES, I2S_FRAME_BYTES);
         let i2s = I2s::new(
             peripherals.I2S0,
             peripherals.DMA_CH0,
             I2sConfig::new_tdm_philips()
                 .with_sample_rate(Rate::from_hz(48_000))
-                .with_data_format(DataFormat::Data16Channel16)
+                .with_data_format(DataFormat::Data32Channel32)
                 .with_channels(Channels::MONO),
         )
         .expect("failed to create I2S")

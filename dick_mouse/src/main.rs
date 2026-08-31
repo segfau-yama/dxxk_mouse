@@ -17,7 +17,7 @@ esp_bootloader_esp_idf::esp_app_desc!();
 
 mod tasks;
 
-use tasks::audio::AUDIO_FRAME_BYTES;
+use tasks::audio::I2S_FRAME_BYTES;
 
 #[esp_rtos::main]
 async fn main(spawner: Spawner) {
@@ -29,13 +29,13 @@ async fn main(spawner: Spawner) {
 
     let pcnt = Pcnt::new(peripherals.PCNT);
     let (rx_descriptors, tx_descriptors) =
-        esp_hal::dma_descriptors!(AUDIO_FRAME_BYTES, AUDIO_FRAME_BYTES);
+        esp_hal::dma_descriptors!(I2S_FRAME_BYTES, I2S_FRAME_BYTES);
     let i2s = I2s::new(
         peripherals.I2S0,
         peripherals.DMA_CH0,
         I2sConfig::new_tdm_philips()
             .with_sample_rate(Rate::from_hz(48_000))
-            .with_data_format(DataFormat::Data16Channel16)
+            .with_data_format(DataFormat::Data32Channel32)
             .with_channels(Channels::MONO),
     )
     .expect("failed to create I2S")

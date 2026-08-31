@@ -10,7 +10,10 @@ use esp_hal::{
 };
 
 pub(crate) const AUDIO_FRAME_SAMPLES: usize = 48;
+// USB and application frames contain 16-bit PCM samples.
 pub(crate) const AUDIO_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i16>();
+// The INMP441 is read as one 32-bit slot per sample.
+pub(crate) const I2S_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i32>();
 pub(crate) type AudioFrame = [i16; AUDIO_FRAME_SAMPLES];
 
 pub(crate) const DEFAULT_VOLUME_PERCENT: u8 = 100;
@@ -21,33 +24,11 @@ pub(crate) static MICROPHONE_FRAMES: Channel<CriticalSectionRawMutex, AudioFrame
     Channel::new();
 pub(crate) static SPEAKER_FRAMES: Channel<CriticalSectionRawMutex, AudioFrame, 2> = Channel::new();
 
-pub(crate) fn bytes_to_audio_frame(bytes: &[u8]) -> AudioFrame {
-    let mut frame = [0; AUDIO_FRAME_SAMPLES];
-
-    for (sample, chunk) in frame.iter_mut().zip(bytes.chunks_exact(2)) {
-        *sample = i16::from_le_bytes([chunk[0], chunk[1]]);
-    }
-
-    frame
-}
-
-pub(crate) fn volume_after_detents(volume: u8, detents: i32) -> u8 {
-    i32::from(volume)
-        .saturating_add(detents.saturating_mul(VOLUME_STEP_PERCENT))
-        .clamp(0, 100) as u8
-}
-
-pub(crate) fn apply_volume(frame: &mut AudioFrame, volume: u8) {
-    for sample in frame {
-        *sample = (i32::from(*sample) * i32::from(volume) / 100) as i16;
-    }
-}
-
 fn setup_volume_encoder<const NUM: usize>(
     unit: &Unit<'static, NUM>,
     gpio_a: AnyPin<'static>,
     gpio_b: AnyPin<'static>,
-) -> (Input<'static>, Input<'static>, RotaryEncoder, i32) {
+) -> (RotaryEncoder, i32) {
     let input_a = Input::new(gpio_a, InputConfig::default().with_pull(Pull::Up));
     let input_b = Input::new(gpio_b, InputConfig::default().with_pull(Pull::Up));
     let signal_a = input_a.peripheral_input();
@@ -70,8 +51,6 @@ fn setup_volume_encoder<const NUM: usize>(
     let count = unit.value() as i32;
     let now_ms = Instant::now().duration_since_epoch().as_millis();
     (
-        input_a,
-        input_b,
         RotaryEncoder::new(count, now_ms, 2),
         count,
     )
@@ -104,7 +83,7 @@ pub(crate) async fn microphone_task(
     let mute_input = Input::new(mute_gpio, InputConfig::default().with_pull(Pull::Up));
     let mut mute_button = Button::new(mute_input.level(), Level::Low, 5);
     let mut muted = false;
-    let (_volume_input_a, _volume_input_b, mut volume_encoder, mut reported_count) =
+    let (mut volume_encoder, mut reported_count) =
         setup_volume_encoder(&volume_unit, volume_gpio_a, volume_gpio_b);
     let mut volume = DEFAULT_VOLUME_PERCENT;
 
@@ -114,26 +93,36 @@ pub(crate) async fn microphone_task(
         if mute_button.changed() && mute_button.is_pressed() {
             muted = !muted;
         }
-        volume = volume_after_detents(
-            volume,
-            encoder_detents(
-                &volume_unit,
-                &mut volume_encoder,
-                &mut reported_count,
-                now_ms,
-            ),
-        );
+        volume = i32::from(volume)
+            .saturating_add(
+                encoder_detents(
+                    &volume_unit,
+                    &mut volume_encoder,
+                    &mut reported_count,
+                    now_ms,
+                )
+                .saturating_mul(VOLUME_STEP_PERCENT),
+            )
+            .clamp(0, 100) as u8;
+        let mut bytes = [0; I2S_FRAME_BYTES];
 
-        let mut bytes = [0; AUDIO_FRAME_BYTES];
-
-        if i2s_rx.read_dma_async(&mut bytes).await.is_ok() {
-            let mut frame = bytes_to_audio_frame(&bytes);
-            apply_volume(&mut frame, if muted { 0 } else { volume });
-            let microphone = Microphone::new(frame);
-            MICROPHONE_FRAMES.send(*microphone.buffer()).await;
+        match i2s_rx.read_dma_async(&mut bytes).await {
+            Ok(()) => {
+                let mut frame = [0; AUDIO_FRAME_SAMPLES];
+                for (sample, chunk) in frame.iter_mut().zip(bytes.chunks_exact(4)) {
+                    // INMP441 data is left-aligned in each 32-bit I2S slot; keep its top 16 bits.
+                    let raw = i32::from_le_bytes([chunk[0], chunk[1], chunk[2], chunk[3]]);
+                    *sample = (raw >> 16) as i16;
+                }
+                let volume = if muted { 0 } else { volume };
+                for sample in &mut frame {
+                    *sample = (i32::from(*sample) * i32::from(volume) / 100) as i16;
+                }
+                let microphone = Microphone::new(frame);
+                MICROPHONE_FRAMES.send(*microphone.buffer()).await;
+            }
+            Err(_) => Timer::after(Duration::from_millis(1)).await,
         }
-
-        Timer::after(Duration::from_millis(1)).await;
     }
 }
 
@@ -148,7 +137,7 @@ pub(crate) async fn speaker_task(
     let mute_input = Input::new(mute_gpio, InputConfig::default().with_pull(Pull::Up));
     let mut mute_button = Button::new(mute_input.level(), Level::Low, 5);
     let mut muted = false;
-    let (_volume_input_a, _volume_input_b, mut volume_encoder, mut reported_count) =
+    let (mut volume_encoder, mut reported_count) =
         setup_volume_encoder(&volume_unit, volume_gpio_a, volume_gpio_b);
     let mut volume = DEFAULT_VOLUME_PERCENT;
 
@@ -159,20 +148,26 @@ pub(crate) async fn speaker_task(
         if mute_button.changed() && mute_button.is_pressed() {
             muted = !muted;
         }
-        volume = volume_after_detents(
-            volume,
-            encoder_detents(
-                &volume_unit,
-                &mut volume_encoder,
-                &mut reported_count,
-                now_ms,
-            ),
-        );
-        apply_volume(&mut frame, if muted { 0 } else { volume });
+        volume = i32::from(volume)
+            .saturating_add(
+                encoder_detents(
+                    &volume_unit,
+                    &mut volume_encoder,
+                    &mut reported_count,
+                    now_ms,
+                )
+                .saturating_mul(VOLUME_STEP_PERCENT),
+            )
+            .clamp(0, 100) as u8;
+        let volume = if muted { 0 } else { volume };
+        for sample in &mut frame {
+            *sample = (i32::from(*sample) * i32::from(volume) / 100) as i16;
+        }
         let speaker = Speaker::new(frame);
-        let mut bytes = [0; AUDIO_FRAME_BYTES];
+        let mut bytes = [0; I2S_FRAME_BYTES];
 
-        for (sample, chunk) in speaker.buffer().iter().zip(bytes.chunks_exact_mut(2)) {
+        for (sample, chunk) in speaker.buffer().iter().zip(bytes.chunks_exact_mut(4)) {
+            let sample = i32::from(*sample) << 16;
             chunk.copy_from_slice(&sample.to_le_bytes());
         }
 
