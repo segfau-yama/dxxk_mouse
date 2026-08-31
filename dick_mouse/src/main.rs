@@ -42,15 +42,15 @@ async fn main(spawner: Spawner) {
     .into_async();
     let i2s_rx = i2s
         .i2s_rx
-        .with_bclk(peripherals.GPIO15)
-        .with_ws(peripherals.GPIO16)
-        .with_din(peripherals.GPIO17)
+        .with_bclk(peripherals.GPIO5)
+        .with_ws(peripherals.GPIO6)
+        .with_din(peripherals.GPIO7)
         .build(rx_descriptors);
     let i2s_tx = i2s
         .i2s_tx
-        .with_bclk(peripherals.GPIO8)
-        .with_ws(peripherals.GPIO9)
-        .with_dout(peripherals.GPIO10)
+        .with_bclk(peripherals.GPIO35)
+        .with_ws(peripherals.GPIO36)
+        .with_dout(peripherals.GPIO37)
         .build(tx_descriptors);
     let usb = Usb::new(peripherals.USB0, peripherals.GPIO20, peripherals.GPIO19);
 
@@ -60,20 +60,20 @@ async fn main(spawner: Spawner) {
     spawner.spawn(
         tasks::mouse::mouse_task(
             pcnt.unit0,
-            peripherals.GPIO11.degrade(),
-            peripherals.GPIO12.degrade(),
+            peripherals.GPIO9.degrade(),
+            peripherals.GPIO10.degrade(),
             peripherals.ADC1,
             peripherals.GPIO1,
             peripherals.GPIO2,
-            peripherals.GPIO38.degrade(),
-            peripherals.GPIO39.degrade(),
+            peripherals.GPIO47.degrade(),
+            peripherals.GPIO48.degrade(),
         )
         .expect("failed to create mouse task"),
     );
     spawner.spawn(
         tasks::audio::microphone_task(
             i2s_rx,
-            peripherals.GPIO4.degrade(),
+            peripherals.GPIO18.degrade(),
             pcnt.unit1,
             peripherals.GPIO13.degrade(),
             peripherals.GPIO14.degrade(),
@@ -84,18 +84,18 @@ async fn main(spawner: Spawner) {
     spawner.spawn(
         tasks::audio::speaker_task(
             i2s_tx,
-            peripherals.GPIO5.degrade(),
+            peripherals.GPIO17.degrade(),
             pcnt.unit2,
-            peripherals.GPIO40.degrade(),
-            peripherals.GPIO41.degrade(),
+            peripherals.GPIO11.degrade(),
+            peripherals.GPIO12.degrade(),
         )
         .expect("failed to create speaker task"),
     );
     spawner.spawn(
         tasks::keyboard::keyboard_task(
+            peripherals.GPIO40.degrade(),
+            peripherals.GPIO41.degrade(),
             peripherals.GPIO42.degrade(),
-            peripherals.GPIO6.degrade(),
-            peripherals.GPIO7.degrade(),
         )
         .expect("failed to create keyboard task"),
     );
