@@ -19,6 +19,7 @@ pub const SPEAKER_I2S_FRAME_BYTES: usize =
     SPEAKER_I2S_FRAME_SAMPLES * 2 * core::mem::size_of::<i16>();
 pub(crate) type AudioFrame = [i16; AUDIO_FRAME_SAMPLES];
 
+const MICROPHONE_GAIN: i16 = 8;
 pub(crate) const DEFAULT_VOLUME_PERCENT: u8 = 100;
 pub(crate) const VOLUME_STEP_PERCENT: i32 = 5;
 const COUNTS_PER_DETENT: i32 = 4;
@@ -112,7 +113,7 @@ pub async fn microphone_task(
                 for (sample, chunk) in frame.iter_mut().zip(bytes.chunks_exact(4)) {
                     // INMP441 data is left-aligned in each 32-bit I2S slot; keep its top 16 bits.
                     let raw = i32::from_le_bytes([chunk[0], chunk[1], chunk[2], chunk[3]]);
-                    *sample = (raw >> 16) as i16;
+                    *sample = ((raw >> 16) as i16).saturating_mul(MICROPHONE_GAIN);
                 }
                 let volume = if muted { 0 } else { volume };
                 for sample in &mut frame {
