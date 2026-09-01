@@ -2,6 +2,7 @@
 #![no_main]
 
 use embassy_executor::Spawner;
+use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_time::{Duration, Timer};
 use embassy_usb::{Builder as UsbBuilder, Config as UsbConfig, UsbDevice};
 use esp_backtrace as _;
@@ -27,15 +28,24 @@ use dick_mouse::tasks::usb_microphone::{
 esp_bootloader_esp_idf::esp_app_desc!();
 
 const AUDIO_FRAME_SAMPLES: usize = 48;
+const USB_AUDIO_CHANNELS: usize = 2;
 const I2S_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i32>();
-const USB_AUDIO_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * 2 * core::mem::size_of::<i16>();
-const MICROPHONE_GAIN: i16 = 8;
+const USB_AUDIO_FRAME_BYTES: usize =
+    AUDIO_FRAME_SAMPLES * USB_AUDIO_CHANNELS * core::mem::size_of::<i16>();
+// UAC1 Type-I packets may differ by one sample around the nominal samples/frame.
+const USB_AUDIO_MAX_PACKET_BYTES: usize =
+    (AUDIO_FRAME_SAMPLES + 1) * USB_AUDIO_CHANNELS * core::mem::size_of::<i16>();
 const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
 const USB_BOS_DESCRIPTOR_SIZE: usize = 128;
 const USB_MSOS_DESCRIPTOR_SIZE: usize = 128;
 const USB_CONTROL_BUFFER_SIZE: usize = 64;
 const USB_EP_OUT_BUFFER_SIZE: usize = 256;
+const MICROPHONE_QUEUE_DEPTH: usize = 8;
 
+type AudioFrame = [i16; AUDIO_FRAME_SAMPLES];
+
+static MICROPHONE_FRAMES: Channel<CriticalSectionRawMutex, AudioFrame, MICROPHONE_QUEUE_DEPTH> =
+    Channel::new();
 static USB_EP_OUT_BUFFER: StaticCell<[u8; USB_EP_OUT_BUFFER_SIZE]> = StaticCell::new();
 static USB_CONFIG_DESCRIPTOR: StaticCell<[u8; USB_CONFIG_DESCRIPTOR_SIZE]> = StaticCell::new();
 static USB_BOS_DESCRIPTOR: StaticCell<[u8; USB_BOS_DESCRIPTOR_SIZE]> = StaticCell::new();
@@ -49,49 +59,77 @@ async fn usb_task(mut device: UsbDevice<'static, UsbDriver<'static>>) {
 }
 
 #[embassy_executor::task]
-async fn microphone_stream(
-    mut audio: UsbMicrophoneStream<'static, UsbDriver<'static>>,
-    mut i2s_rx: I2sRx<'static, Async>,
-) {
+async fn microphone_capture(mut i2s_rx: I2sRx<'static, Async>) {
+    let mut frames = 0u32;
+    let mut peak = 0i32;
+
+    loop {
+        let mut input = [0u8; I2S_FRAME_BYTES];
+
+        if let Err(error) = i2s_rx.read_dma_async(&mut input).await {
+            println!("microphone: i2s read error = {:?}", error);
+            Timer::after(Duration::from_millis(1)).await;
+            continue;
+        }
+
+        let mut frame = [0i16; AUDIO_FRAME_SAMPLES];
+        let mut frame_peak = 0i32;
+
+        for (sample, raw) in frame.iter_mut().zip(input.chunks_exact(4)) {
+            let raw = i32::from_le_bytes([raw[0], raw[1], raw[2], raw[3]]);
+            // INMP441 is 24-bit left-aligned in a 32-bit I2S slot.
+            // Keep the upper 16 bits without extra gain while debugging clipping/alignment.
+            *sample = (raw >> 16) as i16;
+            frame_peak = frame_peak.max(i32::from(*sample).abs());
+        }
+
+        peak = peak.max(frame_peak);
+        MICROPHONE_FRAMES.send(frame).await;
+        frames += 1;
+
+        if frames == 100 {
+            println!("microphone: i2s frames=100, peak={}", peak);
+            frames = 0;
+            peak = 0;
+        }
+    }
+}
+
+#[embassy_executor::task]
+async fn microphone_stream(mut audio: UsbMicrophoneStream<'static, UsbDriver<'static>>) {
     loop {
         audio.wait_enabled().await;
         println!("microphone: IN endpoint enabled");
-        let mut frames = 0;
-        let mut peak = 0;
+
+        let mut frames = 0u32;
+        let mut peak = 0i32;
 
         loop {
-            let mut input = [0u8; I2S_FRAME_BYTES];
-            let mut frame = [0u8; USB_AUDIO_FRAME_BYTES];
+            let samples = MICROPHONE_FRAMES.receive().await;
+            let mut packet = [0u8; USB_AUDIO_FRAME_BYTES];
+            let mut frame_peak = 0i32;
 
-            if let Err(error) = i2s_rx.read_dma_async(&mut input).await {
-                println!("microphone: i2s read error = {:?}", error);
-                Timer::after(Duration::from_millis(1)).await;
-                continue;
-            }
-
-            let mut frame_peak = 0;
-            for (sample, chunk) in input.chunks_exact(4).zip(frame.chunks_exact_mut(4)) {
-                let raw = i32::from_le_bytes([sample[0], sample[1], sample[2], sample[3]]);
-                let sample = ((raw >> 16) as i16).saturating_mul(MICROPHONE_GAIN);
-                frame_peak = frame_peak.max(i32::from(sample).abs());
+            for (sample, chunk) in samples.iter().zip(packet.chunks_exact_mut(4)) {
+                frame_peak = frame_peak.max(i32::from(*sample).abs());
                 let sample = sample.to_le_bytes();
                 chunk[..2].copy_from_slice(&sample);
                 chunk[2..].copy_from_slice(&sample);
             }
             peak = peak.max(frame_peak);
 
-            match audio.write(&frame).await {
+            match audio.write(&packet).await {
                 Ok(()) => {
                     if frames == 0 {
                         println!(
                             "microphone: first frame = {} bytes, peak={}",
-                            frame.len(),
+                            packet.len(),
                             frame_peak
                         );
                     }
                     frames += 1;
+
                     if frames == 100 {
-                        println!("microphone: frames=100, peak={}", peak);
+                        println!("microphone: USB frames=100, peak={}", peak);
                         frames = 0;
                         peak = 0;
                     }
@@ -155,13 +193,16 @@ async fn main(spawner: Spawner) {
         USB_CONTROL_BUFFER.init([0; USB_CONTROL_BUFFER_SIZE]),
     );
 
-    let microphone = UsbMicrophoneClass::new(&mut builder, USB_AUDIO_FRAME_BYTES as u16);
+    let microphone = UsbMicrophoneClass::new(&mut builder, USB_AUDIO_MAX_PACKET_BYTES as u16);
     builder.handler(USB_MICROPHONE_HANDLER.init(microphone.handler));
     let device = builder.build();
 
     spawner.spawn(usb_task(device).expect("failed to spawn USB task"));
     spawner.spawn(
-        microphone_stream(microphone.stream, i2s_rx).expect("failed to spawn microphone task"),
+        microphone_capture(i2s_rx).expect("failed to spawn microphone capture task"),
+    );
+    spawner.spawn(
+        microphone_stream(microphone.stream).expect("failed to spawn microphone USB task"),
     );
     println!("microphone: UAC1 ready (UART0 115200 8N1)");
 
