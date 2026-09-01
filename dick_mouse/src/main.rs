@@ -16,7 +16,7 @@ use esp_hal::{
 esp_bootloader_esp_idf::esp_app_desc!();
 
 use dick_mouse::tasks;
-use tasks::audio::I2S_FRAME_BYTES;
+use tasks::audio::{I2S_FRAME_BYTES, SPEAKER_I2S_FRAME_BYTES};
 
 #[esp_rtos::main]
 async fn main(spawner: Spawner) {
@@ -27,9 +27,9 @@ async fn main(spawner: Spawner) {
     esp_rtos::start(timg0.timer0, sw_int.software_interrupt0);
 
     let pcnt = Pcnt::new(peripherals.PCNT);
-    let (rx_descriptors, tx_descriptors) =
-        esp_hal::dma_descriptors!(I2S_FRAME_BYTES, I2S_FRAME_BYTES);
-    let i2s = I2s::new(
+    let (rx_descriptors, _) = esp_hal::dma_descriptors!(I2S_FRAME_BYTES, 0);
+    let (_, tx_descriptors) = esp_hal::dma_descriptors!(0, SPEAKER_I2S_FRAME_BYTES);
+    let i2s_rx = I2s::new(
         peripherals.I2S0,
         peripherals.DMA_CH0,
         I2sConfig::new_tdm_philips()
@@ -38,19 +38,28 @@ async fn main(spawner: Spawner) {
             .with_channels(Channels::MONO),
     )
     .expect("failed to create I2S")
-    .into_async();
-    let i2s_rx = i2s
-        .i2s_rx
-        .with_bclk(peripherals.GPIO5)
-        .with_ws(peripherals.GPIO6)
-        .with_din(peripherals.GPIO7)
-        .build(rx_descriptors);
-    let i2s_tx = i2s
-        .i2s_tx
-        .with_bclk(peripherals.GPIO35)
-        .with_ws(peripherals.GPIO36)
-        .with_dout(peripherals.GPIO37)
-        .build(tx_descriptors);
+    .into_async()
+    .i2s_rx
+    .with_bclk(peripherals.GPIO5)
+    .with_ws(peripherals.GPIO6)
+    .with_din(peripherals.GPIO7)
+    .build(rx_descriptors);
+
+    let i2s_tx = I2s::new(
+        peripherals.I2S1,
+        peripherals.DMA_CH1,
+        I2sConfig::new_tdm_philips()
+            .with_sample_rate(Rate::from_hz(48_000))
+            .with_data_format(DataFormat::Data16Channel16)
+            .with_channels(Channels::STEREO),
+    )
+    .expect("failed to create speaker I2S")
+    .into_async()
+    .i2s_tx
+    .with_bclk(peripherals.GPIO35)
+    .with_ws(peripherals.GPIO36)
+    .with_dout(peripherals.GPIO37)
+    .build(tx_descriptors);
     let usb = Usb::new(peripherals.USB0, peripherals.GPIO20, peripherals.GPIO19);
 
     spawner.spawn(

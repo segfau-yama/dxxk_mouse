@@ -94,8 +94,6 @@ pub async fn usb_task(usb: Usb<'static>) {
         FeedbackRefresh::Period32Frames as u8,
         None,
     );
-    // ponytail: AudioSource currently assumes interface order.
-    builder.handler(USB_MICROPHONE_HANDLER.init(microphone.handler));
 
     let speaker = UsbSpeakerClass::new(
         &mut builder,
@@ -106,6 +104,9 @@ pub async fn usb_task(usb: Usb<'static>) {
         &[UsbAudioChannel::LeftFront],
         FeedbackRefresh::Period32Frames,
     );
+    // ponytail: AudioSource rejects other interfaces; keep it after Speaker's handler.
+    builder.handler(USB_MICROPHONE_HANDLER.init(microphone.handler));
+
     let mut hid_writer = HidWriter::<_, USB_HID_REPORT_BYTES>::new(
         &mut builder,
         USB_HID_STATE.init(UsbHidState::new()),
@@ -142,7 +143,7 @@ pub async fn usb_task(usb: Usb<'static>) {
                                 {
                                     *sample = i16::from_le_bytes([chunk[0], chunk[1]]);
                                 }
-                                SPEAKER_FRAMES.send(frame).await;
+                                let _ = SPEAKER_FRAMES.try_send(frame);
                             }
                             Ok(_) => {}
                             Err(_) => break,
@@ -171,7 +172,9 @@ pub async fn usb_task(usb: Usb<'static>) {
                     microphone_audio.wait_enabled().await;
 
                     loop {
-                        let frame = MICROPHONE_FRAMES.receive().await;
+                        let frame = MICROPHONE_FRAMES
+                            .try_receive()
+                            .unwrap_or([0; AUDIO_FRAME_SAMPLES]);
                         let mut bytes = [0; USB_AUDIO_MAX_PACKET_BYTES];
 
                         for (sample, chunk) in frame.iter().zip(bytes.chunks_exact_mut(4)) {

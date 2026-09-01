@@ -1,4 +1,4 @@
-use crate::device::{Button, Microphone, RotaryEncoder, Speaker};
+use crate::device::{Button, Microphone, RotaryEncoder};
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_time::{Duration, Timer};
 use esp_hal::{
@@ -14,6 +14,9 @@ pub(crate) const AUDIO_FRAME_SAMPLES: usize = 48;
 pub(crate) const AUDIO_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i16>();
 // The INMP441 is read as one 32-bit slot per sample.
 pub const I2S_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i32>();
+const SPEAKER_I2S_FRAME_SAMPLES: usize = AUDIO_FRAME_SAMPLES * 20;
+pub const SPEAKER_I2S_FRAME_BYTES: usize =
+    SPEAKER_I2S_FRAME_SAMPLES * 2 * core::mem::size_of::<i16>();
 pub(crate) type AudioFrame = [i16; AUDIO_FRAME_SAMPLES];
 
 pub(crate) const DEFAULT_VOLUME_PERCENT: u8 = 100;
@@ -22,7 +25,7 @@ const COUNTS_PER_DETENT: i32 = 4;
 
 pub(crate) static MICROPHONE_FRAMES: Channel<CriticalSectionRawMutex, AudioFrame, 2> =
     Channel::new();
-pub(crate) static SPEAKER_FRAMES: Channel<CriticalSectionRawMutex, AudioFrame, 2> = Channel::new();
+pub(crate) static SPEAKER_FRAMES: Channel<CriticalSectionRawMutex, AudioFrame, 32> = Channel::new();
 
 fn setup_volume_encoder<const NUM: usize>(
     unit: &Unit<'static, NUM>,
@@ -50,10 +53,7 @@ fn setup_volume_encoder<const NUM: usize>(
 
     let count = unit.value() as i32;
     let now_ms = Instant::now().duration_since_epoch().as_millis();
-    (
-        RotaryEncoder::new(count, now_ms, 2),
-        count,
-    )
+    (RotaryEncoder::new(count, now_ms, 2), count)
 }
 
 fn encoder_detents<const NUM: usize>(
@@ -142,7 +142,11 @@ pub async fn speaker_task(
     let mut volume = DEFAULT_VOLUME_PERCENT;
 
     loop {
-        let mut frame = SPEAKER_FRAMES.receive().await;
+        let mut samples = [0; SPEAKER_I2S_FRAME_SAMPLES];
+        for chunk in samples.chunks_exact_mut(AUDIO_FRAME_SAMPLES) {
+            chunk.copy_from_slice(&SPEAKER_FRAMES.receive().await);
+        }
+
         let now_ms = Instant::now().duration_since_epoch().as_millis();
         mute_button = mute_button.update(mute_input.level(), now_ms);
         if mute_button.changed() && mute_button.is_pressed() {
@@ -160,17 +164,18 @@ pub async fn speaker_task(
             )
             .clamp(0, 100) as u8;
         let volume = if muted { 0 } else { volume };
-        for sample in &mut frame {
+        for sample in &mut samples {
             *sample = (i32::from(*sample) * i32::from(volume) / 100) as i16;
         }
-        let speaker = Speaker::new(frame);
-        let mut bytes = [0; I2S_FRAME_BYTES];
+        let mut bytes = [0; SPEAKER_I2S_FRAME_BYTES];
 
-        for (sample, chunk) in speaker.buffer().iter().zip(bytes.chunks_exact_mut(4)) {
-            let sample = i32::from(*sample) << 16;
-            chunk.copy_from_slice(&sample.to_le_bytes());
+        for (sample, chunk) in samples.iter().zip(bytes.chunks_exact_mut(4)) {
+            let sample = sample.to_le_bytes();
+            chunk[..2].copy_from_slice(&sample);
+            chunk[2..].copy_from_slice(&sample);
         }
 
+        // ponytail: one-shot DMA is enough for bring-up; use circular DMA if 20 ms chunks click.
         let _ = i2s_tx.write_dma_async(&mut bytes).await;
     }
 }
