@@ -29,7 +29,8 @@ use super::{
 
 pub(crate) const USB_HID_POLL_MS: u8 = 10;
 const USB_HID_REPORT_BYTES: usize = 9;
-const USB_AUDIO_MAX_PACKET_BYTES: usize = AUDIO_FRAME_BYTES * 2;
+const USB_MICROPHONE_PACKET_BYTES: usize = AUDIO_FRAME_BYTES;
+const USB_SPEAKER_MAX_PACKET_BYTES: usize = AUDIO_FRAME_BYTES * 2;
 const USB_AUDIO_FEEDBACK_48K: [u8; 3] = [0x00, 0x00, 0x0c];
 const USB_EP_OUT_BUFFER_SIZE: usize = 256;
 const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
@@ -88,12 +89,12 @@ pub async fn usb_task(usb: Usb<'static>) {
         USB_CONTROL_BUFFER.init([0; USB_CONTROL_BUFFER_SIZE]),
     );
 
-    let microphone = UsbMicrophoneClass::new(&mut builder, USB_AUDIO_MAX_PACKET_BYTES as u16);
+    let microphone = UsbMicrophoneClass::new(&mut builder, USB_MICROPHONE_PACKET_BYTES as u16);
 
     let speaker = UsbSpeakerClass::new(
         &mut builder,
         USB_SPEAKER_STATE.init(UsbSpeakerState::new()),
-        USB_AUDIO_MAX_PACKET_BYTES as u16,
+        USB_SPEAKER_MAX_PACKET_BYTES as u16,
         SampleWidth::Width2Byte,
         &[48_000],
         &[UsbAudioChannel::LeftFront],
@@ -126,7 +127,7 @@ pub async fn usb_task(usb: Usb<'static>) {
                     speaker_stream.wait_connection().await;
 
                     loop {
-                        let mut packet = [0; USB_AUDIO_MAX_PACKET_BYTES];
+                        let mut packet = [0; USB_SPEAKER_MAX_PACKET_BYTES];
 
                         match speaker_stream.read_packet(&mut packet).await {
                             Ok(size) if size > 0 => {
@@ -166,12 +167,10 @@ pub async fn usb_task(usb: Usb<'static>) {
 
                     loop {
                         let frame = MICROPHONE_FRAMES.receive().await;
-                        let mut bytes = [0; USB_AUDIO_MAX_PACKET_BYTES];
+                        let mut bytes = [0; USB_MICROPHONE_PACKET_BYTES];
 
-                        for (sample, chunk) in frame.iter().zip(bytes.chunks_exact_mut(4)) {
-                            let sample = sample.to_le_bytes();
-                            chunk[..2].copy_from_slice(&sample);
-                            chunk[2..].copy_from_slice(&sample);
+                        for (sample, chunk) in frame.iter().zip(bytes.chunks_exact_mut(2)) {
+                            chunk.copy_from_slice(&sample.to_le_bytes());
                         }
 
                         if microphone_audio.write(&bytes).await.is_err() {
