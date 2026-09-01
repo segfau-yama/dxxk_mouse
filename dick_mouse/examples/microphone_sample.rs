@@ -4,17 +4,7 @@
 use embassy_executor::Spawner;
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_time::{Duration, Timer};
-use embassy_usb::{
-    Builder as UsbBuilder, Config as UsbConfig, UsbDevice,
-    class::uac1::{
-        SampleWidth,
-        source::{
-            AudioSource as UsbMicrophoneClass,
-            AudioSourceControlHandler as UsbMicrophoneControlHandler,
-            AudioSourceEpIn as UsbMicrophoneStream,
-        },
-    },
-};
+use embassy_usb::{Builder as UsbBuilder, Config as UsbConfig, UsbDevice};
 use esp_backtrace as _;
 use esp_hal::{
     Async,
@@ -30,11 +20,16 @@ use esp_hal::{
 use esp_println::println;
 use static_cell::StaticCell;
 
+use dick_mouse::tasks::usb_microphone::{
+    ControlHandler as UsbMicrophoneControlHandler, Microphone as UsbMicrophoneClass,
+    Stream as UsbMicrophoneStream,
+};
+
 esp_bootloader_esp_idf::esp_app_desc!();
 
 const AUDIO_FRAME_SAMPLES: usize = 48;
 const I2S_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i32>();
-const USB_AUDIO_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * 2 * core::mem::size_of::<i16>();
+const USB_AUDIO_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i16>();
 const USB_MICROPHONE_FEEDBACK_PERIOD_MS: u8 = 8;
 const USB_AUDIO_FEEDBACK_48K: [u8; 3] = [0x00, 0x00, 0x0c];
 const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
@@ -53,7 +48,6 @@ static USB_CONFIG_DESCRIPTOR: StaticCell<[u8; USB_CONFIG_DESCRIPTOR_SIZE]> = Sta
 static USB_BOS_DESCRIPTOR: StaticCell<[u8; USB_BOS_DESCRIPTOR_SIZE]> = StaticCell::new();
 static USB_MSOS_DESCRIPTOR: StaticCell<[u8; USB_MSOS_DESCRIPTOR_SIZE]> = StaticCell::new();
 static USB_CONTROL_BUFFER: StaticCell<[u8; USB_CONTROL_BUFFER_SIZE]> = StaticCell::new();
-static USB_MICROPHONE_SAMPLE_RATES: [u32; 1] = [48_000];
 static USB_MICROPHONE_HANDLER: StaticCell<UsbMicrophoneControlHandler> = StaticCell::new();
 
 #[embassy_executor::task]
@@ -96,10 +90,8 @@ async fn microphone_stream(mut audio: UsbMicrophoneStream<'static, UsbDriver<'st
             let samples = MICROPHONE_FRAMES.receive().await;
             let mut packet = [0u8; USB_AUDIO_FRAME_BYTES];
 
-            for (sample, chunk) in samples.iter().zip(packet.chunks_exact_mut(4)) {
-                let sample = sample.to_le_bytes();
-                chunk[..2].copy_from_slice(&sample);
-                chunk[2..].copy_from_slice(&sample);
+            for (sample, chunk) in samples.iter().zip(packet.chunks_exact_mut(2)) {
+                chunk.copy_from_slice(&sample.to_le_bytes());
             }
 
             match audio.write(&packet).await {
@@ -181,10 +173,8 @@ async fn main(spawner: Spawner) {
 
     let microphone = UsbMicrophoneClass::new(
         &mut builder,
-        &USB_MICROPHONE_SAMPLE_RATES,
-        SampleWidth::Width2Byte,
+        USB_AUDIO_FRAME_BYTES as u16,
         USB_MICROPHONE_FEEDBACK_PERIOD_MS,
-        None,
     );
     builder.handler(USB_MICROPHONE_HANDLER.init(microphone.handler));
     let device = builder.build();
@@ -192,14 +182,12 @@ async fn main(spawner: Spawner) {
     // Start I2S capture first so PCM is already queued when the host enables AltSetting 1.
     spawner.spawn(microphone_capture(i2s_rx).expect("failed to spawn microphone capture task"));
     spawner.spawn(usb_task(device).expect("failed to spawn USB task"));
+    spawner
+        .spawn(microphone_stream(microphone.stream).expect("failed to spawn microphone USB task"));
     spawner.spawn(
-        microphone_stream(microphone.audio_ep_in).expect("failed to spawn microphone USB task"),
+        microphone_feedback(microphone.feedback).expect("failed to spawn microphone feedback task"),
     );
-    spawner.spawn(
-        microphone_feedback(microphone.feedback_ep_in)
-            .expect("failed to spawn microphone feedback task"),
-    );
-    println!("microphone: UAC1 stereo 48k S16_LE feedback ready (UART0 115200 8N1)");
+    println!("microphone: UAC1 mono 48k S16_LE feedback ready (UART0 115200 8N1)");
 
     core::future::pending::<()>().await;
 }

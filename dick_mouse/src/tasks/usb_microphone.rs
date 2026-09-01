@@ -32,6 +32,7 @@ const SAMPLE_RATE_48K: [u8; 3] = [0x80, 0xbb, 0x00];
 
 pub struct Microphone<'d, D: Driver<'d>> {
     pub stream: Stream<'d, D>,
+    pub feedback: Stream<'d, D>,
     pub handler: ControlHandler,
 }
 
@@ -57,7 +58,11 @@ pub struct ControlHandler;
 impl Handler for ControlHandler {}
 
 impl<'d, D: Driver<'d>> Microphone<'d, D> {
-    pub fn new(builder: &mut Builder<'d, D>, max_packet_size: u16) -> Self {
+    pub fn new(
+        builder: &mut Builder<'d, D>,
+        max_packet_size: u16,
+        feedback_interval_ms: u8,
+    ) -> Self {
         let mut function =
             builder.function(USB_AUDIO_CLASS, USB_AUDIOCONTROL_SUBCLASS, PROTOCOL_NONE);
 
@@ -153,23 +158,35 @@ impl<'d, D: Driver<'d>> Microphone<'d, D> {
             ],
         );
 
-        let endpoint =
+        let audio_endpoint =
             active.alloc_endpoint_in(EndpointType::Isochronous, None, max_packet_size, 1);
+        let feedback_endpoint =
+            active.alloc_endpoint_in(EndpointType::Isochronous, None, 4, feedback_interval_ms);
 
-        // Match the simple UAC1 microphone descriptor from Appendix B:
-        // isochronous IN, no explicit synchronization pipe, bRefresh=0, bSynchAddress=0.
+        // Fixed-rate async microphone: explicit feedback endpoint, no sampling-frequency control.
         active.endpoint_descriptor(
-            endpoint.info(),
-            SynchronizationType::NoSynchronization,
+            audio_endpoint.info(),
+            SynchronizationType::Asynchronous,
             UsageType::DataEndpoint,
-            &[0, 0],
+            &[feedback_interval_ms, feedback_endpoint.info().addr.into()],
         );
         // Fixed 48 kHz is already declared by the Format Type descriptor, so advertise
         // no Sampling Frequency Control and no lock delay.
         active.descriptor(CS_ENDPOINT, &[EP_GENERAL, 0, 0, 0, 0]);
+        active.endpoint_descriptor(
+            feedback_endpoint.info(),
+            SynchronizationType::NoSynchronization,
+            UsageType::FeedbackEndpoint,
+            &[],
+        );
 
         Self {
-            stream: Stream { endpoint },
+            stream: Stream {
+                endpoint: audio_endpoint,
+            },
+            feedback: Stream {
+                endpoint: feedback_endpoint,
+            },
             handler: ControlHandler,
         }
     }
