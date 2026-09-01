@@ -4,7 +4,9 @@
 use embassy_executor::Spawner;
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_time::{Duration, Timer};
-use embassy_usb::{Builder as UsbBuilder, Config as UsbConfig, UsbDevice};
+use embassy_usb::{
+    Builder as UsbBuilder, Config as UsbConfig, UsbDevice, class::uac1::FeedbackRefresh,
+};
 use esp_backtrace as _;
 use esp_hal::{
     Async,
@@ -30,7 +32,7 @@ esp_bootloader_esp_idf::esp_app_desc!();
 const AUDIO_FRAME_SAMPLES: usize = 48;
 const I2S_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i32>();
 const USB_AUDIO_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i16>();
-const USB_MICROPHONE_FEEDBACK_PERIOD_MS: u8 = 8;
+const USB_MICROPHONE_FEEDBACK_REFRESH: FeedbackRefresh = FeedbackRefresh::Period8Frames;
 const USB_AUDIO_FEEDBACK_48K: [u8; 3] = [0x00, 0x00, 0x0c];
 const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
 const USB_BOS_DESCRIPTOR_SIZE: usize = 128;
@@ -117,7 +119,7 @@ async fn microphone_feedback(mut feedback: UsbMicrophoneStream<'static, UsbDrive
 
         while feedback.write(&USB_AUDIO_FEEDBACK_48K).await.is_ok() {
             Timer::after(Duration::from_millis(
-                USB_MICROPHONE_FEEDBACK_PERIOD_MS as u64,
+                USB_MICROPHONE_FEEDBACK_REFRESH.frame_count() as u64,
             ))
             .await;
         }
@@ -174,7 +176,7 @@ async fn main(spawner: Spawner) {
     let microphone = UsbMicrophoneClass::new(
         &mut builder,
         USB_AUDIO_FRAME_BYTES as u16,
-        USB_MICROPHONE_FEEDBACK_PERIOD_MS,
+        USB_MICROPHONE_FEEDBACK_REFRESH as u8,
     );
     builder.handler(USB_MICROPHONE_HANDLER.init(microphone.handler));
     let device = builder.build();

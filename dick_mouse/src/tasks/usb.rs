@@ -32,7 +32,7 @@ const USB_HID_REPORT_BYTES: usize = 9;
 const USB_MICROPHONE_PACKET_BYTES: usize = AUDIO_FRAME_BYTES;
 const USB_SPEAKER_MAX_PACKET_BYTES: usize = AUDIO_FRAME_BYTES * 2;
 const USB_AUDIO_FEEDBACK_48K: [u8; 3] = [0x00, 0x00, 0x0c];
-const USB_MICROPHONE_FEEDBACK_PERIOD_MS: u8 = 8;
+const USB_MICROPHONE_FEEDBACK_REFRESH: FeedbackRefresh = FeedbackRefresh::Period8Frames;
 const USB_EP_OUT_BUFFER_SIZE: usize = 256;
 const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
 const USB_BOS_DESCRIPTOR_SIZE: usize = 128;
@@ -93,7 +93,7 @@ pub async fn usb_task(usb: Usb<'static>) {
     let microphone = UsbMicrophoneClass::new(
         &mut builder,
         USB_MICROPHONE_PACKET_BYTES as u16,
-        USB_MICROPHONE_FEEDBACK_PERIOD_MS,
+        USB_MICROPHONE_FEEDBACK_REFRESH as u8,
     );
 
     let speaker = UsbSpeakerClass::new(
@@ -195,7 +195,7 @@ pub async fn usb_task(usb: Usb<'static>) {
                         .is_ok()
                     {
                         Timer::after(Duration::from_millis(
-                            USB_MICROPHONE_FEEDBACK_PERIOD_MS as u64,
+                            USB_MICROPHONE_FEEDBACK_REFRESH.frame_count() as u64,
                         ))
                         .await;
                     }
