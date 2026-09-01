@@ -66,7 +66,7 @@ static USB_MICROPHONE_HANDLER: StaticCell<UsbMicrophoneControlHandler> = StaticC
 static USB_SPEAKER_STATE: StaticCell<UsbSpeakerState<'static>> = StaticCell::new();
 
 #[embassy_executor::task]
-pub(crate) async fn usb_task(usb: Usb<'static>) {
+pub async fn usb_task(usb: Usb<'static>) {
     let driver = UsbDriver::new(
         usb,
         USB_EP_OUT_BUFFER.init([0; USB_EP_OUT_BUFFER_SIZE]),

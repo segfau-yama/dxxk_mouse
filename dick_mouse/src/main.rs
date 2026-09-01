@@ -15,8 +15,7 @@ use esp_hal::{
 
 esp_bootloader_esp_idf::esp_app_desc!();
 
-mod tasks;
-
+use dick_mouse::tasks;
 use tasks::audio::I2S_FRAME_BYTES;
 
 #[esp_rtos::main]

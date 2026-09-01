@@ -1,4 +1,4 @@
-use dick_mouse::device::{Button, Microphone, RotaryEncoder, Speaker};
+use crate::device::{Button, Microphone, RotaryEncoder, Speaker};
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_time::{Duration, Timer};
 use esp_hal::{
@@ -13,7 +13,7 @@ pub(crate) const AUDIO_FRAME_SAMPLES: usize = 48;
 // USB and application frames contain 16-bit PCM samples.
 pub(crate) const AUDIO_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i16>();
 // The INMP441 is read as one 32-bit slot per sample.
-pub(crate) const I2S_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i32>();
+pub const I2S_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i32>();
 pub(crate) type AudioFrame = [i16; AUDIO_FRAME_SAMPLES];
 
 pub(crate) const DEFAULT_VOLUME_PERCENT: u8 = 100;
@@ -73,7 +73,7 @@ fn encoder_detents<const NUM: usize>(
 }
 
 #[embassy_executor::task]
-pub(crate) async fn microphone_task(
+pub async fn microphone_task(
     mut i2s_rx: I2sRx<'static, Async>,
     mute_gpio: AnyPin<'static>,
     volume_unit: Unit<'static, 1>,
@@ -127,7 +127,7 @@ pub(crate) async fn microphone_task(
 }
 
 #[embassy_executor::task]
-pub(crate) async fn speaker_task(
+pub async fn speaker_task(
     mut i2s_tx: I2sTx<'static, Async>,
     mute_gpio: AnyPin<'static>,
     volume_unit: Unit<'static, 2>,

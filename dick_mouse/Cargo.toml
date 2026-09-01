@@ -16,7 +16,7 @@ embassy-usb = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483a
 esp-backtrace = { version = "0.20.0", default-features = false, features = ["esp32s3", "panic-handler", "println"] }
 esp-bootloader-esp-idf = { version = "0.5.0", default-features = false, features = ["esp32s3"] }
 esp-hal = { version = "1.1.2", default-features = false, features = ["esp32s3", "rt", "unstable"] }
-esp-println = { version = "0.18.0", default-features = false, features = ["esp32s3", "no-op"] }
+esp-println = { version = "0.18.0", default-features = false, features = ["esp32s3", "uart", "critical-section"] }
 esp-rtos = { version = "0.3.0", default-features = false, features = ["embassy", "esp32s3"] }
 static_cell = { version = "2.1.1", default-features = false }
 usbd-hid = { version = "0.10.1", default-features = false }

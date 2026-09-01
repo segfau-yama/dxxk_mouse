@@ -1,4 +1,4 @@
-use dick_mouse::device::{Button, Joystick, RotaryEncoder};
+use crate::device::{Button, Joystick, RotaryEncoder};
 use embassy_time::{Duration, Timer};
 use esp_hal::{
     analog::adc::{Adc, AdcCalLine, AdcConfig, Attenuation},
@@ -14,7 +14,7 @@ use super::{
 };
 
 #[embassy_executor::task]
-pub(crate) async fn mouse_task(
+pub async fn mouse_task(
     unit: Unit<'static, 0>,
     encoder_gpio_a: AnyPin<'static>,
     encoder_gpio_b: AnyPin<'static>,

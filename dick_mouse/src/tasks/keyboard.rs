@@ -1,4 +1,4 @@
-use dick_mouse::device::Button;
+use crate::device::Button;
 use embassy_time::{Duration, Timer};
 use esp_hal::{
     gpio::{AnyPin, Input, InputConfig, Level, Pull},
@@ -11,7 +11,7 @@ use super::{
 };
 
 #[embassy_executor::task]
-pub(crate) async fn keyboard_task(
+pub async fn keyboard_task(
     joystick_button_gpio: AnyPin<'static>,
     back_gpio: AnyPin<'static>,
     forward_gpio: AnyPin<'static>,

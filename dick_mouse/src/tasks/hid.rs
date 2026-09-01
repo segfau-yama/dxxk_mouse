@@ -1,4 +1,4 @@
-use dick_mouse::device::Button;
+use crate::device::Button;
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_time::{Duration, Timer};
 use esp_hal::{
@@ -101,7 +101,7 @@ pub(crate) fn mouse_report(input: MouseInput) -> MouseReport {
 }
 
 #[embassy_executor::task]
-pub(crate) async fn hid_task(mode_gpio: AnyPin<'static>) {
+pub async fn hid_task(mode_gpio: AnyPin<'static>) {
     let mode_input = Input::new(mode_gpio, InputConfig::default().with_pull(Pull::Up));
     let mut mode_button = Button::new(mode_input.level(), Level::Low, 5);
     let mut game_mode = mode_button.is_pressed();

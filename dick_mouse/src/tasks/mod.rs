@@ -1,5 +1,5 @@
-pub(crate) mod audio;
-pub(crate) mod hid;
-pub(crate) mod keyboard;
-pub(crate) mod mouse;
-pub(crate) mod usb;
+pub mod audio;
+pub mod hid;
+pub mod keyboard;
+pub mod mouse;
+pub mod usb;
