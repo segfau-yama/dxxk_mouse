@@ -56,38 +56,26 @@ async fn usb_task(mut device: UsbDevice<'static, UsbDriver<'static>>) {
 
 #[embassy_executor::task]
 async fn microphone_capture(mut i2s_rx: I2sRx<'static, Async>) {
-    let mut frames = 0u32;
-    let mut peak = 0i32;
-
     loop {
         let mut input = [0u8; I2S_FRAME_BYTES];
 
         if let Err(error) = i2s_rx.read_dma_async(&mut input).await {
+            // This path is exceptional, so UART logging cannot disturb a healthy stream.
             println!("microphone: i2s read error = {:?}", error);
             Timer::after(Duration::from_millis(1)).await;
             continue;
         }
 
         let mut frame = [0i16; AUDIO_FRAME_SAMPLES];
-        let mut frame_peak = 0i32;
 
         for (sample, raw) in frame.iter_mut().zip(input.chunks_exact(4)) {
             let raw = i32::from_le_bytes([raw[0], raw[1], raw[2], raw[3]]);
             // INMP441 provides 24-bit data left-aligned in a 32-bit I2S slot.
             // Keep the upper 16 bits for the UAC1 S16_LE stream.
             *sample = (raw >> 16) as i16;
-            frame_peak = frame_peak.max(i32::from(*sample).abs());
         }
 
-        peak = peak.max(frame_peak);
         MICROPHONE_FRAMES.send(frame).await;
-        frames += 1;
-
-        if frames == 100 {
-            println!("microphone: i2s frames=100, peak={}", peak);
-            frames = 0;
-            peak = 0;
-        }
     }
 }
 
@@ -95,43 +83,24 @@ async fn microphone_capture(mut i2s_rx: I2sRx<'static, Async>) {
 async fn microphone_stream(mut audio: UsbMicrophoneStream<'static, UsbDriver<'static>>) {
     loop {
         audio.wait_enabled().await;
-        println!("microphone: IN endpoint enabled");
-
         let mut frames = 0u32;
-        let mut peak = 0i32;
 
         loop {
             let samples = MICROPHONE_FRAMES.receive().await;
             let mut packet = [0u8; USB_AUDIO_FRAME_BYTES];
-            let mut frame_peak = 0i32;
 
             for (sample, chunk) in samples.iter().zip(packet.chunks_exact_mut(2)) {
-                frame_peak = frame_peak.max(i32::from(*sample).abs());
                 chunk.copy_from_slice(&sample.to_le_bytes());
             }
-            peak = peak.max(frame_peak);
 
             match audio.write(&packet).await {
-                Ok(()) => {
-                    if frames == 0 {
-                        println!(
-                            "microphone: first frame = {} bytes, peak={}",
-                            packet.len(),
-                            frame_peak
-                        );
-                    }
-                    frames += 1;
-
-                    if frames == 100 {
-                        println!("microphone: USB frames=100, peak={}", peak);
-                        frames = 0;
-                        peak = 0;
-                    }
-                }
+                Ok(()) => frames = frames.wrapping_add(1),
                 Err(error) => {
+                    // Log only after the host has already disabled the endpoint. Never print
+                    // between successful 1 ms isochronous packets.
                     println!(
-                        "microphone: IN write error = {:?}, frames={}, peak={}, frame_peak={}",
-                        error, frames, peak, frame_peak
+                        "microphone: IN write error = {:?}, frames={}",
+                        error, frames
                     );
                     break;
                 }
