@@ -1,4 +1,4 @@
-use embassy_futures::join::{join, join4};
+use embassy_futures::join::{join, join5};
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_time::{Duration, Timer};
 use embassy_usb::{
@@ -9,13 +9,13 @@ use embassy_usb::{
         },
         uac1::{
             Channel as UsbAudioChannel, FeedbackRefresh, SampleWidth,
-            source::AudioSourceControlHandler as UsbMicrophoneControlHandler,
+            source::{
+                AudioSource as UsbMicrophoneClass,
+                AudioSourceControlHandler as UsbMicrophoneControlHandler,
+            },
             speaker::{Speaker as UsbSpeakerClass, State as UsbSpeakerState},
         },
     },
-    descriptor::{SynchronizationType, UsageType},
-    driver::{Driver, Endpoint, EndpointAddress, EndpointError, EndpointIn, EndpointType},
-    types::InterfaceNumber,
 };
 use esp_hal::otg_fs::{
     Usb,
@@ -29,7 +29,7 @@ use super::audio::{AUDIO_FRAME_BYTES, AUDIO_FRAME_SAMPLES, MICROPHONE_FRAMES, SP
 pub(crate) const USB_HID_POLL_MS: u8 = 10;
 const USB_HID_REPORT_BYTES: usize = 9;
 const USB_AUDIO_MAX_PACKET_BYTES: usize = AUDIO_FRAME_BYTES * 2;
-const USB_SPEAKER_FEEDBACK_48K: [u8; 3] = [0x00, 0x00, 0x0c];
+const USB_AUDIO_FEEDBACK_48K: [u8; 3] = [0x00, 0x00, 0x0c];
 const USB_EP_OUT_BUFFER_SIZE: usize = 256;
 const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
 const USB_BOS_DESCRIPTOR_SIZE: usize = 128;
@@ -65,172 +65,6 @@ static USB_HID_STATE: StaticCell<UsbHidState<'static>> = StaticCell::new();
 static USB_MICROPHONE_HANDLER: StaticCell<UsbMicrophoneControlHandler> = StaticCell::new();
 static USB_SPEAKER_STATE: StaticCell<UsbSpeakerState<'static>> = StaticCell::new();
 
-const USB_AUDIO_CLASS: u8 = 0x01;
-const USB_AUDIO_CONTROL_SUBCLASS: u8 = 0x01;
-const USB_AUDIO_STREAMING_SUBCLASS: u8 = 0x02;
-const USB_AUDIO_PROTOCOL_NONE: u8 = 0x00;
-const USB_CS_INTERFACE: u8 = 0x24;
-const USB_CS_ENDPOINT: u8 = 0x25;
-const USB_AC_HEADER: u8 = 0x01;
-const USB_INPUT_TERMINAL: u8 = 0x02;
-const USB_OUTPUT_TERMINAL: u8 = 0x03;
-const USB_FEATURE_UNIT: u8 = 0x06;
-const USB_AS_GENERAL: u8 = 0x01;
-const USB_FORMAT_TYPE: u8 = 0x02;
-const USB_FORMAT_TYPE_I: u8 = 0x01;
-const USB_EP_GENERAL: u8 = 0x01;
-const USB_PCM_FORMAT: u16 = 0x0001;
-const USB_MICROPHONE_SAMPLE_RATES: &[u32] = &[48_000];
-
-struct UsbMicrophoneAudio<'d, D: Driver<'d>> {
-    endpoint: D::EndpointIn,
-}
-
-impl<'d, D: Driver<'d>> UsbMicrophoneAudio<'d, D> {
-    async fn write(&mut self, data: &[u8]) -> Result<(), EndpointError> {
-        self.endpoint.write(data).await
-    }
-
-    async fn wait_enabled(&mut self) {
-        self.endpoint.wait_enabled().await;
-    }
-}
-
-struct UsbMicrophoneClass<'d, D: Driver<'d>> {
-    audio_ep_in: UsbMicrophoneAudio<'d, D>,
-    handler: UsbMicrophoneControlHandler,
-}
-
-impl<'d, D: Driver<'d>> UsbMicrophoneClass<'d, D> {
-    fn new(builder: &mut UsbBuilder<'d, D>, sample_width: SampleWidth) -> Self {
-        let mut function = builder.function(
-            USB_AUDIO_CLASS,
-            USB_AUDIO_CONTROL_SUBCLASS,
-            USB_AUDIO_PROTOCOL_NONE,
-        );
-
-        let mut control_interface = function.interface();
-        let control_interface_number = control_interface.interface_number();
-        let streaming_interface_number = u8::from(control_interface_number) + 1;
-        let mut control_alt = control_interface.alt_setting(
-            USB_AUDIO_CLASS,
-            USB_AUDIO_CONTROL_SUBCLASS,
-            USB_AUDIO_PROTOCOL_NONE,
-            None,
-        );
-
-        // AC header (9) + input terminal (12) + feature unit (10) + output terminal (9).
-        control_alt.descriptor(
-            USB_CS_INTERFACE,
-            &[
-                USB_AC_HEADER,
-                0x00,
-                0x01,
-                40,
-                0x00,
-                0x01,
-                streaming_interface_number,
-            ],
-        );
-        control_alt.descriptor(
-            USB_CS_INTERFACE,
-            &[
-                USB_INPUT_TERMINAL,
-                0x01,
-                0x01,
-                0x02,
-                0x00,
-                0x02,
-                0x03,
-                0x00,
-                0x00,
-                0x00,
-            ],
-        );
-        control_alt.descriptor(
-            USB_CS_INTERFACE,
-            &[USB_FEATURE_UNIT, 0x02, 0x01, 0x01, 0x03, 0x03, 0x03, 0x00],
-        );
-        control_alt.descriptor(
-            USB_CS_INTERFACE,
-            &[USB_OUTPUT_TERMINAL, 0x03, 0x01, 0x01, 0x00, 0x02, 0x00],
-        );
-        drop(control_alt);
-        drop(control_interface);
-
-        let mut streaming_interface = function.interface();
-        let _alt0 = streaming_interface.alt_setting(
-            USB_AUDIO_CLASS,
-            USB_AUDIO_STREAMING_SUBCLASS,
-            USB_AUDIO_PROTOCOL_NONE,
-            None,
-        );
-        let mut alt1 = streaming_interface.alt_setting(
-            USB_AUDIO_CLASS,
-            USB_AUDIO_STREAMING_SUBCLASS,
-            USB_AUDIO_PROTOCOL_NONE,
-            None,
-        );
-        alt1.descriptor(
-            USB_CS_INTERFACE,
-            &[
-                USB_AS_GENERAL,
-                0x03,
-                0x01,
-                USB_PCM_FORMAT as u8,
-                (USB_PCM_FORMAT >> 8) as u8,
-            ],
-        );
-        alt1.descriptor(
-            USB_CS_INTERFACE,
-            &[
-                USB_FORMAT_TYPE,
-                USB_FORMAT_TYPE_I,
-                0x02,
-                sample_width as u8,
-                sample_width.in_bit() as u8,
-                0x01,
-                0x80,
-                0xbb,
-                0x00,
-            ],
-        );
-
-        let audio_endpoint = alt1.alloc_endpoint_in(
-            EndpointType::Isochronous,
-            None,
-            USB_AUDIO_MAX_PACKET_BYTES as u16,
-            1,
-        );
-        // Asynchronous UAC1 source: no synchronization endpoint is advertised.
-        alt1.endpoint_descriptor(
-            audio_endpoint.info(),
-            SynchronizationType::Asynchronous,
-            UsageType::DataEndpoint,
-            &[0x00, 0x00],
-        );
-        alt1.descriptor(USB_CS_ENDPOINT, &[USB_EP_GENERAL, 0x01, 0x00, 0x00, 0x00]);
-        drop(alt1);
-        drop(streaming_interface);
-        drop(function);
-
-        let handler = UsbMicrophoneControlHandler::new(
-            USB_MICROPHONE_SAMPLE_RATES,
-            audio_endpoint.info().addr,
-            EndpointAddress::from(0),
-            control_interface_number,
-            InterfaceNumber(streaming_interface_number),
-        );
-
-        Self {
-            audio_ep_in: UsbMicrophoneAudio {
-                endpoint: audio_endpoint,
-            },
-            handler,
-        }
-    }
-}
-
 #[embassy_executor::task]
 pub(crate) async fn usb_task(usb: Usb<'static>) {
     let driver = UsbDriver::new(
@@ -253,7 +87,14 @@ pub(crate) async fn usb_task(usb: Usb<'static>) {
         USB_CONTROL_BUFFER.init([0; USB_CONTROL_BUFFER_SIZE]),
     );
 
-    let microphone = UsbMicrophoneClass::new(&mut builder, SampleWidth::Width2Byte);
+    let microphone = UsbMicrophoneClass::new(
+        &mut builder,
+        &[48_000],
+        SampleWidth::Width2Byte,
+        FeedbackRefresh::Period32Frames as u8,
+        None,
+    );
+    // ponytail: AudioSource currently assumes interface order.
     builder.handler(USB_MICROPHONE_HANDLER.init(microphone.handler));
 
     let speaker = UsbSpeakerClass::new(
@@ -281,10 +122,11 @@ pub(crate) async fn usb_task(usb: Usb<'static>) {
     let mut speaker_stream = speaker.stream;
     let mut speaker_feedback = speaker.feedback;
     let mut microphone_audio = microphone.audio_ep_in;
+    let mut microphone_feedback = microphone.feedback_ep_in;
 
     join(
         device.run(),
-        join4(
+        join5(
             async move {
                 loop {
                     speaker_stream.wait_connection().await;
@@ -313,7 +155,7 @@ pub(crate) async fn usb_task(usb: Usb<'static>) {
                     speaker_feedback.wait_connection().await;
 
                     while speaker_feedback
-                        .write_packet(&USB_SPEAKER_FEEDBACK_48K)
+                        .write_packet(&USB_AUDIO_FEEDBACK_48K)
                         .await
                         .is_ok()
                     {
@@ -341,6 +183,22 @@ pub(crate) async fn usb_task(usb: Usb<'static>) {
                         if microphone_audio.write(&bytes).await.is_err() {
                             break;
                         }
+                    }
+                }
+            },
+            async move {
+                loop {
+                    microphone_feedback.wait_enabled().await;
+
+                    while microphone_feedback
+                        .write(&USB_AUDIO_FEEDBACK_48K)
+                        .await
+                        .is_ok()
+                    {
+                        Timer::after(Duration::from_millis(
+                            FeedbackRefresh::Period32Frames.frame_count() as u64,
+                        ))
+                        .await;
                     }
                 }
             },

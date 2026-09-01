@@ -8,15 +8,15 @@ default = ["firmware-bin"]
 firmware-bin = []
 
 [dependencies]
-embassy-executor = { version = "0.10.0", default-features = false }
+embassy-executor = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483a7036f23a9925a339152396bec4c041", default-features = false }
 embassy-futures = { version = "0.1.2", default-features = false }
 embassy-sync = { version = "0.8.0", default-features = false }
 embassy-time = { version = "0.5.1", default-features = false }
-embassy-usb = { git = "https://github.com/embassy-rs/embassy", rev = "89f0ce53bb64d827a00fec5222df4e831b6d541b", default-features = false, features = ["max-interface-count-8", "usbd-hid"] }
-esp-backtrace = { version = "0.19.0", default-features = false, features = ["esp32s3", "panic-handler", "println"] }
+embassy-usb = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483a7036f23a9925a339152396bec4c041", default-features = false, features = ["max-interface-count-8", "usbd-hid"] }
+esp-backtrace = { version = "0.20.0", default-features = false, features = ["esp32s3", "panic-handler", "println"] }
 esp-bootloader-esp-idf = { version = "0.5.0", default-features = false, features = ["esp32s3"] }
-esp-hal = { version = "1.1.1", default-features = false, features = ["esp32s3", "rt", "unstable"] }
-esp-println = { version = "0.17.0", default-features = false, features = ["esp32s3", "no-op"] }
+esp-hal = { version = "1.1.2", default-features = false, features = ["esp32s3", "rt", "unstable"] }
+esp-println = { version = "0.18.0", default-features = false, features = ["esp32s3", "no-op"] }
 esp-rtos = { version = "0.3.0", default-features = false, features = ["embassy", "esp32s3"] }
 static_cell = { version = "2.1.1", default-features = false }
 usbd-hid = { version = "0.10.1", default-features = false }
@@ -25,11 +25,14 @@ usbd-hid = { version = "0.10.1", default-features = false }
 embedded-test = { version = "0.7.2", features = ["xtensa-semihosting"] }
 
 [patch.crates-io]
-embassy-futures = { git = "https://github.com/embassy-rs/embassy", rev = "89f0ce53bb64d827a00fec5222df4e831b6d541b" }
-embassy-sync = { git = "https://github.com/embassy-rs/embassy", rev = "89f0ce53bb64d827a00fec5222df4e831b6d541b" }
-embassy-time = { git = "https://github.com/embassy-rs/embassy", rev = "89f0ce53bb64d827a00fec5222df4e831b6d541b" }
-embassy-time-driver = { git = "https://github.com/embassy-rs/embassy", rev = "89f0ce53bb64d827a00fec5222df4e831b6d541b" }
-embassy-usb-driver = { git = "https://github.com/embassy-rs/embassy", rev = "89f0ce53bb64d827a00fec5222df4e831b6d541b" }
+embassy-executor = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483a7036f23a9925a339152396bec4c041" }
+embassy-executor-macros = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483a7036f23a9925a339152396bec4c041" }
+embassy-executor-timer-queue = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483a7036f23a9925a339152396bec4c041" }
+embassy-futures = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483a7036f23a9925a339152396bec4c041" }
+embassy-sync = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483a7036f23a9925a339152396bec4c041" }
+embassy-time = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483a7036f23a9925a339152396bec4c041" }
+embassy-time-driver = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483a7036f23a9925a339152396bec4c041" }
+embassy-usb-driver = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483a7036f23a9925a339152396bec4c041" }
 
 [lib]
 harness = false
