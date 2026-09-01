@@ -1,0 +1,1166 @@
+[ 9月 1日(火) 22:40:45 2026] Linux version 7.1.8-zen1-3-zen (linux-zen@archlinux) (gcc (GCC) 16.2.1 20260810, GNU ld (GNU Binutils) 2.47) #1 ZEN SMP PREEMPT_DYNAMIC Tue, 11 Aug 2026 09:59:01 +0000
+[ 9月 1日(火) 22:40:45 2026] Command line: initrd=\initramfs-linux-zen.img root=PARTUUID=0ab85bd2-95e7-4bed-8528-124fd620af7f zswap.enabled=0 rw rootfstype=ext4
+[ 9月 1日(火) 22:40:45 2026] BIOS-provided physical RAM map:
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x0000000000000000-0x000000000009ffff]  System RAM
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000000a0000-0x00000000000fffff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x0000000000100000-0x0000000009bfefff]  System RAM
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x0000000009bff000-0x0000000009ffffff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x000000000a000000-0x000000000a1fffff]  System RAM
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x000000000a200000-0x000000000a20dfff]  ACPI NVS
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x000000000a20e000-0x000000000affffff]  System RAM
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x000000000b000000-0x000000000b01ffff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x000000000b020000-0x00000000bb61bfff]  System RAM
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000bb61c000-0x00000000bcd5efff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000bcd5f000-0x00000000bcd9cfff]  ACPI data
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000bcd9d000-0x00000000bd477fff]  ACPI NVS
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000bd478000-0x00000000bdffefff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000bdfff000-0x00000000beffffff]  System RAM
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000bf000000-0x00000000bfffffff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [gap 0x00000000c0000000-0x00000000efffffff]
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000f0000000-0x00000000f7ffffff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [gap 0x00000000f8000000-0x00000000fd1fffff]
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000fd200000-0x00000000fd2fffff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [gap 0x00000000fd300000-0x00000000fd5fffff]
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000fd600000-0x00000000fd7fffff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [gap 0x00000000fd800000-0x00000000fe9fffff]
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000fea00000-0x00000000fea0ffff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [gap 0x00000000fea10000-0x00000000feb7ffff]
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000feb80000-0x00000000fec01fff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [gap 0x00000000fec02000-0x00000000fec0ffff]
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000fec10000-0x00000000fec10fff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [gap 0x00000000fec11000-0x00000000fec2ffff]
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000fec30000-0x00000000fec30fff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [gap 0x00000000fec31000-0x00000000fecfffff]
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000fed00000-0x00000000fed00fff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [gap 0x00000000fed01000-0x00000000fed3ffff]
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000fed40000-0x00000000fed44fff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [gap 0x00000000fed45000-0x00000000fed7ffff]
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000fed80000-0x00000000fed8ffff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [gap 0x00000000fed90000-0x00000000fedc1fff]
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000fedc2000-0x00000000fedcffff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [gap 0x00000000fedd0000-0x00000000fedd3fff]
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000fedd4000-0x00000000fedd5fff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [gap 0x00000000fedd6000-0x00000000feffffff]
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x00000000ff000000-0x00000000ffffffff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x0000000100000000-0x000000043f37ffff]  System RAM
+[ 9月 1日(火) 22:40:45 2026] BIOS-e820: [mem 0x000000043f380000-0x000000043fffffff]  device reserved
+[ 9月 1日(火) 22:40:45 2026] NX (Execute Disable) protection: active
+[ 9月 1日(火) 22:40:45 2026] APIC: Static calls initialized
+[ 9月 1日(火) 22:40:45 2026] efi: EFI v2.7 by American Megatrends
+[ 9月 1日(火) 22:40:45 2026] efi: ACPI=0xbd461000 ACPI 2.0=0xbd461014 TPMFinalLog=0xbd42b000 SMBIOS=0xbde32000 SMBIOS 3.0=0xbde31000 MEMATTR=0xb808b018 ESRT=0xb808b898 RNG=0xbcd6df18 INITRD=0xb9997098 TPMEventLog=0xbcd69018 
+[ 9月 1日(火) 22:40:45 2026] random: crng init done
+[ 9月 1日(火) 22:40:45 2026] efi: Remove mem298: MMIO range=[0xf0000000-0xf7ffffff] (128MB) from e820 map
+[ 9月 1日(火) 22:40:45 2026] e820: remove [mem 0xf0000000-0xf7ffffff] device reserved
+[ 9月 1日(火) 22:40:45 2026] efi: Remove mem299: MMIO range=[0xfd200000-0xfd2fffff] (1MB) from e820 map
+[ 9月 1日(火) 22:40:45 2026] e820: remove [mem 0xfd200000-0xfd2fffff] device reserved
+[ 9月 1日(火) 22:40:45 2026] efi: Remove mem300: MMIO range=[0xfd600000-0xfd7fffff] (2MB) from e820 map
+[ 9月 1日(火) 22:40:45 2026] e820: remove [mem 0xfd600000-0xfd7fffff] device reserved
+[ 9月 1日(火) 22:40:45 2026] efi: Not removing mem301: MMIO range=[0xfea00000-0xfea0ffff] (64KB) from e820 map
+[ 9月 1日(火) 22:40:45 2026] efi: Remove mem302: MMIO range=[0xfeb80000-0xfec01fff] (0MB) from e820 map
+[ 9月 1日(火) 22:40:45 2026] e820: remove [mem 0xfeb80000-0xfec01fff] device reserved
+[ 9月 1日(火) 22:40:45 2026] efi: Not removing mem303: MMIO range=[0xfec10000-0xfec10fff] (4KB) from e820 map
+[ 9月 1日(火) 22:40:45 2026] efi: Not removing mem304: MMIO range=[0xfec30000-0xfec30fff] (4KB) from e820 map
+[ 9月 1日(火) 22:40:45 2026] efi: Not removing mem305: MMIO range=[0xfed00000-0xfed00fff] (4KB) from e820 map
+[ 9月 1日(火) 22:40:45 2026] efi: Not removing mem306: MMIO range=[0xfed40000-0xfed44fff] (20KB) from e820 map
+[ 9月 1日(火) 22:40:45 2026] efi: Not removing mem307: MMIO range=[0xfed80000-0xfed8ffff] (64KB) from e820 map
+[ 9月 1日(火) 22:40:45 2026] efi: Not removing mem308: MMIO range=[0xfedc2000-0xfedcffff] (56KB) from e820 map
+[ 9月 1日(火) 22:40:45 2026] efi: Not removing mem309: MMIO range=[0xfedd4000-0xfedd5fff] (8KB) from e820 map
+[ 9月 1日(火) 22:40:45 2026] efi: Remove mem310: MMIO range=[0xff000000-0xffffffff] (16MB) from e820 map
+[ 9月 1日(火) 22:40:45 2026] e820: remove [mem 0xff000000-0xffffffff] device reserved
+[ 9月 1日(火) 22:40:45 2026] DMI: SMBIOS 3.3.0 present.
+[ 9月 1日(火) 22:40:45 2026] DMI: To Be Filled By O.E.M. B550 Pro4/B550 Pro4, BIOS P2.20 02/24/2022
+[ 9月 1日(火) 22:40:45 2026] DMI: Memory slots populated: 2/4
+[ 9月 1日(火) 22:40:45 2026] tsc: Fast TSC calibration using PIT
+[ 9月 1日(火) 22:40:45 2026] tsc: Detected 3693.274 MHz processor
+[ 9月 1日(火) 22:40:45 2026] e820: update [mem 0x00000000-0x00000fff] System RAM ==> device reserved
+[ 9月 1日(火) 22:40:45 2026] e820: remove [mem 0x000a0000-0x000fffff] System RAM
+[ 9月 1日(火) 22:40:45 2026] last_pfn = 0x43f380 max_arch_pfn = 0x400000000
+[ 9月 1日(火) 22:40:45 2026] total RAM covered: 3071M
+[ 9月 1日(火) 22:40:45 2026] Found optimal setting for mtrr clean up
+[ 9月 1日(火) 22:40:45 2026]  gran_size: 64K 	chunk_size: 64M 	num_reg: 3  	lose cover RAM: 0G
+[ 9月 1日(火) 22:40:45 2026] MTRR map: 7 entries (3 fixed + 4 variable; max 20), built from 9 variable MTRRs
+[ 9月 1日(火) 22:40:45 2026] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+[ 9月 1日(火) 22:40:45 2026] e820: update [mem 0xbcf00000-0xbcf0ffff] System RAM ==> device reserved
+[ 9月 1日(火) 22:40:45 2026] e820: update [mem 0xc0000000-0xffffffff] System RAM ==> device reserved
+[ 9月 1日(火) 22:40:45 2026] last_pfn = 0xbf000 max_arch_pfn = 0x400000000
+[ 9月 1日(火) 22:40:45 2026] esrt: Reserving ESRT space from 0x00000000b808b898 to 0x00000000b808b8d0.
+[ 9月 1日(火) 22:40:45 2026] e820: update [mem 0xb808b000-0xb808bfff] System RAM ==> device reserved
+[ 9月 1日(火) 22:40:45 2026] Using GB pages for direct mapping
+[ 9月 1日(火) 22:40:45 2026] Secure boot disabled
+[ 9月 1日(火) 22:40:45 2026] RAMDISK: [mem 0xa5d18000-0xad49dfff]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Early table checksum verification disabled
+[ 9月 1日(火) 22:40:45 2026] ACPI: RSDP 0x00000000BD461014 000024 (v02 ALASKA)
+[ 9月 1日(火) 22:40:45 2026] ACPI: XSDT 0x00000000BD460728 0000D4 (v01 ALASKA A M I    01072009 AMI  01000013)
+[ 9月 1日(火) 22:40:45 2026] ACPI: FACP 0x00000000BCD8E000 000114 (v06 ALASKA A M I    01072009 AMI  00010013)
+[ 9月 1日(火) 22:40:45 2026] ACPI: DSDT 0x00000000BCD87000 0067DE (v02 ALASKA A M I    01072009 INTL 20120913)
+[ 9月 1日(火) 22:40:45 2026] ACPI: FACS 0x00000000BD45B000 000040
+[ 9月 1日(火) 22:40:45 2026] ACPI: SSDT 0x00000000BCD94000 008CE9 (v02 AMD    AmdTable 00000002 MSFT 04000000)
+[ 9月 1日(火) 22:40:45 2026] ACPI: SSDT 0x00000000BCD90000 003ACF (v01 AMD    AMD AOD  00000001 INTL 20120913)
+[ 9月 1日(火) 22:40:45 2026] ACPI: SSDT 0x00000000BCD8F000 0001AD (v02 ALASKA CPUSSDT  01072009 AMI  01072009)
+[ 9月 1日(火) 22:40:45 2026] ACPI: FIDT 0x00000000BCD86000 00009C (v01 ALASKA A M I    01072009 AMI  00010013)
+[ 9月 1日(火) 22:40:45 2026] ACPI: MCFG 0x00000000BCD85000 00003C (v01 ALASKA A M I    01072009 MSFT 00010013)
+[ 9月 1日(火) 22:40:45 2026] ACPI: AAFT 0x00000000BCD84000 000115 (v01 ALASKA OEMAAFT  01072009 MSFT 00000097)
+[ 9月 1日(火) 22:40:45 2026] ACPI: HPET 0x00000000BCD83000 000038 (v01 ALASKA A M I    01072009 AMI  00000005)
+[ 9月 1日(火) 22:40:45 2026] ACPI: BGRT 0x00000000BCD82000 000038 (v01 ALASKA A M I    01072009 AMI  00010013)
+[ 9月 1日(火) 22:40:45 2026] ACPI: TPM2 0x00000000BCD81000 00004C (v04 ALASKA A M I    00000001 AMI  00000000)
+[ 9月 1日(火) 22:40:45 2026] ACPI: PCCT 0x00000000BCD80000 00006E (v02 AMD    AmdTable 00000001 AMD  00000001)
+[ 9月 1日(火) 22:40:45 2026] ACPI: SSDT 0x00000000BCD7C000 0030FB (v02 AMD    AmdTable 00000001 AMD  00000001)
+[ 9月 1日(火) 22:40:45 2026] ACPI: CRAT 0x00000000BCD7B000 000B18 (v01 AMD    AmdTable 00000001 AMD  00000001)
+[ 9月 1日(火) 22:40:45 2026] ACPI: CDIT 0x00000000BCD7A000 000029 (v01 AMD    AmdTable 00000001 AMD  00000001)
+[ 9月 1日(火) 22:40:45 2026] ACPI: SSDT 0x00000000BCD79000 000259 (v01 AMD    ArticDGP 00000001 INTL 20120913)
+[ 9月 1日(火) 22:40:45 2026] ACPI: SSDT 0x00000000BCD75000 003798 (v01 AMD    ArticN   00000001 INTL 20120913)
+[ 9月 1日(火) 22:40:45 2026] ACPI: WSMT 0x00000000BCD74000 000028 (v01 ALASKA A M I    01072009 AMI  00010013)
+[ 9月 1日(火) 22:40:45 2026] ACPI: APIC 0x00000000BCD73000 00015E (v03 ALASKA A M I    01072009 AMI  00010013)
+[ 9月 1日(火) 22:40:45 2026] ACPI: SSDT 0x00000000BCD72000 00007D (v01 AMD    ArticDIS 00000001 INTL 20120913)
+[ 9月 1日(火) 22:40:45 2026] ACPI: SSDT 0x00000000BCD70000 0010AF (v01 AMD    ArticC   00000001 INTL 20120913)
+[ 9月 1日(火) 22:40:45 2026] ACPI: SSDT 0x00000000BCD6F000 0000BF (v01 AMD    AmdTable 00001000 INTL 20120913)
+[ 9月 1日(火) 22:40:45 2026] ACPI: FPDT 0x00000000BCD6E000 000044 (v01 ALASKA A M I    01072009 AMI  01000013)
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving FACP table memory at [mem 0xbcd8e000-0xbcd8e113]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving DSDT table memory at [mem 0xbcd87000-0xbcd8d7dd]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving FACS table memory at [mem 0xbd45b000-0xbd45b03f]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving SSDT table memory at [mem 0xbcd94000-0xbcd9cce8]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving SSDT table memory at [mem 0xbcd90000-0xbcd93ace]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving SSDT table memory at [mem 0xbcd8f000-0xbcd8f1ac]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving FIDT table memory at [mem 0xbcd86000-0xbcd8609b]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving MCFG table memory at [mem 0xbcd85000-0xbcd8503b]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving AAFT table memory at [mem 0xbcd84000-0xbcd84114]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving HPET table memory at [mem 0xbcd83000-0xbcd83037]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving BGRT table memory at [mem 0xbcd82000-0xbcd82037]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving TPM2 table memory at [mem 0xbcd81000-0xbcd8104b]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving PCCT table memory at [mem 0xbcd80000-0xbcd8006d]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving SSDT table memory at [mem 0xbcd7c000-0xbcd7f0fa]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving CRAT table memory at [mem 0xbcd7b000-0xbcd7bb17]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving CDIT table memory at [mem 0xbcd7a000-0xbcd7a028]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving SSDT table memory at [mem 0xbcd79000-0xbcd79258]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving SSDT table memory at [mem 0xbcd75000-0xbcd78797]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving WSMT table memory at [mem 0xbcd74000-0xbcd74027]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving APIC table memory at [mem 0xbcd73000-0xbcd7315d]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving SSDT table memory at [mem 0xbcd72000-0xbcd7207c]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving SSDT table memory at [mem 0xbcd70000-0xbcd710ae]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving SSDT table memory at [mem 0xbcd6f000-0xbcd6f0be]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Reserving FPDT table memory at [mem 0xbcd6e000-0xbcd6e043]
+[ 9月 1日(火) 22:40:45 2026] No NUMA configuration found
+[ 9月 1日(火) 22:40:45 2026] Faking a node at [mem 0x0000000000000000-0x000000043f37ffff]
+[ 9月 1日(火) 22:40:45 2026] NODE_DATA(0) allocated [mem 0x43f354f80-0x43f37ffff]
+[ 9月 1日(火) 22:40:45 2026] ACPI: PM-Timer IO Port: 0x808
+[ 9月 1日(火) 22:40:45 2026] ACPI: LAPIC_NMI (acpi_id[0xff] high edge lint[0x1])
+[ 9月 1日(火) 22:40:45 2026] IOAPIC[0]: apic_id 13, version 33, address 0xfec00000, GSI 0-23
+[ 9月 1日(火) 22:40:45 2026] IOAPIC[1]: apic_id 14, version 33, address 0xfec01000, GSI 24-55
+[ 9月 1日(火) 22:40:45 2026] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+[ 9月 1日(火) 22:40:45 2026] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 low level)
+[ 9月 1日(火) 22:40:45 2026] ACPI: Using ACPI (MADT) for SMP configuration information
+[ 9月 1日(火) 22:40:45 2026] ACPI: HPET id: 0x10228201 base: 0xfed00000
+[ 9月 1日(火) 22:40:45 2026] e820: update [mem 0xb75c7000-0xb7607fff] System RAM ==> device reserved
+[ 9月 1日(火) 22:40:45 2026] CPU topo: Max. logical packages:   1
+[ 9月 1日(火) 22:40:45 2026] CPU topo: Max. logical nodes:      1
+[ 9月 1日(火) 22:40:45 2026] CPU topo: Num. nodes per package:  1
+[ 9月 1日(火) 22:40:45 2026] CPU topo: Max. logical dies:       1
+[ 9月 1日(火) 22:40:45 2026] CPU topo: Max. dies per package:   1
+[ 9月 1日(火) 22:40:45 2026] CPU topo: Max. threads per core:   2
+[ 9月 1日(火) 22:40:45 2026] CPU topo: Num. cores per package:     6
+[ 9月 1日(火) 22:40:45 2026] CPU topo: Num. threads per package:  12
+[ 9月 1日(火) 22:40:45 2026] CPU topo: Allowing 12 present CPUs plus 0 hotplug CPUs
+[ 9月 1日(火) 22:40:45 2026] PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+[ 9月 1日(火) 22:40:45 2026] PM: hibernation: Registered nosave memory: [mem 0x000a0000-0x000fffff]
+[ 9月 1日(火) 22:40:45 2026] PM: hibernation: Registered nosave memory: [mem 0x09bff000-0x09ffffff]
+[ 9月 1日(火) 22:40:45 2026] PM: hibernation: Registered nosave memory: [mem 0x0a200000-0x0a20dfff]
+[ 9月 1日(火) 22:40:45 2026] PM: hibernation: Registered nosave memory: [mem 0x0b000000-0x0b01ffff]
+[ 9月 1日(火) 22:40:45 2026] PM: hibernation: Registered nosave memory: [mem 0xb75c7000-0xb7607fff]
+[ 9月 1日(火) 22:40:45 2026] PM: hibernation: Registered nosave memory: [mem 0xb808b000-0xb808bfff]
+[ 9月 1日(火) 22:40:45 2026] PM: hibernation: Registered nosave memory: [mem 0xbb61c000-0xbdffefff]
+[ 9月 1日(火) 22:40:45 2026] PM: hibernation: Registered nosave memory: [mem 0xbf000000-0xffffffff]
+[ 9月 1日(火) 22:40:45 2026] [gap 0xc0000000-0xfe9fffff] available for PCI devices
+[ 9月 1日(火) 22:40:45 2026] Booting paravirtualized kernel on bare hardware
+[ 9月 1日(火) 22:40:45 2026] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1910969940391419 ns
+[ 9月 1日(火) 22:40:45 2026] Zone ranges:
+[ 9月 1日(火) 22:40:45 2026]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+[ 9月 1日(火) 22:40:45 2026]   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+[ 9月 1日(火) 22:40:45 2026]   Normal   [mem 0x0000000100000000-0x000000043f37ffff]
+[ 9月 1日(火) 22:40:45 2026]   Device   empty
+[ 9月 1日(火) 22:40:45 2026] Movable zone start for each node
+[ 9月 1日(火) 22:40:45 2026] Early memory node ranges
+[ 9月 1日(火) 22:40:45 2026]   node   0: [mem 0x0000000000001000-0x000000000009ffff]
+[ 9月 1日(火) 22:40:45 2026]   node   0: [mem 0x0000000000100000-0x0000000009bfefff]
+[ 9月 1日(火) 22:40:45 2026]   node   0: [mem 0x000000000a000000-0x000000000a1fffff]
+[ 9月 1日(火) 22:40:45 2026]   node   0: [mem 0x000000000a20e000-0x000000000affffff]
+[ 9月 1日(火) 22:40:45 2026]   node   0: [mem 0x000000000b020000-0x00000000bb61bfff]
+[ 9月 1日(火) 22:40:45 2026]   node   0: [mem 0x00000000bdfff000-0x00000000beffffff]
+[ 9月 1日(火) 22:40:45 2026]   node   0: [mem 0x0000000100000000-0x000000043f37ffff]
+[ 9月 1日(火) 22:40:45 2026] Initmem setup node 0 [mem 0x0000000000001000-0x000000043f37ffff]
+[ 9月 1日(火) 22:40:45 2026] On node 0, zone DMA: 1 pages in unavailable ranges
+[ 9月 1日(火) 22:40:45 2026] On node 0, zone DMA: 96 pages in unavailable ranges
+[ 9月 1日(火) 22:40:45 2026] On node 0, zone DMA32: 1025 pages in unavailable ranges
+[ 9月 1日(火) 22:40:45 2026] On node 0, zone DMA32: 14 pages in unavailable ranges
+[ 9月 1日(火) 22:40:45 2026] On node 0, zone DMA32: 32 pages in unavailable ranges
+[ 9月 1日(火) 22:40:45 2026] On node 0, zone DMA32: 10723 pages in unavailable ranges
+[ 9月 1日(火) 22:40:45 2026] On node 0, zone Normal: 4096 pages in unavailable ranges
+[ 9月 1日(火) 22:40:45 2026] On node 0, zone Normal: 3200 pages in unavailable ranges
+[ 9月 1日(火) 22:40:45 2026] setup_percpu: NR_CPUS:8192 nr_cpumask_bits:12 nr_cpu_ids:12 nr_node_ids:1
+[ 9月 1日(火) 22:40:45 2026] percpu: Embedded 63 pages/cpu s221184 r8192 d28672 u262144
+[ 9月 1日(火) 22:40:45 2026] pcpu-alloc: s221184 r8192 d28672 u262144 alloc=1*2097152
+[ 9月 1日(火) 22:40:45 2026] pcpu-alloc: [0] 00 01 02 03 04 05 06 07 [0] 08 09 10 11 -- -- -- -- 
+[ 9月 1日(火) 22:40:45 2026] Kernel command line: initrd=\initramfs-linux-zen.img root=PARTUUID=0ab85bd2-95e7-4bed-8528-124fd620af7f zswap.enabled=0 rw rootfstype=ext4
+[ 9月 1日(火) 22:40:45 2026] printk: log buffer data + meta data: 131072 + 557056 = 688128 bytes
+[ 9月 1日(火) 22:40:45 2026] Dentry cache hash table entries: 2097152 (order: 12, 16777216 bytes, linear)
+[ 9月 1日(火) 22:40:45 2026] Inode-cache hash table entries: 1048576 (order: 11, 8388608 bytes, linear)
+[ 9月 1日(火) 22:40:45 2026] software IO TLB: area num 16.
+[ 9月 1日(火) 22:40:45 2026] Fallback order for Node 0: 0 
+[ 9月 1日(火) 22:40:45 2026] Built 1 zonelists, mobility grouping on.  Total pages: 4175117
+[ 9月 1日(火) 22:40:45 2026] Policy zone: Normal
+[ 9月 1日(火) 22:40:45 2026] mem auto-init: stack:all(zero), heap alloc:on, heap free:off
+[ 9月 1日(火) 22:40:45 2026] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=12, Nodes=1
+[ 9月 1日(火) 22:40:45 2026] ftrace: allocating 55861 entries in 220 pages
+[ 9月 1日(火) 22:40:45 2026] ftrace: allocated 220 pages with 5 groups
+[ 9月 1日(火) 22:40:45 2026] Dynamic Preempt: full
+[ 9月 1日(火) 22:40:45 2026] rcu: Preemptible hierarchical RCU implementation.
+[ 9月 1日(火) 22:40:45 2026] rcu: 	RCU restricting CPUs from NR_CPUS=8192 to nr_cpu_ids=12.
+[ 9月 1日(火) 22:40:45 2026] rcu: 	RCU priority boosting: priority 1 delay 500 ms.
+[ 9月 1日(火) 22:40:45 2026] 	Trampoline variant of Tasks RCU enabled.
+[ 9月 1日(火) 22:40:45 2026] 	Rude variant of Tasks RCU enabled.
+[ 9月 1日(火) 22:40:45 2026] 	Tracing variant of Tasks RCU enabled.
+[ 9月 1日(火) 22:40:45 2026] rcu: RCU calculated value of scheduler-enlistment delay is 100 jiffies.
+[ 9月 1日(火) 22:40:45 2026] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=12
+[ 9月 1日(火) 22:40:45 2026] RCU Tasks: Setting shift to 4 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=12.
+[ 9月 1日(火) 22:40:45 2026] RCU Tasks Rude: Setting shift to 4 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=12.
+[ 9月 1日(火) 22:40:45 2026] NR_IRQS: 524544, nr_irqs: 1064, preallocated irqs: 16
+[ 9月 1日(火) 22:40:45 2026] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[ 9月 1日(火) 22:40:45 2026] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275000 ns
+[ 9月 1日(火) 22:40:45 2026] kfence: initialized - using 2097152 bytes for 255 objects at 0x(____ptrval____)-0x(____ptrval____)
+[ 9月 1日(火) 22:40:45 2026] Console: colour dummy device 80x25
+[ 9月 1日(火) 22:40:45 2026] printk: legacy console [tty0] enabled
+[ 9月 1日(火) 22:40:45 2026] ACPI: Core revision 20251212
+[ 9月 1日(火) 22:40:45 2026] clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 133484873504 ns
+[ 9月 1日(火) 22:40:45 2026] APIC: Switch to symmetric I/O mode setup
+[ 9月 1日(火) 22:40:45 2026] x2apic: IRQ remapping doesn't support X2APIC mode
+[ 9月 1日(火) 22:40:45 2026] ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+[ 9月 1日(火) 22:40:45 2026] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x6a79085c23a, max_idle_ns: 881590561410 ns
+[ 9月 1日(火) 22:40:45 2026] Calibrating delay loop (skipped), value calculated using timer frequency.. 7386.54 BogoMIPS (lpj=3693274)
+[ 9月 1日(火) 22:40:45 2026] x86/cpu: User Mode Instruction Prevention (UMIP) activated
+[ 9月 1日(火) 22:40:45 2026] LVT offset 1 assigned for vector 0xf9
+[ 9月 1日(火) 22:40:45 2026] LVT offset 2 assigned for vector 0xf4
+[ 9月 1日(火) 22:40:45 2026] Last level iTLB entries: 4KB 512, 2MB 512, 4MB 256
+[ 9月 1日(火) 22:40:45 2026] Last level dTLB entries: 4KB 2048, 2MB 2048, 4MB 1024, 1GB 0
+[ 9月 1日(火) 22:40:45 2026] process: using mwait in idle threads
+[ 9月 1日(火) 22:40:45 2026] mitigations: Enabled attack vectors: user_kernel, user_user, guest_host, guest_guest, SMT mitigations: auto
+[ 9月 1日(火) 22:40:45 2026] Speculative Store Bypass: Mitigation: Speculative Store Bypass disabled via prctl
+[ 9月 1日(火) 22:40:45 2026] Transient Scheduler Attacks: Mitigation: Clear CPU buffers
+[ 9月 1日(火) 22:40:45 2026] Spectre V2 : Mitigation: Retpolines
+[ 9月 1日(火) 22:40:45 2026] Spectre V2 : User space: Mitigation: STIBP always-on protection
+[ 9月 1日(火) 22:40:45 2026] Speculative Return Stack Overflow: Mitigation: Safe RET
+[ 9月 1日(火) 22:40:45 2026] VMSCAPE: Mitigation: IBPB before exit to userspace
+[ 9月 1日(火) 22:40:45 2026] Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
+[ 9月 1日(火) 22:40:45 2026] Spectre V2 : Spectre v2 / SpectreRSB: Filling RSB on context switch and VMEXIT
+[ 9月 1日(火) 22:40:45 2026] Spectre V2 : Enabling Restricted Speculation for firmware calls
+[ 9月 1日(火) 22:40:45 2026] Spectre V2 : mitigation: Enabling conditional Indirect Branch Prediction Barrier
+[ 9月 1日(火) 22:40:45 2026] active return thunk: srso_alias_return_thunk
+[ 9月 1日(火) 22:40:45 2026] x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+[ 9月 1日(火) 22:40:45 2026] x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+[ 9月 1日(火) 22:40:45 2026] x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+[ 9月 1日(火) 22:40:45 2026] x86/fpu: Supporting XSAVE feature 0x200: 'Protection Keys User registers'
+[ 9月 1日(火) 22:40:45 2026] x86/fpu: Supporting XSAVE feature 0x800: 'Control-flow User registers'
+[ 9月 1日(火) 22:40:45 2026] x86/fpu: Supporting XSAVE feature 0x1000: 'Control-flow Kernel registers (KVM only)'
+[ 9月 1日(火) 22:40:45 2026] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+[ 9月 1日(火) 22:40:45 2026] x86/fpu: xstate_offset[9]:  832, xstate_sizes[9]:    8
+[ 9月 1日(火) 22:40:45 2026] x86/fpu: xstate_offset[11]:  840, xstate_sizes[11]:   16
+[ 9月 1日(火) 22:40:45 2026] x86/fpu: xstate_offset[12]:  856, xstate_sizes[12]:   24
+[ 9月 1日(火) 22:40:45 2026] x86/fpu: Enabled xstate features 0x1a07, context size is 880 bytes, using 'compacted' format.
+[ 9月 1日(火) 22:40:45 2026] pid_max: default: 32768 minimum: 301
+[ 9月 1日(火) 22:40:45 2026] landlock: Up and running.
+[ 9月 1日(火) 22:40:45 2026] Yama: becoming mindful.
+[ 9月 1日(火) 22:40:45 2026] LSM support for eBPF active
+[ 9月 1日(火) 22:40:45 2026] Mount-cache hash table entries: 32768 (order: 6, 262144 bytes, linear)
+[ 9月 1日(火) 22:40:45 2026] Mountpoint-cache hash table entries: 32768 (order: 6, 262144 bytes, linear)
+[ 9月 1日(火) 22:40:45 2026] VFS: Finished mounting rootfs on nullfs
+[ 9月 1日(火) 22:40:45 2026] smpboot: CPU0: AMD Ryzen 5 5600X 6-Core Processor (family: 0x19, model: 0x21, stepping: 0x2)
+[ 9月 1日(火) 22:40:45 2026] Performance Events: Fam17h+ core perfctr, AMD PMU driver.
+[ 9月 1日(火) 22:40:45 2026] ... version:                   0
+[ 9月 1日(火) 22:40:45 2026] ... bit width:                 48
+[ 9月 1日(火) 22:40:45 2026] ... generic counters:          6
+[ 9月 1日(火) 22:40:45 2026] ... generic bitmap:            000000000000003f
+[ 9月 1日(火) 22:40:45 2026] ... fixed-purpose counters:    0
+[ 9月 1日(火) 22:40:45 2026] ... fixed-purpose bitmap:      0000000000000000
+[ 9月 1日(火) 22:40:45 2026] ... value mask:                0000ffffffffffff
+[ 9月 1日(火) 22:40:45 2026] ... max period:                00007fffffffffff
+[ 9月 1日(火) 22:40:45 2026] ... global_ctrl mask:          000000000000003f
+[ 9月 1日(火) 22:40:45 2026] signal: max sigframe size: 3376
+[ 9月 1日(火) 22:40:45 2026] rcu: Hierarchical SRCU implementation.
+[ 9月 1日(火) 22:40:45 2026] rcu: 	Max phase no-delay instances is 400.
+[ 9月 1日(火) 22:40:45 2026] Timer migration: 2 hierarchy levels; 8 children per group; 2 crossnode level
+[ 9月 1日(火) 22:40:45 2026] MCE: In-kernel MCE decoding enabled.
+[ 9月 1日(火) 22:40:45 2026] NMI watchdog: Enabled. Permanently consumes one hw-PMU counter.
+[ 9月 1日(火) 22:40:45 2026] smp: Bringing up secondary CPUs ...
+[ 9月 1日(火) 22:40:45 2026] smpboot: x86: Booting SMP configuration:
+[ 9月 1日(火) 22:40:45 2026] .... node  #0, CPUs:        #1  #2  #3  #4  #5  #6  #7  #8  #9 #10 #11
+[ 9月 1日(火) 22:40:45 2026] Spectre V2 : Update user space SMT mitigation: STIBP always-on
+[ 9月 1日(火) 22:40:45 2026] smp: Brought up 1 node, 12 CPUs
+[ 9月 1日(火) 22:40:45 2026] smpboot: Total of 12 processors activated (88638.57 BogoMIPS)
+[ 9月 1日(火) 22:40:45 2026] Memory: 16053072K/16700468K available (25122K kernel code, 3015K rwdata, 17280K rodata, 5068K init, 4836K bss, 632560K reserved, 0K cma-reserved)
+[ 9月 1日(火) 22:40:45 2026] devtmpfs: initialized
+[ 9月 1日(火) 22:40:45 2026] x86/mm: Memory block size: 128MB
+[ 9月 1日(火) 22:40:45 2026] ACPI: PM: Registering ACPI NVS region [mem 0x0a200000-0x0a20dfff] (57344 bytes)
+[ 9月 1日(火) 22:40:45 2026] ACPI: PM: Registering ACPI NVS region [mem 0xbcd9d000-0xbd477fff] (7188480 bytes)
+[ 9月 1日(火) 22:40:45 2026] posixtimers hash table entries: 8192 (order: 5, 131072 bytes, linear)
+[ 9月 1日(火) 22:40:45 2026] futex hash table entries: 4096 (262144 bytes on 1 NUMA nodes, total 256 KiB, linear).
+[ 9月 1日(火) 22:40:45 2026] xor: automatically using best checksumming function   avx       
+[ 9月 1日(火) 22:40:45 2026] PM: RTC time: 13:40:44, date: 2026-09-01
+[ 9月 1日(火) 22:40:45 2026] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[ 9月 1日(火) 22:40:45 2026] DMA: preallocated 2048 KiB GFP_KERNEL pool for atomic allocations
+[ 9月 1日(火) 22:40:45 2026] DMA: preallocated 2048 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+[ 9月 1日(火) 22:40:45 2026] DMA: preallocated 2048 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+[ 9月 1日(火) 22:40:45 2026] audit: initializing netlink subsys (disabled)
+[ 9月 1日(火) 22:40:45 2026] audit: type=2000 audit(1788270044.155:1): state=initialized audit_enabled=0 res=1
+[ 9月 1日(火) 22:40:45 2026] thermal_sys: Registered thermal governor 'fair_share'
+[ 9月 1日(火) 22:40:45 2026] thermal_sys: Registered thermal governor 'bang_bang'
+[ 9月 1日(火) 22:40:45 2026] thermal_sys: Registered thermal governor 'step_wise'
+[ 9月 1日(火) 22:40:45 2026] thermal_sys: Registered thermal governor 'user_space'
+[ 9月 1日(火) 22:40:45 2026] thermal_sys: Registered thermal governor 'power_allocator'
+[ 9月 1日(火) 22:40:45 2026] cpuidle: using governor ladder
+[ 9月 1日(火) 22:40:45 2026] cpuidle: using governor menu
+[ 9月 1日(火) 22:40:45 2026] Detected 1 PCC Subspaces
+[ 9月 1日(火) 22:40:45 2026] Registering PCC driver as Mailbox controller
+[ 9月 1日(火) 22:40:45 2026] Freeing SMP alternatives memory: 72K
+[ 9月 1日(火) 22:40:45 2026] efi: Freeing EFI boot services memory: 86836K
+[ 9月 1日(火) 22:40:45 2026] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+[ 9月 1日(火) 22:40:45 2026] PCI: ECAM [mem 0xf0000000-0xf7ffffff] (base 0xf0000000) for domain 0000 [bus 00-7f]
+[ 9月 1日(火) 22:40:45 2026] PCI: Using configuration type 1 for base access
+[ 9月 1日(火) 22:40:45 2026] virt/tdx: TDX not supported by the host platform
+[ 9月 1日(火) 22:40:45 2026] kprobes: kprobe jump-optimization is enabled. All kprobes are optimized if possible.
+[ 9月 1日(火) 22:40:45 2026] HugeTLB: registered 1.00 GiB page size, pre-allocated 0 pages
+[ 9月 1日(火) 22:40:45 2026] HugeTLB: 16380 KiB vmemmap can be freed for a 1.00 GiB page
+[ 9月 1日(火) 22:40:45 2026] HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+[ 9月 1日(火) 22:40:45 2026] HugeTLB: 28 KiB vmemmap can be freed for a 2.00 MiB page
+[ 9月 1日(火) 22:40:45 2026] raid6: skipped pq benchmark and selected avx2x4
+[ 9月 1日(火) 22:40:45 2026] raid6: using avx2x2 recovery algorithm
+[ 9月 1日(火) 22:40:45 2026] fbcon: Taking over console
+[ 9月 1日(火) 22:40:45 2026] ACPI: Added _OSI(Module Device)
+[ 9月 1日(火) 22:40:45 2026] ACPI: Added _OSI(Processor Device)
+[ 9月 1日(火) 22:40:45 2026] ACPI: Added _OSI(Processor Aggregator Device)
+[ 9月 1日(火) 22:40:45 2026] ACPI: 10 ACPI AML tables successfully acquired and loaded
+[ 9月 1日(火) 22:40:45 2026] ACPI: [Firmware Bug]: BIOS _OSI(Linux) query ignored
+[ 9月 1日(火) 22:40:45 2026] ACPI: \_SB_: platform _OSC: OS support mask [006e7eff]
+[ 9月 1日(火) 22:40:45 2026] ACPI: Interpreter enabled
+[ 9月 1日(火) 22:40:45 2026] ACPI: PM: (supports S0 S3 S4 S5)
+[ 9月 1日(火) 22:40:45 2026] ACPI: Using IOAPIC for interrupt routing
+[ 9月 1日(火) 22:40:45 2026] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+[ 9月 1日(火) 22:40:45 2026] PCI: Using E820 reservations for host bridge windows
+[ 9月 1日(火) 22:40:45 2026] ACPI: Enabled 8 GPEs in block 00 to 1F
+[ 9月 1日(火) 22:40:45 2026] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI EDR HPX-Type3]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0A08:00: _OSC: platform does not support [SHPCHotplug LTR DPC]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME AER PCIeCapability]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0A08:00: [Firmware Info]: ECAM [mem 0xf0000000-0xf7ffffff] for domain 0000 [bus 00-7f] only partially covers this bridge
+[ 9月 1日(火) 22:40:45 2026] PCI host bridge to bus 0000:00
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:00: root bus resource [io  0x0000-0x03af window]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:00: root bus resource [io  0x03e0-0x0cf7 window]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:00: root bus resource [io  0x03b0-0x03df window]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000dffff window]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:00: root bus resource [mem 0xc0000000-0xfec2ffff window]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:00: root bus resource [mem 0xfee00000-0xffffffff window]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:00: root bus resource [bus 00-ff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:00.0: [1022:1480] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.0: [1022:1482] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.1: [1022:1483] type 01 class 0x060400 PCIe Root Port
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.1: PCI bridge to [bus 01]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.1:   bridge window [mem 0xfc900000-0xfc9fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.1: PME# supported from D0 D3hot D3cold
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.2: [1022:1483] type 01 class 0x060400 PCIe Root Port
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.2: PCI bridge to [bus 02-06]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.2:   bridge window [io  0xd000-0xefff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.2:   bridge window [mem 0xfc200000-0xfc5fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.2: enabling Extended Tags
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.2: PME# supported from D0 D3hot D3cold
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:02.0: [1022:1482] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:03.0: [1022:1482] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:03.1: [1022:1483] type 01 class 0x060400 PCIe Root Port
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:03.1: PCI bridge to [bus 07]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:03.1:   bridge window [io  0xf000-0xffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:03.1:   bridge window [mem 0xfb000000-0xfc0fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:03.1:   bridge window [mem 0xd0000000-0xe1ffffff 64bit pref]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:03.1: PME# supported from D0 D3hot D3cold
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:04.0: [1022:1482] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:05.0: [1022:1482] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:07.0: [1022:1482] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:07.1: [1022:1484] type 01 class 0x060400 PCIe Root Port
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:07.1: PCI bridge to [bus 08]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:07.1: enabling Extended Tags
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:07.1: PME# supported from D0 D3hot D3cold
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:08.0: [1022:1482] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:08.1: [1022:1484] type 01 class 0x060400 PCIe Root Port
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:08.1: PCI bridge to [bus 09]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:08.1:   bridge window [mem 0xfc600000-0xfc8fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:08.1: enabling Extended Tags
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:08.1: PME# supported from D0 D3hot D3cold
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:14.0: [1022:790b] type 00 class 0x0c0500 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:14.3: [1022:790e] type 00 class 0x060100 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:18.0: [1022:1440] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:18.1: [1022:1441] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:18.2: [1022:1442] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:18.3: [1022:1443] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:18.4: [1022:1444] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:18.5: [1022:1445] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:18.6: [1022:1446] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:18.7: [1022:1447] type 00 class 0x060000 conventional PCI endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:01:00.0: [1e0f:0009] type 00 class 0x010802 PCIe Endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:01:00.0: BAR 0 [mem 0xfc900000-0xfc903fff 64bit]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.1: PCI bridge to [bus 01]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.0: [1022:43ee] type 00 class 0x0c0330 PCIe Legacy Endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.0: BAR 0 [mem 0xfc5a0000-0xfc5a7fff 64bit]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.0: enabling Extended Tags
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.0: PME# supported from D3hot D3cold
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.1: [1022:43eb] type 00 class 0x010601 PCIe Legacy Endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.1: BAR 5 [mem 0xfc580000-0xfc59ffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.1: ROM [mem 0xfc500000-0xfc57ffff pref]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.1: enabling Extended Tags
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.1: PME# supported from D3hot D3cold
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.2: [1022:43e9] type 01 class 0x060400 PCIe Switch Upstream Port
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.2: PCI bridge to [bus 03-06]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.2:   bridge window [io  0xd000-0xefff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.2:   bridge window [mem 0xfc200000-0xfc4fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.2: enabling Extended Tags
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.2: PME# supported from D3hot D3cold
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.2: PCI bridge to [bus 02-06]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:04.0: [1022:43ea] type 01 class 0x060400 PCIe Switch Downstream Port
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:04.0: PCI bridge to [bus 04]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:04.0:   bridge window [mem 0xfc400000-0xfc4fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:04.0: enabling Extended Tags
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:04.0: PME# supported from D3hot D3cold
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:06.0: [1022:43ea] type 01 class 0x060400 PCIe Switch Downstream Port
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:06.0: PCI bridge to [bus 05]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:06.0:   bridge window [io  0xe000-0xefff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:06.0:   bridge window [mem 0xfc300000-0xfc3fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:06.0: enabling Extended Tags
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:06.0: PME# supported from D3hot D3cold
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:08.0: [1022:43ea] type 01 class 0x060400 PCIe Switch Downstream Port
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:08.0: PCI bridge to [bus 06]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:08.0:   bridge window [io  0xd000-0xdfff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:08.0:   bridge window [mem 0xfc200000-0xfc2fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:08.0: enabling Extended Tags
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:08.0: PME# supported from D3hot D3cold
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.2: PCI bridge to [bus 03-06]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:04:00.0: [8086:f1a6] type 00 class 0x010802 PCIe Endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:04:00.0: BAR 0 [mem 0xfc400000-0xfc403fff 64bit]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:04:00.0: 15.752 Gb/s available PCIe bandwidth, limited by 8.0 GT/s PCIe x2 link at 0000:03:04.0 (capable of 31.504 Gb/s with 8.0 GT/s PCIe x4 link)
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:04.0: PCI bridge to [bus 04]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:05:00.0: [10ec:b852] type 00 class 0x028000 PCIe Endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:05:00.0: BAR 0 [io  0xe000-0xe0ff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:05:00.0: BAR 2 [mem 0xfc300000-0xfc3fffff 64bit]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:05:00.0: PME# supported from D0 D3hot D3cold
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:06.0: PCI bridge to [bus 05]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:06:00.0: [10ec:8168] type 00 class 0x020000 PCIe Endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:06:00.0: BAR 0 [io  0xd000-0xd0ff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:06:00.0: BAR 2 [mem 0xfc204000-0xfc204fff 64bit]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:06:00.0: BAR 4 [mem 0xfc200000-0xfc203fff 64bit]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:06:00.0: supports D1 D2
+[ 9月 1日(火) 22:40:45 2026] pci 0000:06:00.0: PME# supported from D0 D1 D2 D3hot D3cold
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:08.0: PCI bridge to [bus 06]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:07:00.0: [10de:2504] type 00 class 0x030000 PCIe Legacy Endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:07:00.0: BAR 0 [mem 0xfb000000-0xfbffffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:07:00.0: BAR 1 [mem 0xd0000000-0xdfffffff 64bit pref]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:07:00.0: BAR 3 [mem 0xe0000000-0xe1ffffff 64bit pref]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:07:00.0: BAR 5 [io  0xf000-0xf07f]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:07:00.0: ROM [mem 0xfc000000-0xfc07ffff pref]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:07:00.0: Video device with shadowed ROM at [mem 0x000c0000-0x000dffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:07:00.0: PME# supported from D0 D3hot
+[ 9月 1日(火) 22:40:45 2026] pci 0000:07:00.1: [10de:228e] type 00 class 0x040300 PCIe Endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:07:00.1: BAR 0 [mem 0xfc080000-0xfc083fff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:03.1: PCI bridge to [bus 07]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:08:00.0: [1022:148a] type 00 class 0x130000 PCIe Endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:08:00.0: enabling Extended Tags
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:07.1: PCI bridge to [bus 08]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:09:00.0: [1022:1485] type 00 class 0x130000 PCIe Endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:09:00.0: enabling Extended Tags
+[ 9月 1日(火) 22:40:45 2026] pci 0000:09:00.1: [1022:1486] type 00 class 0x108000 PCIe Endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:09:00.1: BAR 2 [mem 0xfc700000-0xfc7fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:09:00.1: BAR 5 [mem 0xfc808000-0xfc809fff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:09:00.1: enabling Extended Tags
+[ 9月 1日(火) 22:40:45 2026] pci 0000:09:00.3: [1022:149c] type 00 class 0x0c0330 PCIe Endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:09:00.3: BAR 0 [mem 0xfc600000-0xfc6fffff 64bit]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:09:00.3: enabling Extended Tags
+[ 9月 1日(火) 22:40:45 2026] pci 0000:09:00.3: PME# supported from D0 D3hot D3cold
+[ 9月 1日(火) 22:40:45 2026] pci 0000:09:00.4: [1022:1487] type 00 class 0x040300 PCIe Endpoint
+[ 9月 1日(火) 22:40:45 2026] pci 0000:09:00.4: BAR 0 [mem 0xfc800000-0xfc807fff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:09:00.4: enabling Extended Tags
+[ 9月 1日(火) 22:40:45 2026] pci 0000:09:00.4: PME# supported from D0 D3hot D3cold
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:08.1: PCI bridge to [bus 09]
+[ 9月 1日(火) 22:40:45 2026] ACPI: PCI: Interrupt link LNKA configured for IRQ 0
+[ 9月 1日(火) 22:40:45 2026] ACPI: PCI: Interrupt link LNKB configured for IRQ 0
+[ 9月 1日(火) 22:40:45 2026] ACPI: PCI: Interrupt link LNKC configured for IRQ 0
+[ 9月 1日(火) 22:40:45 2026] ACPI: PCI: Interrupt link LNKD configured for IRQ 0
+[ 9月 1日(火) 22:40:45 2026] ACPI: PCI: Interrupt link LNKE configured for IRQ 0
+[ 9月 1日(火) 22:40:45 2026] ACPI: PCI: Interrupt link LNKF configured for IRQ 0
+[ 9月 1日(火) 22:40:45 2026] ACPI: PCI: Interrupt link LNKG configured for IRQ 0
+[ 9月 1日(火) 22:40:45 2026] ACPI: PCI: Interrupt link LNKH configured for IRQ 0
+[ 9月 1日(火) 22:40:45 2026] iommu: Default domain type: Translated
+[ 9月 1日(火) 22:40:45 2026] iommu: DMA domain TLB invalidation policy: lazy mode
+[ 9月 1日(火) 22:40:45 2026] SCSI subsystem initialized
+[ 9月 1日(火) 22:40:45 2026] libata version 3.00 loaded.
+[ 9月 1日(火) 22:40:45 2026] ACPI: bus type USB registered
+[ 9月 1日(火) 22:40:45 2026] usbcore: registered new interface driver usbfs
+[ 9月 1日(火) 22:40:45 2026] usbcore: registered new interface driver hub
+[ 9月 1日(火) 22:40:45 2026] usbcore: registered new device driver usb
+[ 9月 1日(火) 22:40:45 2026] EDAC MC: Ver: 3.0.0
+[ 9月 1日(火) 22:40:45 2026] efivars: Registered efivars operations
+[ 9月 1日(火) 22:40:45 2026] NetLabel: Initializing
+[ 9月 1日(火) 22:40:45 2026] NetLabel:  domain hash size = 128
+[ 9月 1日(火) 22:40:45 2026] NetLabel:  protocols = UNLABELED CIPSOv4 CALIPSO
+[ 9月 1日(火) 22:40:45 2026] NetLabel:  unlabeled traffic allowed by default
+[ 9月 1日(火) 22:40:45 2026] mctp: management component transport protocol core
+[ 9月 1日(火) 22:40:45 2026] NET: Registered PF_MCTP protocol family
+[ 9月 1日(火) 22:40:45 2026] PCI: Using ACPI for IRQ routing
+[ 9月 1日(火) 22:40:45 2026] PCI: pci_cache_line_size set to 64 bytes
+[ 9月 1日(火) 22:40:45 2026] e820: register RAM buffer resource [mem 0x09bff000-0x0bffffff]
+[ 9月 1日(火) 22:40:45 2026] e820: register RAM buffer resource [mem 0x0a200000-0x0bffffff]
+[ 9月 1日(火) 22:40:45 2026] e820: register RAM buffer resource [mem 0x0b000000-0x0bffffff]
+[ 9月 1日(火) 22:40:45 2026] e820: register RAM buffer resource [mem 0xb75c7000-0xb7ffffff]
+[ 9月 1日(火) 22:40:45 2026] e820: register RAM buffer resource [mem 0xb808b000-0xbbffffff]
+[ 9月 1日(火) 22:40:45 2026] e820: register RAM buffer resource [mem 0xbb61c000-0xbbffffff]
+[ 9月 1日(火) 22:40:45 2026] e820: register RAM buffer resource [mem 0xbf000000-0xbfffffff]
+[ 9月 1日(火) 22:40:45 2026] e820: register RAM buffer resource [mem 0x43f380000-0x43fffffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:07:00.0: vgaarb: setting as boot VGA device
+[ 9月 1日(火) 22:40:45 2026] pci 0000:07:00.0: vgaarb: bridge control possible
+[ 9月 1日(火) 22:40:45 2026] pci 0000:07:00.0: vgaarb: VGA device added: decodes=io+mem,owns=io+mem,locks=none
+[ 9月 1日(火) 22:40:45 2026] vgaarb: loaded
+[ 9月 1日(火) 22:40:45 2026] hpet0: at MMIO 0xfed00000, IRQs 2, 8, 0
+[ 9月 1日(火) 22:40:45 2026] hpet0: 3 comparators, 32-bit 14.318180 MHz counter
+[ 9月 1日(火) 22:40:45 2026] clocksource: Switched to clocksource tsc-early
+[ 9月 1日(火) 22:40:45 2026] VFS: Disk quotas dquot_6.6.0
+[ 9月 1日(火) 22:40:45 2026] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C01:00: Reserved [mem 0xf0000000-0xf7ffffff]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:00: Reserved [mem 0xfeb80000-0xfebfffff]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:01: Reserved [mem 0xfd200000-0xfd2fffff]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:02: Reserved [io  0x0280-0x028f]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:02: Reserved [io  0x0290-0x029f]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:02: Reserved [io  0x02a0-0x02af]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:02: Reserved [io  0x02b0-0x02bf]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Skipped [io  0x0010-0x001f]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Skipped [io  0x0022-0x003f]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Skipped [io  0x0063]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Skipped [io  0x0065]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Skipped [io  0x0067-0x006f]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Skipped [io  0x0072-0x007f]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Skipped [io  0x0080]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Skipped [io  0x0084-0x0086]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Skipped [io  0x0088]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Skipped [io  0x008c-0x008e]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Skipped [io  0x0090-0x009f]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Skipped [io  0x00a2-0x00bf]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Skipped [io  0x00b1]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Skipped [io  0x00e0-0x00ef]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [io  0x04d0-0x04d1]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [io  0x040b]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [io  0x04d6]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [io  0x0c00-0x0c01]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [io  0x0c14]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [io  0x0c50-0x0c51]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [io  0x0c52]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [io  0x0c6c]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [io  0x0c6f]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [io  0x0cd8-0x0cdf]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [io  0x0800-0x089f]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [io  0x0b00-0x0b0f]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [io  0x0b20-0x0b3f]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [io  0x0900-0x090f]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [io  0x0910-0x091f]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Could not reserve [mem 0xfec00000-0xfec00fff]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Could not reserve [mem 0xfec01000-0xfec01fff]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [mem 0xfedc0000-0xfedc0fff]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [mem 0xfee00000-0xfee00fff]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Could not reserve [mem 0xfed80000-0xfed8ffff]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [mem 0xfec10000-0xfec10fff]
+[ 9月 1日(火) 22:40:45 2026] acpi PNP0C02:03: Reserved [mem 0xff000000-0xffffffff]
+[ 9月 1日(火) 22:40:45 2026] pnp: PnP ACPI init
+[ 9月 1日(火) 22:40:45 2026] pnp 00:00: [dma 0 disabled]
+[ 9月 1日(火) 22:40:45 2026] pnp: PnP ACPI: found 1 devices
+[ 9月 1日(火) 22:40:45 2026] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+[ 9月 1日(火) 22:40:45 2026] NET: Registered PF_INET protocol family
+[ 9月 1日(火) 22:40:45 2026] IP idents hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+[ 9月 1日(火) 22:40:45 2026] tcp_listen_portaddr_hash hash table entries: 8192 (order: 5, 131072 bytes, linear)
+[ 9月 1日(火) 22:40:45 2026] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[ 9月 1日(火) 22:40:45 2026] TCP established hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+[ 9月 1日(火) 22:40:45 2026] TCP bind hash table entries: 65536 (order: 9, 2097152 bytes, linear)
+[ 9月 1日(火) 22:40:45 2026] TCP: Hash tables configured (established 131072 bind 65536)
+[ 9月 1日(火) 22:40:45 2026] MPTCP token hash table entries: 16384 (order: 7, 393216 bytes, linear)
+[ 9月 1日(火) 22:40:45 2026] UDP hash table entries: 8192 (order: 7, 524288 bytes, linear)
+[ 9月 1日(火) 22:40:45 2026] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[ 9月 1日(火) 22:40:45 2026] NET: Registered PF_XDP protocol family
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.1: PCI bridge to [bus 01]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.1:   bridge window [mem 0xfc900000-0xfc9fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:04.0: PCI bridge to [bus 04]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:04.0:   bridge window [mem 0xfc400000-0xfc4fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:06.0: PCI bridge to [bus 05]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:06.0:   bridge window [io  0xe000-0xefff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:06.0:   bridge window [mem 0xfc300000-0xfc3fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:08.0: PCI bridge to [bus 06]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:08.0:   bridge window [io  0xd000-0xdfff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:03:08.0:   bridge window [mem 0xfc200000-0xfc2fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.2: PCI bridge to [bus 03-06]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.2:   bridge window [io  0xd000-0xefff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:02:00.2:   bridge window [mem 0xfc200000-0xfc4fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.2: PCI bridge to [bus 02-06]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.2:   bridge window [io  0xd000-0xefff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:01.2:   bridge window [mem 0xfc200000-0xfc5fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:03.1: PCI bridge to [bus 07]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:03.1:   bridge window [io  0xf000-0xffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:03.1:   bridge window [mem 0xfb000000-0xfc0fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:03.1:   bridge window [mem 0xd0000000-0xe1ffffff 64bit pref]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:07.1: PCI bridge to [bus 08]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:08.1: PCI bridge to [bus 09]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:00:08.1:   bridge window [mem 0xfc600000-0xfc8fffff]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:00: resource 4 [io  0x0000-0x03af window]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:00: resource 5 [io  0x03e0-0x0cf7 window]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:00: resource 6 [io  0x03b0-0x03df window]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:00: resource 7 [io  0x0d00-0xffff window]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:00: resource 8 [mem 0x000a0000-0x000dffff window]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:00: resource 9 [mem 0xc0000000-0xfec2ffff window]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:00: resource 10 [mem 0xfee00000-0xffffffff window]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:01: resource 1 [mem 0xfc900000-0xfc9fffff]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:02: resource 0 [io  0xd000-0xefff]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:02: resource 1 [mem 0xfc200000-0xfc5fffff]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:03: resource 0 [io  0xd000-0xefff]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:03: resource 1 [mem 0xfc200000-0xfc4fffff]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:04: resource 1 [mem 0xfc400000-0xfc4fffff]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:05: resource 0 [io  0xe000-0xefff]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:05: resource 1 [mem 0xfc300000-0xfc3fffff]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:06: resource 0 [io  0xd000-0xdfff]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:06: resource 1 [mem 0xfc200000-0xfc2fffff]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:07: resource 0 [io  0xf000-0xffff]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:07: resource 1 [mem 0xfb000000-0xfc0fffff]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:07: resource 2 [mem 0xd0000000-0xe1ffffff 64bit pref]
+[ 9月 1日(火) 22:40:45 2026] pci_bus 0000:09: resource 1 [mem 0xfc600000-0xfc8fffff]
+[ 9月 1日(火) 22:40:45 2026] pci 0000:07:00.1: extending delay after power-on from D3hot to 20 msec
+[ 9月 1日(火) 22:40:45 2026] pci 0000:07:00.1: D0 power state depends on 0000:07:00.0
+[ 9月 1日(火) 22:40:45 2026] PCI: CLS 64 bytes, default 64
+[ 9月 1日(火) 22:40:45 2026] PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
+[ 9月 1日(火) 22:40:45 2026] software IO TLB: mapped [mem 0x00000000b2f72000-0x00000000b6f72000] (64MB)
+[ 9月 1日(火) 22:40:45 2026] LVT offset 0 assigned for vector 0x400
+[ 9月 1日(火) 22:40:45 2026] Trying to unpack rootfs image as initramfs...
+[ 9月 1日(火) 22:40:45 2026] perf: AMD IBS detected (0x000003ff)
+[ 9月 1日(火) 22:40:45 2026] Initialise system trusted keyrings
+[ 9月 1日(火) 22:40:45 2026] Key type blacklist registered
+[ 9月 1日(火) 22:40:45 2026] workingset: timestamp_bits=36 (anon: 32) max_order=22 bucket_order=0 (anon: 0)
+[ 9月 1日(火) 22:40:45 2026] fuse: init (API version 7.45)
+[ 9月 1日(火) 22:40:45 2026] integrity: Platform Keyring initialized
+[ 9月 1日(火) 22:40:45 2026] integrity: Machine keyring initialized
+[ 9月 1日(火) 22:40:45 2026] Key type asymmetric registered
+[ 9月 1日(火) 22:40:45 2026] Asymmetric key parser 'x509' registered
+[ 9月 1日(火) 22:40:45 2026] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 245)
+[ 9月 1日(火) 22:40:45 2026] io scheduler mq-deadline registered
+[ 9月 1日(火) 22:40:45 2026] io scheduler kyber registered
+[ 9月 1日(火) 22:40:45 2026] io scheduler bfq registered
+[ 9月 1日(火) 22:40:45 2026] ledtrig-cpu: registered to indicate activity on CPUs
+[ 9月 1日(火) 22:40:45 2026] pcieport 0000:00:01.1: PME: Signaling with IRQ 26
+[ 9月 1日(火) 22:40:45 2026] pcieport 0000:00:01.1: AER: enabled with IRQ 26
+[ 9月 1日(火) 22:40:45 2026] pcieport 0000:00:01.2: PME: Signaling with IRQ 27
+[ 9月 1日(火) 22:40:45 2026] pcieport 0000:00:01.2: AER: enabled with IRQ 27
+[ 9月 1日(火) 22:40:45 2026] pcieport 0000:00:03.1: PME: Signaling with IRQ 28
+[ 9月 1日(火) 22:40:45 2026] pcieport 0000:00:03.1: AER: enabled with IRQ 28
+[ 9月 1日(火) 22:40:45 2026] pcieport 0000:00:07.1: PME: Signaling with IRQ 30
+[ 9月 1日(火) 22:40:45 2026] pcieport 0000:00:07.1: AER: enabled with IRQ 30
+[ 9月 1日(火) 22:40:45 2026] pcieport 0000:00:08.1: PME: Signaling with IRQ 31
+[ 9月 1日(火) 22:40:45 2026] pcieport 0000:00:08.1: AER: enabled with IRQ 31
+[ 9月 1日(火) 22:40:45 2026] input: Power Button as /devices/platform/PNP0C0C:00/input/input0
+[ 9月 1日(火) 22:40:45 2026] ACPI: button: Power Button [PWRB]
+[ 9月 1日(火) 22:40:45 2026] input: Power Button as /devices/platform/LNXPWRBN:00/input/input1
+[ 9月 1日(火) 22:40:45 2026] ACPI: button: Power Button [PWRF]
+[ 9月 1日(火) 22:40:45 2026] Monitor-Mwait will be used to enter C-1 state
+[ 9月 1日(火) 22:40:45 2026] Estimated ratio of average max frequency by base frequency (times 1024): 1155
+[ 9月 1日(火) 22:40:45 2026] Serial: 8250/16550 driver, 32 ports, IRQ sharing enabled
+[ 9月 1日(火) 22:40:45 2026] 00:00: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+[ 9月 1日(火) 22:40:45 2026] Non-volatile memory driver v1.3
+[ 9月 1日(火) 22:40:45 2026] tpm_crb_acpi MSFT0101:00: Disabling hwrng
+[ 9月 1日(火) 22:40:45 2026] ACPI: bus type drm_connector registered
+[ 9月 1日(火) 22:40:45 2026] ahci 0000:02:00.1: SSS flag set, parallel bus scan disabled
+[ 9月 1日(火) 22:40:45 2026] ahci 0000:02:00.1: AHCI vers 0001.0301, 32 command slots, 6 Gbps, SATA mode
+[ 9月 1日(火) 22:40:45 2026] ahci 0000:02:00.1: 6/6 ports implemented (port mask 0x3f)
+[ 9月 1日(火) 22:40:45 2026] ahci 0000:02:00.1: flags: 64bit ncq sntf stag pm led clo only pmp pio slum part sxs deso sadm sds apst 
+[ 9月 1日(火) 22:40:45 2026] scsi host0: ahci
+[ 9月 1日(火) 22:40:45 2026] scsi host1: ahci
+[ 9月 1日(火) 22:40:45 2026] scsi host2: ahci
+[ 9月 1日(火) 22:40:45 2026] scsi host3: ahci
+[ 9月 1日(火) 22:40:45 2026] scsi host4: ahci
+[ 9月 1日(火) 22:40:45 2026] scsi host5: ahci
+[ 9月 1日(火) 22:40:45 2026] ata1: SATA max UDMA/133 abar m131072@0xfc580000 port 0xfc580100 irq 38 lpm-pol 3
+[ 9月 1日(火) 22:40:45 2026] ata2: SATA max UDMA/133 abar m131072@0xfc580000 port 0xfc580180 irq 38 lpm-pol 3
+[ 9月 1日(火) 22:40:45 2026] ata3: SATA max UDMA/133 abar m131072@0xfc580000 port 0xfc580200 irq 38 lpm-pol 3
+[ 9月 1日(火) 22:40:45 2026] ata4: SATA max UDMA/133 abar m131072@0xfc580000 port 0xfc580280 irq 38 lpm-pol 3
+[ 9月 1日(火) 22:40:45 2026] ata5: SATA max UDMA/133 abar m131072@0xfc580000 port 0xfc580300 irq 38 lpm-pol 3
+[ 9月 1日(火) 22:40:45 2026] ata6: SATA max UDMA/133 abar m131072@0xfc580000 port 0xfc580380 irq 38 lpm-pol 3
+[ 9月 1日(火) 22:40:45 2026] xhci_hcd 0000:02:00.0: xHCI Host Controller
+[ 9月 1日(火) 22:40:45 2026] xhci_hcd 0000:02:00.0: new USB bus registered, assigned bus number 1
+[ 9月 1日(火) 22:40:45 2026] Freeing initrd memory: 122392K
+[ 9月 1日(火) 22:40:45 2026] xhci_hcd 0000:02:00.0: hcc params 0x0200ef81 hci version 0x110 quirks 0x0000000000000010
+[ 9月 1日(火) 22:40:45 2026] xhci_hcd 0000:02:00.0: xHCI Host Controller
+[ 9月 1日(火) 22:40:45 2026] xhci_hcd 0000:02:00.0: new USB bus registered, assigned bus number 2
+[ 9月 1日(火) 22:40:45 2026] xhci_hcd 0000:02:00.0: Host supports USB 3.1 Enhanced SuperSpeed
+[ 9月 1日(火) 22:40:45 2026] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.01
+[ 9月 1日(火) 22:40:45 2026] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[ 9月 1日(火) 22:40:45 2026] usb usb1: Product: xHCI Host Controller
+[ 9月 1日(火) 22:40:45 2026] usb usb1: Manufacturer: Linux 7.1.8-zen1-3-zen xhci-hcd
+[ 9月 1日(火) 22:40:45 2026] usb usb1: SerialNumber: 0000:02:00.0
+[ 9月 1日(火) 22:40:45 2026] hub 1-0:1.0: USB hub found
+[ 9月 1日(火) 22:40:45 2026] hub 1-0:1.0: 10 ports detected
+[ 9月 1日(火) 22:40:45 2026] usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
+[ 9月 1日(火) 22:40:45 2026] usb usb2: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.01
+[ 9月 1日(火) 22:40:45 2026] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[ 9月 1日(火) 22:40:45 2026] usb usb2: Product: xHCI Host Controller
+[ 9月 1日(火) 22:40:45 2026] usb usb2: Manufacturer: Linux 7.1.8-zen1-3-zen xhci-hcd
+[ 9月 1日(火) 22:40:45 2026] usb usb2: SerialNumber: 0000:02:00.0
+[ 9月 1日(火) 22:40:45 2026] hub 2-0:1.0: USB hub found
+[ 9月 1日(火) 22:40:45 2026] hub 2-0:1.0: 4 ports detected
+[ 9月 1日(火) 22:40:45 2026] xhci_hcd 0000:09:00.3: xHCI Host Controller
+[ 9月 1日(火) 22:40:45 2026] xhci_hcd 0000:09:00.3: new USB bus registered, assigned bus number 3
+[ 9月 1日(火) 22:40:45 2026] xhci_hcd 0000:09:00.3: hcc params 0x0278ffe5 hci version 0x110 quirks 0x0000000000000010
+[ 9月 1日(火) 22:40:45 2026] xhci_hcd 0000:09:00.3: xHCI Host Controller
+[ 9月 1日(火) 22:40:45 2026] xhci_hcd 0000:09:00.3: new USB bus registered, assigned bus number 4
+[ 9月 1日(火) 22:40:45 2026] xhci_hcd 0000:09:00.3: Host supports USB 3.1 Enhanced SuperSpeed
+[ 9月 1日(火) 22:40:45 2026] usb usb3: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.01
+[ 9月 1日(火) 22:40:45 2026] usb usb3: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[ 9月 1日(火) 22:40:45 2026] usb usb3: Product: xHCI Host Controller
+[ 9月 1日(火) 22:40:45 2026] usb usb3: Manufacturer: Linux 7.1.8-zen1-3-zen xhci-hcd
+[ 9月 1日(火) 22:40:45 2026] usb usb3: SerialNumber: 0000:09:00.3
+[ 9月 1日(火) 22:40:45 2026] hub 3-0:1.0: USB hub found
+[ 9月 1日(火) 22:40:45 2026] hub 3-0:1.0: 4 ports detected
+[ 9月 1日(火) 22:40:45 2026] usb usb4: We don't know the algorithms for LPM for this host, disabling LPM.
+[ 9月 1日(火) 22:40:45 2026] usb usb4: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.01
+[ 9月 1日(火) 22:40:45 2026] usb usb4: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[ 9月 1日(火) 22:40:45 2026] usb usb4: Product: xHCI Host Controller
+[ 9月 1日(火) 22:40:45 2026] usb usb4: Manufacturer: Linux 7.1.8-zen1-3-zen xhci-hcd
+[ 9月 1日(火) 22:40:45 2026] usb usb4: SerialNumber: 0000:09:00.3
+[ 9月 1日(火) 22:40:45 2026] hub 4-0:1.0: USB hub found
+[ 9月 1日(火) 22:40:45 2026] hub 4-0:1.0: 4 ports detected
+[ 9月 1日(火) 22:40:45 2026] usbcore: registered new interface driver usbserial_generic
+[ 9月 1日(火) 22:40:45 2026] usbserial: USB Serial support registered for generic
+[ 9月 1日(火) 22:40:45 2026] i8042: PNP: No PS/2 controller found.
+[ 9月 1日(火) 22:40:45 2026] rtc_cmos PNP0B00:00: RTC can wake from S4
+[ 9月 1日(火) 22:40:45 2026] rtc_cmos PNP0B00:00: registered as rtc0
+[ 9月 1日(火) 22:40:45 2026] rtc_cmos PNP0B00:00: setting system clock to 2026-09-01T13:40:45 UTC (1788270045)
+[ 9月 1日(火) 22:40:45 2026] rtc_cmos PNP0B00:00: alarms up to one month, y3k, 114 bytes nvram
+[ 9月 1日(火) 22:40:45 2026] simple-framebuffer simple-framebuffer.0: [drm] Registered 1 planes with drm panic
+[ 9月 1日(火) 22:40:45 2026] [drm] Initialized simpledrm 1.0.0 for simple-framebuffer.0 on minor 0
+[ 9月 1日(火) 22:40:45 2026] Console: switching to colour frame buffer device 240x67
+[ 9月 1日(火) 22:40:45 2026] simple-framebuffer simple-framebuffer.0: [drm] fb0: simpledrmdrmfb frame buffer device
+[ 9月 1日(火) 22:40:45 2026] hid: raw HID events driver (C) Jiri Kosina
+[ 9月 1日(火) 22:40:45 2026] usbcore: registered new interface driver usbhid
+[ 9月 1日(火) 22:40:45 2026] usbhid: USB HID core driver
+[ 9月 1日(火) 22:40:45 2026] drop_monitor: Initializing network drop monitor service
+[ 9月 1日(火) 22:40:45 2026] NET: Registered PF_INET6 protocol family
+[ 9月 1日(火) 22:40:45 2026] Segment Routing with IPv6
+[ 9月 1日(火) 22:40:45 2026] RPL Segment Routing with IPv6
+[ 9月 1日(火) 22:40:45 2026] In-situ OAM (IOAM) with IPv6
+[ 9月 1日(火) 22:40:45 2026] NET: Registered PF_PACKET protocol family
+[ 9月 1日(火) 22:40:45 2026] x86/amd: Previous system reset reason [0x00080800]: software wrote 0x6 to reset control register 0xCF9
+[ 9月 1日(火) 22:40:45 2026] microcode: Current revision: 0x0a201211
+[ 9月 1日(火) 22:40:45 2026] microcode: Updated early from: 0x0a201205
+[ 9月 1日(火) 22:40:45 2026] resctrl: L3 allocation detected
+[ 9月 1日(火) 22:40:45 2026] resctrl: MB allocation detected
+[ 9月 1日(火) 22:40:45 2026] resctrl: L3 monitoring detected
+[ 9月 1日(火) 22:40:45 2026] IPI shorthand broadcast: enabled
+[ 9月 1日(火) 22:40:45 2026] sched_clock: Marking stable (510518894, 232181)->(570205952, -59454877)
+[ 9月 1日(火) 22:40:45 2026] registered taskstats version 1
+[ 9月 1日(火) 22:40:45 2026] Loading compiled-in X.509 certificates
+[ 9月 1日(火) 22:40:45 2026] Loaded X.509 cert 'Build time autogenerated kernel key: 56414831cf17faa232291422941ff800127c9bbf'
+[ 9月 1日(火) 22:40:45 2026] Demotion targets for Node 0: null
+[ 9月 1日(火) 22:40:45 2026] Key type .fscrypt registered
+[ 9月 1日(火) 22:40:45 2026] Key type fscrypt-provisioning registered
+[ 9月 1日(火) 22:40:45 2026] Btrfs loaded, zoned=yes, fsverity=yes
+[ 9月 1日(火) 22:40:45 2026] Key type big_key registered
+[ 9月 1日(火) 22:40:45 2026] PM:   Magic number: 10:603:684
+[ 9月 1日(火) 22:40:45 2026] mem full: hash matches
+[ 9月 1日(火) 22:40:45 2026] RAS: Correctable Errors collector initialized.
+[ 9月 1日(火) 22:40:45 2026] clk: Disabling unused clocks
+[ 9月 1日(火) 22:40:45 2026] PM: genpd: Disabling unused power domains
+[ 9月 1日(火) 22:40:45 2026] usb 3-1: new full-speed USB device number 2 using xhci_hcd
+[ 9月 1日(火) 22:40:45 2026] ata1: SATA link down (SStatus 0 SControl 300)
+[ 9月 1日(火) 22:40:45 2026] usb 1-3: new full-speed USB device number 2 using xhci_hcd
+[ 9月 1日(火) 22:40:45 2026] usb 3-1: New USB device found, idVendor=258a, idProduct=0049, bcdDevice= 1.01
+[ 9月 1日(火) 22:40:45 2026] usb 3-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[ 9月 1日(火) 22:40:45 2026] usb 3-1: Product: Gaming Keyboard
+[ 9月 1日(火) 22:40:45 2026] usb 3-1: Manufacturer: BY Tech
+[ 9月 1日(火) 22:40:45 2026] input: BY Tech Gaming Keyboard as /devices/pci0000:00/0000:00:08.1/0000:09:00.3/usb3/3-1/3-1:1.0/0003:258A:0049.0001/input/input2
+[ 9月 1日(火) 22:40:45 2026] hid-generic 0003:258A:0049.0001: input,hidraw0: USB HID v1.11 Keyboard [BY Tech Gaming Keyboard] on usb-0000:09:00.3-1/input0
+[ 9月 1日(火) 22:40:45 2026] input: BY Tech Gaming Keyboard System Control as /devices/pci0000:00/0000:00:08.1/0000:09:00.3/usb3/3-1/3-1:1.1/0003:258A:0049.0002/input/input3
+[ 9月 1日(火) 22:40:46 2026] input: BY Tech Gaming Keyboard Consumer Control as /devices/pci0000:00/0000:00:08.1/0000:09:00.3/usb3/3-1/3-1:1.1/0003:258A:0049.0002/input/input4
+[ 9月 1日(火) 22:40:46 2026] input: BY Tech Gaming Keyboard as /devices/pci0000:00/0000:00:08.1/0000:09:00.3/usb3/3-1/3-1:1.1/0003:258A:0049.0002/input/input6
+[ 9月 1日(火) 22:40:46 2026] input: BY Tech Gaming Keyboard Mouse as /devices/pci0000:00/0000:00:08.1/0000:09:00.3/usb3/3-1/3-1:1.1/0003:258A:0049.0002/input/input7
+[ 9月 1日(火) 22:40:46 2026] hid-generic 0003:258A:0049.0002: input,hiddev96,hidraw1: USB HID v1.11 Keyboard [BY Tech Gaming Keyboard] on usb-0000:09:00.3-1/input1
+[ 9月 1日(火) 22:40:46 2026] usb 3-2: new full-speed USB device number 3 using xhci_hcd
+[ 9月 1日(火) 22:40:46 2026] usb 1-3: New USB device found, idVendor=c0de, idProduct=0002, bcdDevice= 0.10
+[ 9月 1日(火) 22:40:46 2026] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[ 9月 1日(火) 22:40:46 2026] usb 1-3: Product: UAC1 microphone sample
+[ 9月 1日(火) 22:40:46 2026] usb 1-3: Manufacturer: dick mouse
+[ 9月 1日(火) 22:40:46 2026] usb 1-3: SerialNumber: microphone-0001
+[ 9月 1日(火) 22:40:46 2026] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+[ 9月 1日(火) 22:40:46 2026] ata2.00: ATA-10: WDC WD20EZAZ-00GGJB0, 80.00A80, max UDMA/133
+[ 9月 1日(火) 22:40:46 2026] ata2.00: 3907029168 sectors, multi 16: LBA48 NCQ (depth 32), AA
+[ 9月 1日(火) 22:40:46 2026] ata2.00: Features: HIPM DIPM NCQ-prio
+[ 9月 1日(火) 22:40:46 2026] ata2.00: configured for UDMA/133
+[ 9月 1日(火) 22:40:46 2026] scsi 1:0:0:0: Direct-Access     ATA      WDC WD20EZAZ-00G 0A80 PQ: 0 ANSI: 5
+[ 9月 1日(火) 22:40:46 2026] sd 1:0:0:0: [sda] 3907029168 512-byte logical blocks: (2.00 TB/1.82 TiB)
+[ 9月 1日(火) 22:40:46 2026] sd 1:0:0:0: [sda] 4096-byte physical blocks
+[ 9月 1日(火) 22:40:46 2026] sd 1:0:0:0: [sda] Write Protect is off
+[ 9月 1日(火) 22:40:46 2026] sd 1:0:0:0: [sda] Mode Sense: 00 3a 00 00
+[ 9月 1日(火) 22:40:46 2026] sd 1:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+[ 9月 1日(火) 22:40:46 2026] sd 1:0:0:0: [sda] Preferred minimum I/O size 4096 bytes
+[ 9月 1日(火) 22:40:46 2026] sd 1:0:0:0: [sda] Attached SCSI disk
+[ 9月 1日(火) 22:40:46 2026] usb 3-2: New USB device found, idVendor=046d, idProduct=c092, bcdDevice=52.00
+[ 9月 1日(火) 22:40:46 2026] usb 3-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[ 9月 1日(火) 22:40:46 2026] usb 3-2: Product: G203 LIGHTSYNC Gaming Mouse
+[ 9月 1日(火) 22:40:46 2026] usb 3-2: Manufacturer: Logitech
+[ 9月 1日(火) 22:40:46 2026] usb 3-2: SerialNumber: 207330545247
+[ 9月 1日(火) 22:40:46 2026] input: Logitech G203 LIGHTSYNC Gaming Mouse as /devices/pci0000:00/0000:00:08.1/0000:09:00.3/usb3/3-2/3-2:1.0/0003:046D:C092.0003/input/input8
+[ 9月 1日(火) 22:40:46 2026] hid-generic 0003:046D:C092.0003: input,hidraw2: USB HID v1.11 Mouse [Logitech G203 LIGHTSYNC Gaming Mouse] on usb-0000:09:00.3-2/input0
+[ 9月 1日(火) 22:40:46 2026] input: Logitech G203 LIGHTSYNC Gaming Mouse Keyboard as /devices/pci0000:00/0000:00:08.1/0000:09:00.3/usb3/3-2/3-2:1.1/0003:046D:C092.0004/input/input9
+[ 9月 1日(火) 22:40:46 2026] hid-generic 0003:046D:C092.0004: input,hiddev97,hidraw3: USB HID v1.11 Keyboard [Logitech G203 LIGHTSYNC Gaming Mouse] on usb-0000:09:00.3-2/input1
+[ 9月 1日(火) 22:40:46 2026] usb 1-4: new full-speed USB device number 3 using xhci_hcd
+[ 9月 1日(火) 22:40:46 2026] tsc: Refined TSC clocksource calibration: 3693.060 MHz
+[ 9月 1日(火) 22:40:46 2026] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x6a77744cfd5, max_idle_ns: 881590969987 ns
+[ 9月 1日(火) 22:40:46 2026] clocksource: Switched to clocksource tsc
+[ 9月 1日(火) 22:40:46 2026] usb 3-3: new full-speed USB device number 4 using xhci_hcd
+[ 9月 1日(火) 22:40:46 2026] ata3: SATA link down (SStatus 0 SControl 300)
+[ 9月 1日(火) 22:40:46 2026] usb 3-3: config 1 has an invalid interface number: 3 but max is 2
+[ 9月 1日(火) 22:40:46 2026] usb 3-3: config 1 has no interface number 2
+[ 9月 1日(火) 22:40:46 2026] usb 3-3: New USB device found, idVendor=31b2, idProduct=0011, bcdDevice= 1.00
+[ 9月 1日(火) 22:40:46 2026] usb 3-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[ 9月 1日(火) 22:40:46 2026] usb 3-3: Product: USB Condenser Microphone
+[ 9月 1日(火) 22:40:46 2026] usb 3-3: Manufacturer: DCMT Technology
+[ 9月 1日(火) 22:40:46 2026] usb 3-3: SerialNumber: 214b206000000178
+[ 9月 1日(火) 22:40:46 2026] input: DCMT Technology USB Condenser Microphone as /devices/pci0000:00/0000:00:08.1/0000:09:00.3/usb3/3-3/3-3:1.3/0003:31B2:0011.0005/input/input12
+[ 9月 1日(火) 22:40:46 2026] usb 1-4: New USB device found, idVendor=1a86, idProduct=55d3, bcdDevice= 4.45
+[ 9月 1日(火) 22:40:46 2026] usb 1-4: New USB device strings: Mfr=0, Product=2, SerialNumber=3
+[ 9月 1日(火) 22:40:46 2026] usb 1-4: Product: USB Single Serial
+[ 9月 1日(火) 22:40:46 2026] usb 1-4: SerialNumber: 5C38193976
+[ 9月 1日(火) 22:40:46 2026] hid-generic 0003:31B2:0011.0005: input,hidraw4: USB HID v1.10 Device [DCMT Technology USB Condenser Microphone] on usb-0000:09:00.3-3/input3
+[ 9月 1日(火) 22:40:46 2026] usb 1-7: new full-speed USB device number 4 using xhci_hcd
+[ 9月 1日(火) 22:40:46 2026] ata4: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
+[ 9月 1日(火) 22:40:46 2026] ata4.00: ATAPI: DRW-24D5MT, 2.00, max UDMA/133
+[ 9月 1日(火) 22:40:46 2026] ata4.00: configured for UDMA/133
+[ 9月 1日(火) 22:40:47 2026] scsi 3:0:0:0: CD-ROM            ASUS     DRW-24D5MT       2.00 PQ: 0 ANSI: 5
+[ 9月 1日(火) 22:40:47 2026] usb 1-7: New USB device found, idVendor=13d3, idProduct=3570, bcdDevice= 0.00
+[ 9月 1日(火) 22:40:47 2026] usb 1-7: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[ 9月 1日(火) 22:40:47 2026] usb 1-7: Product: Bluetooth Radio
+[ 9月 1日(火) 22:40:47 2026] usb 1-7: Manufacturer: Realtek
+[ 9月 1日(火) 22:40:47 2026] usb 1-7: SerialNumber: 00e04c000001
+[ 9月 1日(火) 22:40:47 2026] usb 1-10: new full-speed USB device number 5 using xhci_hcd
+[ 9月 1日(火) 22:40:47 2026] usb 1-10: New USB device found, idVendor=26ce, idProduct=01a2, bcdDevice= 0.00
+[ 9月 1日(火) 22:40:47 2026] usb 1-10: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[ 9月 1日(火) 22:40:47 2026] usb 1-10: Product: LED Controller
+[ 9月 1日(火) 22:40:47 2026] usb 1-10: Manufacturer: ASRock
+[ 9月 1日(火) 22:40:47 2026] usb 1-10: SerialNumber: A02019100900
+[ 9月 1日(火) 22:40:47 2026] input: ASRock LED Controller as /devices/pci0000:00/0000:00:01.2/0000:02:00.0/usb1/1-10/1-10:1.0/0003:26CE:01A2.0006/input/input13
+[ 9月 1日(火) 22:40:47 2026] hid-generic 0003:26CE:01A2.0006: input,hidraw5: USB HID v1.10 Device [ASRock LED Controller] on usb-0000:02:00.0-10/input0
+[ 9月 1日(火) 22:40:48 2026] ata5: failed to resume link (SControl 0)
+[ 9月 1日(火) 22:40:48 2026] ata5: SATA link down (SStatus 0 SControl 0)
+[ 9月 1日(火) 22:40:48 2026] ata6: SATA link down (SStatus 0 SControl 330)
+[ 9月 1日(火) 22:40:48 2026] Freeing unused decrypted memory: 2028K
+[ 9月 1日(火) 22:40:48 2026] Freeing unused kernel image (initmem) memory: 5068K
+[ 9月 1日(火) 22:40:48 2026] Write protecting the kernel read-only data: 45056k
+[ 9月 1日(火) 22:40:48 2026] Freeing unused kernel image (text/rodata gap) memory: 1500K
+[ 9月 1日(火) 22:40:48 2026] Freeing unused kernel image (rodata/data gap) memory: 1152K
+[ 9月 1日(火) 22:40:48 2026] x86/mm: Checked W+X mappings: passed, no W+X pages found.
+[ 9月 1日(火) 22:40:48 2026] rodata_test: all tests were successful
+[ 9月 1日(火) 22:40:48 2026] Run /init as init process
+[ 9月 1日(火) 22:40:48 2026]   with arguments:
+[ 9月 1日(火) 22:40:48 2026]     /init
+[ 9月 1日(火) 22:40:48 2026]   with environment:
+[ 9月 1日(火) 22:40:48 2026]     HOME=/
+[ 9月 1日(火) 22:40:48 2026]     TERM=linux
+[ 9月 1日(火) 22:40:48 2026] Key type psk registered
+[ 9月 1日(火) 22:40:48 2026] nvme nvme1: pci function 0000:04:00.0
+[ 9月 1日(火) 22:40:48 2026] nvme nvme0: pci function 0000:01:00.0
+[ 9月 1日(火) 22:40:48 2026] nvme nvme0: D3 entry latency set to 10 seconds
+[ 9月 1日(火) 22:40:48 2026] nvme nvme0: passthrough uses implicit buffer lengths
+[ 9月 1日(火) 22:40:48 2026] nvme nvme0: 8/0/0 default/read/poll queues
+[ 9月 1日(火) 22:40:48 2026] nvme nvme1: passthrough uses implicit buffer lengths
+[ 9月 1日(火) 22:40:48 2026] nvme nvme1: 12/0/0 default/read/poll queues
+[ 9月 1日(火) 22:40:48 2026] sr 3:0:0:0: [sr0] scsi3-mmc drive: 48x/12x writer dvd-ram cd/rw xa/form2 cdda tray
+[ 9月 1日(火) 22:40:48 2026] cdrom: Uniform CD-ROM driver Revision: 3.20
+[ 9月 1日(火) 22:40:48 2026]  nvme0n1: p1 p2 p3
+[ 9月 1日(火) 22:40:48 2026]  nvme1n1:
+[ 9月 1日(火) 22:40:48 2026] sr 3:0:0:0: Attached scsi CD-ROM sr0
+[ 9月 1日(火) 22:40:49 2026] EXT4-fs (nvme0n1p2): mounted filesystem 03176118-257d-41bb-aec2-47df2267aa40 r/w with ordered data mode. Quota mode: none.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: systemd 261.2-1-arch running in system mode (+PAM +AUDIT -SELINUX +APPARMOR -IMA +IPE +SMACK +SECCOMP +GCRYPT +GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 +KMOD +LIBCRYPTSETUP +LIBCRYPTSETUP_PLUGINS +LIBFDISK +PCRE2 +PWQUALITY +P11KIT +QRENCODE +TPM2 +BZIP2 +LZ4 +XZ +ZLIB +ZSTD +BPF_FRAMEWORK +BTF +XKBCOMMON +UTMP +LIBARCHIVE)
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Detected architecture x86-64.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Hostname set to <suidesktop>.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: bpf-restrict-fs: LSM BPF program attached
+[ 9月 1日(火) 22:40:49 2026] zram: Added device: zram0
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Queued start job for default target Graphical Interface.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Created slice Virtual Machine and Container Slice.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Created slice Slice /system/dirmngr.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Created slice Slice /system/getty.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Created slice Slice /system/gpg-agent.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Created slice Slice /system/gpg-agent-browser.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Created slice Slice /system/gpg-agent-extra.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Created slice Slice /system/gpg-agent-ssh.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Created slice Slice /system/keyboxd.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Created slice Slice /system/modprobe.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Created slice Slice /system/systemd-fsck.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Created slice Slice /system/systemd-validatefs.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Created slice Slice /system/systemd-zram-setup.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Created slice User and Session Slice.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Started Dispatch Password Requests to Console Directory Watch.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Started Forward Password Requests to Wall Directory Watch.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Set up automount Arbitrary Executable File Formats File System Automount Point.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Expecting device /dev/disk/by-uuid/225c8f32-7467-4a79-bdcd-c981dfcce171...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Expecting device /dev/disk/by-uuid/47f526a3-031c-4ffb-b892-05628e518112...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Expecting device /dev/disk/by-uuid/54C6-C3C4...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Expecting device /dev/zram0...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Reached target Login Prompts.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Reached target Image Downloads.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Reached target Local Integrity Protected Volumes.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Reached target Path Units.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Reached target Remote File Systems.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Reached target Slice Units.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Reached target Local Verity Protected Volumes.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on Device-mapper event daemon FIFOs.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on Query the User Interactively for a Password.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on Process Core Dump Socket.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on Credential Encryption/Decryption.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on Factory Reset Management.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on Hostname Service Socket.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on Journal Socket (/dev/log).
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on Journal Sockets.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on Console Output Muting Service Socket.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: TPM PCR Measurements skipped, unmet condition check ConditionSecurity=measured-os
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Make TPM PCR Policy skipped, unmet condition check ConditionSecurity=measured-uki
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on Disk Repartitioning Service Socket.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on Simple Block Device Backed Storage Provider.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on Simple File System Backed Storage Provider.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on udev Control Socket.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on udev Kernel Socket.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on udev Varlink Socket.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Listening on User Database Manager Socket.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Mounting Huge Pages File System...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Mounting POSIX Message Queue File System...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Mounting Kernel Debug File System...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Mounting Kernel Trace File System...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Starting Create List of Static Device Nodes...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Load Kernel Module configfs skipped, unmet condition check ConditionKernelModuleLoaded=!configfs
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Mounting Kernel Configuration File System...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Load Kernel Module drm skipped, unmet condition check ConditionKernelModuleLoaded=!drm
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Load Kernel Module fuse skipped, unmet condition check ConditionKernelModuleLoaded=!fuse
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Mounting FUSE Control File System...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: File System Check on Root Device skipped, unmet condition check ConditionPathIsReadWrite=!/
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Clear Stale Hibernate Storage Info skipped, unmet condition check ConditionPathExists=/sys/firmware/efi/efivars/HibernateLocation-8cf2644b-4b0b-428f-9387-6d876050dc67
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Starting Journal Service...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Starting Load Kernel Modules...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: TPM PCR Machine ID Measurement skipped, unmet condition check ConditionSecurity=measured-os
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: TPM PCR OS Separator skipped, unmet condition check ConditionSecurity=measured-os
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Starting Remount Root and Kernel File Systems...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Early TPM SRK Setup skipped, unmet condition check ConditionSecurity=measured-os
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: TPM PCR NvPCR Initialization Separator skipped, unmet condition check ConditionPathExists=/etc/initrd-release
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Reached target Local Encrypted Volumes.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: TPM NvPCR Product ID Measurement skipped, unmet condition check ConditionSecurity=measured-os
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Starting Load udev Rules from Credentials...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Starting Coldplug All udev Devices...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Mounted Huge Pages File System.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Mounted POSIX Message Queue File System.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Mounted Kernel Debug File System.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Mounted Kernel Trace File System.
+[ 9月 1日(火) 22:40:49 2026] systemd-journald[359]: Collecting audit messages is disabled.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Finished Create List of Static Device Nodes.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Mounted Kernel Configuration File System.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Mounted FUSE Control File System.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Finished Load udev Rules from Credentials.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Starting Create Static Device Nodes in /dev gracefully...
+[ 9月 1日(火) 22:40:49 2026] EXT4-fs (nvme0n1p2): re-mounted 03176118-257d-41bb-aec2-47df2267aa40.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Finished Remount Root and Kernel File Systems.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Rebuild Hardware Database skipped, no trigger condition checks were met.
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Starting Load/Save OS Random Seed...
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: TPM SRK Setup skipped, unmet condition check ConditionSecurity=measured-os
+[ 9月 1日(火) 22:40:49 2026] systemd[1]: Started Journal Service.
+[ 9月 1日(火) 22:40:49 2026] nvidia: loading out-of-tree module taints kernel.
+[ 9月 1日(火) 22:40:49 2026] nvidia: module verification failed: signature and/or required key missing - tainting kernel
+[ 9月 1日(火) 22:40:49 2026] systemd-journald[359]: Received client request to flush runtime journal.
+[ 9月 1日(火) 22:40:49 2026] nvidia-nvlink: Nvlink Core is being initialized, major device number 237
+
+[ 9月 1日(火) 22:40:49 2026] nvidia 0000:07:00.0: vgaarb: VGA decodes changed: olddecodes=io+mem,decodes=none:owns=io+mem
+[ 9月 1日(火) 22:40:49 2026] NVRM: loading NVIDIA UNIX Open Kernel Module for x86_64  610.57.04  Release Build  (root@)  
+[ 9月 1日(火) 22:40:50 2026] zram0: detected capacity change from 0 to 16291840
+[ 9月 1日(火) 22:40:50 2026] mousedev: PS/2 mouse device common for all mice
+[ 9月 1日(火) 22:40:50 2026] mc: Linux media interface: v0.10
+[ 9月 1日(火) 22:40:50 2026] Adding 8145916k swap on /dev/zram0.  Priority:100 extents:1 across:8145916k SSDsc
+[ 9月 1日(火) 22:40:50 2026] ccp 0000:09:00.1: enabling device (0000 -> 0002)
+[ 9月 1日(火) 22:40:50 2026] ccp 0000:09:00.1: ccp: unable to access the device: you might be running a broken BIOS.
+[ 9月 1日(火) 22:40:50 2026] ccp 0000:09:00.1: psp enabled
+[ 9月 1日(火) 22:40:50 2026] cdc_acm 1-4:1.0: ttyACM0: USB ACM device
+[ 9月 1日(火) 22:40:50 2026] usbcore: registered new interface driver cdc_acm
+[ 9月 1日(火) 22:40:50 2026] cdc_acm: USB Abstract Control Model driver for USB modems and ISDN adapters
+[ 9月 1日(火) 22:40:50 2026] Bluetooth: Core ver 2.22
+[ 9月 1日(火) 22:40:50 2026] NET: Registered PF_BLUETOOTH protocol family
+[ 9月 1日(火) 22:40:50 2026] Bluetooth: HCI device and connection manager initialized
+[ 9月 1日(火) 22:40:50 2026] Bluetooth: HCI socket layer initialized
+[ 9月 1日(火) 22:40:50 2026] Bluetooth: L2CAP socket layer initialized
+[ 9月 1日(火) 22:40:50 2026] Bluetooth: SCO socket layer initialized
+[ 9月 1日(火) 22:40:50 2026] piix4_smbus 0000:00:14.0: SMBus Host Controller at 0xb00, revision 0
+[ 9月 1日(火) 22:40:50 2026] piix4_smbus 0000:00:14.0: Using register 0x02 for SMBus port selection
+[ 9月 1日(火) 22:40:50 2026] input: PC Speaker as /devices/platform/pcspkr/input/input14
+[ 9月 1日(火) 22:40:50 2026] RAPL PMU: API unit is 2^-32 Joules, 2 fixed counters, 163840 ms ovfl timer
+[ 9月 1日(火) 22:40:50 2026] RAPL PMU: hw unit of domain package 2^-16 Joules
+[ 9月 1日(火) 22:40:50 2026] RAPL PMU: hw unit of domain core 2^-16 Joules
+[ 9月 1日(火) 22:40:50 2026] i2c i2c-0: Successfully instantiated SPD at 0x52
+[ 9月 1日(火) 22:40:50 2026] i2c i2c-0: Successfully instantiated SPD at 0x53
+[ 9月 1日(火) 22:40:50 2026] piix4_smbus 0000:00:14.0: Auxiliary SMBus Host Controller at 0xb20
+[ 9月 1日(火) 22:40:50 2026] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+[ 9月 1日(火) 22:40:50 2026] sp5100_tco: SP5100/SB800 TCO WatchDog Timer Driver
+[ 9月 1日(火) 22:40:50 2026] sp5100-tco sp5100-tco: Using 0xfeb00000 for watchdog MMIO address
+[ 9月 1日(火) 22:40:50 2026] sp5100-tco sp5100-tco: initialized. heartbeat=60 sec (nowayout=0)
+[ 9月 1日(火) 22:40:50 2026] Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[ 9月 1日(火) 22:40:50 2026] Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
+[ 9月 1日(火) 22:40:50 2026] faux_driver regulatory: Direct firmware load for regulatory.db failed with error -2
+[ 9月 1日(火) 22:40:50 2026] cfg80211: failed to load regulatory.db
+[ 9月 1日(火) 22:40:50 2026] r8169 0000:06:00.0 eth0: RTL8168h/8111h, a8:a1:59:e0:b4:fe, XID 541, IRQ 83
+[ 9月 1日(火) 22:40:50 2026] r8169 0000:06:00.0 eth0: jumbo features [frames: 9194 bytes, tx checksumming: ko]
+[ 9月 1日(火) 22:40:50 2026] ee1004 0-0052: 512 byte EE1004-compliant SPD EEPROM, read-only
+[ 9月 1日(火) 22:40:50 2026] ee1004 0-0053: 512 byte EE1004-compliant SPD EEPROM, read-only
+[ 9月 1日(火) 22:40:50 2026] r8169 0000:06:00.0 enp6s0: renamed from eth0
+[ 9月 1日(火) 22:40:50 2026] nvidia-modeset: Loading NVIDIA UNIX Open Kernel Mode Setting Driver for x86_64  610.57.04  Release Build  (root@)  
+[ 9月 1日(火) 22:40:50 2026] usbcore: registered new interface driver btusb
+[ 9月 1日(火) 22:40:50 2026] [drm] [nvidia-drm] [GPU ID 0x00000700] Loading driver
+[ 9月 1日(火) 22:40:50 2026] Bluetooth: hci0: RTL: examining hci_ver=0b hci_rev=000b lmp_ver=0b lmp_subver=8852
+[ 9月 1日(火) 22:40:50 2026] Bluetooth: hci0: RTL: rom_version status=0 version=1
+[ 9月 1日(火) 22:40:50 2026] kvm_amd: TSC scaling supported
+[ 9月 1日(火) 22:40:50 2026] kvm_amd: Nested Virtualization enabled
+[ 9月 1日(火) 22:40:50 2026] kvm_amd: Nested Paging enabled
+[ 9月 1日(火) 22:40:50 2026] kvm_amd: LBR virtualization supported
+[ 9月 1日(火) 22:40:50 2026] kvm_amd: Virtual VMLOAD VMSAVE supported
+[ 9月 1日(火) 22:40:50 2026] kvm_amd: Virtual GIF supported
+[ 9月 1日(火) 22:40:50 2026] Bluetooth: hci0: RTL: btrtl_initialize: key id 0
+[ 9月 1日(火) 22:40:50 2026] Bluetooth: hci0: RTL: loading rtl_bt/rtl8852bu_fw.bin
+[ 9月 1日(火) 22:40:50 2026] Bluetooth: hci0: RTL: loading rtl_bt/rtl8852bu_config.bin
+[ 9月 1日(火) 22:40:50 2026] Bluetooth: hci0: RTL: cfg_sz 6, total sz 62539
+[ 9月 1日(火) 22:40:50 2026] snd_hda_intel 0000:07:00.1: Disabling MSI
+[ 9月 1日(火) 22:40:50 2026] snd_hda_intel 0000:07:00.1: Handle vga_switcheroo audio client
+[ 9月 1日(火) 22:40:50 2026] snd_hda_intel 0000:09:00.4: enabling device (0000 -> 0002)
+[ 9月 1日(火) 22:40:50 2026] snd_hda_codec_alc882 hdaudioC2D0: ALCS1200A: SKU not ready 0x00000000
+[ 9月 1日(火) 22:40:50 2026] snd_hda_codec_alc882 hdaudioC2D0: autoconfig for ALCS1200A: line_outs=1 (0x14/0x0/0x0/0x0/0x0) type:line
+[ 9月 1日(火) 22:40:50 2026] snd_hda_codec_alc882 hdaudioC2D0:    speaker_outs=0 (0x0/0x0/0x0/0x0/0x0)
+[ 9月 1日(火) 22:40:50 2026] snd_hda_codec_alc882 hdaudioC2D0:    hp_outs=1 (0x1b/0x0/0x0/0x0/0x0)
+[ 9月 1日(火) 22:40:50 2026] snd_hda_codec_alc882 hdaudioC2D0:    mono: mono_out=0x0
+[ 9月 1日(火) 22:40:50 2026] snd_hda_codec_alc882 hdaudioC2D0:    inputs:
+[ 9月 1日(火) 22:40:50 2026] snd_hda_codec_alc882 hdaudioC2D0:      Rear Mic=0x18
+[ 9月 1日(火) 22:40:50 2026] snd_hda_codec_alc882 hdaudioC2D0:      Front Mic=0x19
+[ 9月 1日(火) 22:40:50 2026] snd_hda_codec_alc882 hdaudioC2D0:      Line=0x1a
+[ 9月 1日(火) 22:40:50 2026] input: HDA NVidia HDMI/DP,pcm=3 as /devices/pci0000:00/0000:00:03.1/0000:07:00.1/sound/card0/input15
+[ 9月 1日(火) 22:40:50 2026] input: HDA NVidia HDMI/DP,pcm=7 as /devices/pci0000:00/0000:00:03.1/0000:07:00.1/sound/card0/input16
+[ 9月 1日(火) 22:40:50 2026] input: HDA NVidia HDMI/DP,pcm=8 as /devices/pci0000:00/0000:00:03.1/0000:07:00.1/sound/card0/input17
+[ 9月 1日(火) 22:40:50 2026] input: HDA NVidia HDMI/DP,pcm=9 as /devices/pci0000:00/0000:00:03.1/0000:07:00.1/sound/card0/input18
+[ 9月 1日(火) 22:40:50 2026] input: HD-Audio Generic Rear Mic as /devices/pci0000:00/0000:00:08.1/0000:09:00.4/sound/card2/input19
+[ 9月 1日(火) 22:40:50 2026] input: HD-Audio Generic Front Mic as /devices/pci0000:00/0000:00:08.1/0000:09:00.4/sound/card2/input20
+[ 9月 1日(火) 22:40:50 2026] input: HD-Audio Generic Line as /devices/pci0000:00/0000:00:08.1/0000:09:00.4/sound/card2/input21
+[ 9月 1日(火) 22:40:50 2026] input: HD-Audio Generic Line Out as /devices/pci0000:00/0000:00:08.1/0000:09:00.4/sound/card2/input22
+[ 9月 1日(火) 22:40:50 2026] input: HD-Audio Generic Front Headphone as /devices/pci0000:00/0000:00:08.1/0000:09:00.4/sound/card2/input23
+[ 9月 1日(火) 22:40:50 2026] rtw89_8852be 0000:05:00.0: loaded firmware rtw89/rtw8852b_fw-2.bin
+[ 9月 1日(火) 22:40:50 2026] rtw89_8852be 0000:05:00.0: enabling device (0000 -> 0003)
+[ 9月 1日(火) 22:40:50 2026] rtw89_8852be 0000:05:00.0: Firmware version 0.29.29.18 (9e3d777f), cmd version 0, type 5
+[ 9月 1日(火) 22:40:50 2026] rtw89_8852be 0000:05:00.0: Firmware version 0.29.29.18 (9e3d777f), cmd version 0, type 3
+[ 9月 1日(火) 22:40:50 2026] intel_rapl_common: Found RAPL domain package
+[ 9月 1日(火) 22:40:50 2026] intel_rapl_common: Found RAPL domain core
+[ 9月 1日(火) 22:40:50 2026] amd_atl: AMD Address Translation Library initialized
+[ 9月 1日(火) 22:40:50 2026] usbcore: registered new interface driver snd-usb-audio
+[ 9月 1日(火) 22:40:50 2026] rtw89_8852be 0000:05:00.0: Firmware element BB version: 00 28 00 00
+[ 9月 1日(火) 22:40:50 2026] rtw89_8852be 0000:05:00.0: Firmware element radio A version: 00 32 00 00
+[ 9月 1日(火) 22:40:50 2026] rtw89_8852be 0000:05:00.0: Firmware element NCTL version: 00 0a 00 00
+[ 9月 1日(火) 22:40:50 2026] rtw89_8852be 0000:05:00.0: Firmware element TXPWR version: 00 43 00 00
+[ 9月 1日(火) 22:40:50 2026] rtw89_8852be 0000:05:00.0: Firmware element TXPWR version: 00 43 00 00
+[ 9月 1日(火) 22:40:50 2026] rtw89_8852be 0000:05:00.0: Firmware element TXPWR version: 00 43 00 00
+[ 9月 1日(火) 22:40:50 2026] rtw89_8852be 0000:05:00.0: Firmware element PWR_TRK version: 00 32 00 00
+[ 9月 1日(火) 22:40:50 2026] rtw89_8852be 0000:05:00.0: Firmware element REGD version: 00 49 00 33
+[ 9月 1日(火) 22:40:50 2026] rtw89_8852be 0000:05:00.0: chip info CID: 0, CV: 1, AID: 0, ACV: 1, RFE: 1
+[ 9月 1日(火) 22:40:50 2026] ACPI: \: failed to evaluate _DSM e8c3a8d2-694b-004f-82bd-fe8607803aa7 rev:0 func:10 (0x1001)
+[ 9月 1日(火) 22:40:50 2026] ACPI: \: failed to evaluate _DSM e8c3a8d2-694b-004f-82bd-fe8607803aa7 rev:0 func:6 (0x1001)
+[ 9月 1日(火) 22:40:50 2026] rtw89_8852be 0000:05:00.0: rfkill hardware state changed to enable
+[ 9月 1日(火) 22:40:50 2026] rtw89_8852be 0000:05:00.0 wlp5s0: renamed from wlan0
+[ 9月 1日(火) 22:40:51 2026] Bluetooth: hci0: RTL: fw version 0x127cfd78
+[ 9月 1日(火) 22:40:51 2026] EXT4-fs (nvme0n1p3): mounted filesystem 225c8f32-7467-4a79-bdcd-c981dfcce171 r/w with ordered data mode. Quota mode: none.
+[ 9月 1日(火) 22:40:51 2026] EXT4-fs (sda): mounted filesystem 47f526a3-031c-4ffb-b892-05628e518112 r/w with ordered data mode. Quota mode: none.
+[ 9月 1日(火) 22:40:51 2026] [drm] Initialized nvidia-drm 0.0.0 for 0000:07:00.0 on minor 1
+[ 9月 1日(火) 22:40:52 2026] Console: switching to colour dummy device 80x25
+[ 9月 1日(火) 22:40:52 2026] nvidia 0000:07:00.0: vgaarb: deactivate vga console
+[ 9月 1日(火) 22:40:52 2026] Bluetooth: hci0: AOSP extensions version v1.00
+[ 9月 1日(火) 22:40:52 2026] fbcon: nvidia-drmdrmfb (fb0) is primary device
+[ 9月 1日(火) 22:40:52 2026] Console: switching to colour frame buffer device 240x67
+[ 9月 1日(火) 22:40:52 2026] nvidia 0000:07:00.0: [drm] fb0: nvidia-drmdrmfb frame buffer device
+[ 9月 1日(火) 22:40:52 2026] Bluetooth: BNEP (Ethernet Emulation) ver 1.3
+[ 9月 1日(火) 22:40:52 2026] Bluetooth: BNEP filters: protocol multicast
+[ 9月 1日(火) 22:40:52 2026] Bluetooth: BNEP socket layer initialized
+[ 9月 1日(火) 22:40:52 2026] Bluetooth: MGMT ver 1.23
+[ 9月 1日(火) 22:40:52 2026] NET: Registered PF_ALG protocol family
+[ 9月 1日(火) 22:40:52 2026] Generic FE-GE Realtek PHY r8169-0-600:00: attached PHY driver (mii_bus:phy_addr=r8169-0-600:00, irq=MAC)
+[ 9月 1日(火) 22:40:52 2026] r8169 0000:06:00.0 enp6s0: Link is Down
+[ 9月 1日(火) 22:40:53 2026] bridge: filtering via arp/ip/ip6tables is no longer available by default. Update your scripts to load br_netfilter if you need this.
+[ 9月 1日(火) 22:40:53 2026] u32 classifier
+[ 9月 1日(火) 22:40:53 2026]     Performance counters on
+[ 9月 1日(火) 22:40:53 2026]     input device check on
+[ 9月 1日(火) 22:40:53 2026]     Actions configured
+[ 9月 1日(火) 22:40:57 2026] wlp5s0: authenticate with dc:ea:e7:64:b8:0f (local address=cc:47:40:fc:fe:6c)
+[ 9月 1日(火) 22:40:57 2026] wlp5s0: send auth to dc:ea:e7:64:b8:0f (try 1/3)
+[ 9月 1日(火) 22:40:57 2026] wlp5s0: authenticated
+[ 9月 1日(火) 22:40:57 2026] wlp5s0: associate with dc:ea:e7:64:b8:0f (try 1/3)
+[ 9月 1日(火) 22:40:57 2026] wlp5s0: associate with dc:ea:e7:64:b8:0f (try 2/3)
+[ 9月 1日(火) 22:40:57 2026] wlp5s0: associate with dc:ea:e7:64:b8:0f (try 3/3)
+[ 9月 1日(火) 22:40:57 2026] wlp5s0: RX AssocResp from dc:ea:e7:64:b8:0f (capab=0x431 status=0 aid=2)
+[ 9月 1日(火) 22:40:57 2026] wlp5s0: AP dc:ea:e7:64:b8:0f changed bandwidth in assoc response, new used config is 2462.000 MHz, width 2 (2452.000/0 MHz)
+[ 9月 1日(火) 22:40:57 2026] wlp5s0: associated
+[ 9月 1日(火) 22:40:57 2026] wlp5s0: AP dc:ea:e7:64:b8:0f changed bandwidth in beacon, new used config is 2462.000 MHz, width 1 (2462.000/0 MHz)
+[ 9月 1日(火) 22:41:06 2026] Bluetooth: RFCOMM TTY layer initialized
+[ 9月 1日(火) 22:41:06 2026] Bluetooth: RFCOMM socket layer initialized
+[ 9月 1日(火) 22:41:06 2026] Bluetooth: RFCOMM ver 1.11
+[ 9月 1日(火) 22:42:28 2026] usb 1-3: USB disconnect, device number 2
+[ 9月 1日(火) 22:42:29 2026] usb 1-3: new full-speed USB device number 6 using xhci_hcd
+[ 9月 1日(火) 22:42:29 2026] usb 1-3: New USB device found, idVendor=303a, idProduct=1001, bcdDevice= 1.01
+[ 9月 1日(火) 22:42:29 2026] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[ 9月 1日(火) 22:42:29 2026] usb 1-3: Product: USB JTAG/serial debug unit
+[ 9月 1日(火) 22:42:29 2026] usb 1-3: Manufacturer: Espressif
+[ 9月 1日(火) 22:42:29 2026] usb 1-3: SerialNumber: 94:A9:90:D3:5F:0C
+[ 9月 1日(火) 22:42:29 2026] cdc_acm 1-3:1.0: ttyACM1: USB ACM device
+[ 9月 1日(火) 22:42:37 2026] usb 1-3: USB disconnect, device number 6
+[ 9月 1日(火) 22:42:38 2026] usb 1-3: new full-speed USB device number 7 using xhci_hcd
+[ 9月 1日(火) 22:42:38 2026] usb 1-3: New USB device found, idVendor=c0de, idProduct=0001, bcdDevice= 0.10
+[ 9月 1日(火) 22:42:38 2026] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[ 9月 1日(火) 22:42:38 2026] usb 1-3: Product: DXXK USB Audio
+[ 9月 1日(火) 22:42:38 2026] usb 1-3: Manufacturer: dick mouse
+[ 9月 1日(火) 22:42:38 2026] usb 1-3: SerialNumber: 0001
+[ 9月 1日(火) 22:42:38 2026] input: dick mouse DXXK USB Audio Keyboard as /devices/pci0000:00/0000:00:01.2/0000:02:00.0/usb1/1-3/1-3:1.4/0003:C0DE:0001.0007/input/input24
+[ 9月 1日(火) 22:42:38 2026] input: dick mouse DXXK USB Audio Mouse as /devices/pci0000:00/0000:00:01.2/0000:02:00.0/usb1/1-3/1-3:1.4/0003:C0DE:0001.0007/input/input25
+[ 9月 1日(火) 22:42:38 2026] hid-generic 0003:C0DE:0001.0007: input,hidraw6: USB HID v1.10 Keyboard [dick mouse DXXK USB Audio] on usb-0000:02:00.0-3/input4
+[ 9月 1日(火) 22:42:49 2026] usb 1-3: USB disconnect, device number 7
+[ 9月 1日(火) 22:42:50 2026] usb 1-3: new full-speed USB device number 8 using xhci_hcd
+[ 9月 1日(火) 22:42:50 2026] usb 1-3: New USB device found, idVendor=303a, idProduct=1001, bcdDevice= 1.01
+[ 9月 1日(火) 22:42:50 2026] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[ 9月 1日(火) 22:42:50 2026] usb 1-3: Product: USB JTAG/serial debug unit
+[ 9月 1日(火) 22:42:50 2026] usb 1-3: Manufacturer: Espressif
+[ 9月 1日(火) 22:42:50 2026] usb 1-3: SerialNumber: 94:A9:90:D3:5F:0C
+[ 9月 1日(火) 22:42:50 2026] cdc_acm 1-3:1.0: ttyACM1: USB ACM device
+[ 9月 1日(火) 22:42:51 2026] usb 1-3: USB disconnect, device number 8
+[ 9月 1日(火) 22:42:51 2026] usb 1-3: new full-speed USB device number 9 using xhci_hcd
+[ 9月 1日(火) 22:42:52 2026] usb 1-3: New USB device found, idVendor=c0de, idProduct=0001, bcdDevice= 0.10
+[ 9月 1日(火) 22:42:52 2026] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[ 9月 1日(火) 22:42:52 2026] usb 1-3: Product: DXXK USB Audio
+[ 9月 1日(火) 22:42:52 2026] usb 1-3: Manufacturer: dick mouse
+[ 9月 1日(火) 22:42:52 2026] usb 1-3: SerialNumber: 0001
+[ 9月 1日(火) 22:42:52 2026] input: dick mouse DXXK USB Audio Keyboard as /devices/pci0000:00/0000:00:01.2/0000:02:00.0/usb1/1-3/1-3:1.4/0003:C0DE:0001.0008/input/input26
+[ 9月 1日(火) 22:42:52 2026] input: dick mouse DXXK USB Audio Mouse as /devices/pci0000:00/0000:00:01.2/0000:02:00.0/usb1/1-3/1-3:1.4/0003:C0DE:0001.0008/input/input27
+[ 9月 1日(火) 22:42:52 2026] hid-generic 0003:C0DE:0001.0008: input,hidraw6: USB HID v1.10 Keyboard [dick mouse DXXK USB Audio] on usb-0000:02:00.0-3/input4
+[ 9月 1日(火) 22:42:56 2026] warning: `ThreadPoolForeg' uses wireless extensions which will stop working for Wi-Fi 7 hardware; use nl80211
+[ 9月 1日(火) 22:43:05 2026] clocksource: Watchdog remote CPU 2 read timed out
+[ 9月 1日(火) 22:46:12 2026] usb 1-3: USB disconnect, device number 9
+[ 9月 1日(火) 22:46:12 2026] usb 1-3: new full-speed USB device number 10 using xhci_hcd
+[ 9月 1日(火) 22:46:13 2026] usb 1-3: New USB device found, idVendor=c0de, idProduct=0001, bcdDevice= 0.10
+[ 9月 1日(火) 22:46:13 2026] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[ 9月 1日(火) 22:46:13 2026] usb 1-3: Product: DXXK USB Audio
+[ 9月 1日(火) 22:46:13 2026] usb 1-3: Manufacturer: dick mouse
+[ 9月 1日(火) 22:46:13 2026] usb 1-3: SerialNumber: 0001
+[ 9月 1日(火) 22:46:13 2026] input: dick mouse DXXK USB Audio Keyboard as /devices/pci0000:00/0000:00:01.2/0000:02:00.0/usb1/1-3/1-3:1.4/0003:C0DE:0001.0009/input/input28
+[ 9月 1日(火) 22:46:13 2026] input: dick mouse DXXK USB Audio Mouse as /devices/pci0000:00/0000:00:01.2/0000:02:00.0/usb1/1-3/1-3:1.4/0003:C0DE:0001.0009/input/input29
+[ 9月 1日(火) 22:46:13 2026] hid-generic 0003:C0DE:0001.0009: input,hidraw6: USB HID v1.10 Keyboard [dick mouse DXXK USB Audio] on usb-0000:02:00.0-3/input4
+[ 9月 1日(火) 22:46:16 2026] usb 1-3: USB disconnect, device number 10
+[ 9月 1日(火) 22:46:17 2026] usb 1-3: new full-speed USB device number 11 using xhci_hcd
+[ 9月 1日(火) 22:46:17 2026] usb 1-3: New USB device found, idVendor=c0de, idProduct=0001, bcdDevice= 0.10
+[ 9月 1日(火) 22:46:17 2026] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[ 9月 1日(火) 22:46:17 2026] usb 1-3: Product: DXXK USB Audio
+[ 9月 1日(火) 22:46:17 2026] usb 1-3: Manufacturer: dick mouse
+[ 9月 1日(火) 22:46:17 2026] usb 1-3: SerialNumber: 0001
+[ 9月 1日(火) 22:46:17 2026] input: dick mouse DXXK USB Audio Keyboard as /devices/pci0000:00/0000:00:01.2/0000:02:00.0/usb1/1-3/1-3:1.4/0003:C0DE:0001.000A/input/input30
+[ 9月 1日(火) 22:46:17 2026] input: dick mouse DXXK USB Audio Mouse as /devices/pci0000:00/0000:00:01.2/0000:02:00.0/usb1/1-3/1-3:1.4/0003:C0DE:0001.000A/input/input31
+[ 9月 1日(火) 22:46:17 2026] hid-generic 0003:C0DE:0001.000A: input,hidraw6: USB HID v1.10 Keyboard [dick mouse DXXK USB Audio] on usb-0000:02:00.0-3/input4

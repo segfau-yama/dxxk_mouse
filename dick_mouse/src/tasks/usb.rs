@@ -1,4 +1,4 @@
-use embassy_futures::join::{join, join4};
+use embassy_futures::join::{join, join5};
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_time::{Duration, Timer};
 use embassy_usb::{
@@ -9,6 +9,10 @@ use embassy_usb::{
         },
         uac1::{
             Channel as UsbAudioChannel, FeedbackRefresh, SampleWidth,
+            source::{
+                AudioSource as UsbMicrophoneClass,
+                AudioSourceControlHandler as UsbMicrophoneControlHandler,
+            },
             speaker::{Speaker as UsbSpeakerClass, State as UsbSpeakerState},
         },
     },
@@ -20,18 +24,14 @@ use esp_hal::otg_fs::{
 use static_cell::StaticCell;
 use usbd_hid::descriptor::{KeyboardReport, MouseReport};
 
-use super::{
-    audio::{AUDIO_FRAME_BYTES, AUDIO_FRAME_SAMPLES, MICROPHONE_FRAMES, SPEAKER_FRAMES},
-    usb_microphone::{
-        ControlHandler as UsbMicrophoneControlHandler, Microphone as UsbMicrophoneClass,
-    },
-};
+use super::audio::{AUDIO_FRAME_BYTES, AUDIO_FRAME_SAMPLES, MICROPHONE_FRAMES, SPEAKER_FRAMES};
 
 pub(crate) const USB_HID_POLL_MS: u8 = 10;
 const USB_HID_REPORT_BYTES: usize = 9;
-const USB_MICROPHONE_PACKET_BYTES: usize = AUDIO_FRAME_BYTES;
+const USB_MICROPHONE_PACKET_BYTES: usize = AUDIO_FRAME_BYTES * 2;
 const USB_SPEAKER_MAX_PACKET_BYTES: usize = AUDIO_FRAME_BYTES * 2;
 const USB_AUDIO_FEEDBACK_48K: [u8; 3] = [0x00, 0x00, 0x0c];
+const USB_MICROPHONE_FEEDBACK_PERIOD_MS: u8 = 8;
 const USB_EP_OUT_BUFFER_SIZE: usize = 256;
 const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
 const USB_BOS_DESCRIPTOR_SIZE: usize = 128;
@@ -64,6 +64,7 @@ static USB_BOS_DESCRIPTOR: StaticCell<[u8; USB_BOS_DESCRIPTOR_SIZE]> = StaticCel
 static USB_MSOS_DESCRIPTOR: StaticCell<[u8; USB_MSOS_DESCRIPTOR_SIZE]> = StaticCell::new();
 static USB_CONTROL_BUFFER: StaticCell<[u8; USB_CONTROL_BUFFER_SIZE]> = StaticCell::new();
 static USB_HID_STATE: StaticCell<UsbHidState<'static>> = StaticCell::new();
+static USB_MICROPHONE_SAMPLE_RATES: [u32; 1] = [48_000];
 static USB_MICROPHONE_HANDLER: StaticCell<UsbMicrophoneControlHandler> = StaticCell::new();
 static USB_SPEAKER_STATE: StaticCell<UsbSpeakerState<'static>> = StaticCell::new();
 
@@ -89,7 +90,13 @@ pub async fn usb_task(usb: Usb<'static>) {
         USB_CONTROL_BUFFER.init([0; USB_CONTROL_BUFFER_SIZE]),
     );
 
-    let microphone = UsbMicrophoneClass::new(&mut builder, USB_MICROPHONE_PACKET_BYTES as u16);
+    let microphone = UsbMicrophoneClass::new(
+        &mut builder,
+        &USB_MICROPHONE_SAMPLE_RATES,
+        SampleWidth::Width2Byte,
+        USB_MICROPHONE_FEEDBACK_PERIOD_MS,
+        None,
+    );
 
     let speaker = UsbSpeakerClass::new(
         &mut builder,
@@ -117,11 +124,12 @@ pub async fn usb_task(usb: Usb<'static>) {
     let mut device = builder.build();
     let mut speaker_stream = speaker.stream;
     let mut speaker_feedback = speaker.feedback;
-    let mut microphone_audio = microphone.stream;
+    let mut microphone_audio = microphone.audio_ep_in;
+    let mut microphone_feedback = microphone.feedback_ep_in;
 
     join(
         device.run(),
-        join4(
+        join5(
             async move {
                 loop {
                     speaker_stream.wait_connection().await;
@@ -169,13 +177,31 @@ pub async fn usb_task(usb: Usb<'static>) {
                         let frame = MICROPHONE_FRAMES.receive().await;
                         let mut bytes = [0; USB_MICROPHONE_PACKET_BYTES];
 
-                        for (sample, chunk) in frame.iter().zip(bytes.chunks_exact_mut(2)) {
-                            chunk.copy_from_slice(&sample.to_le_bytes());
+                        for (sample, chunk) in frame.iter().zip(bytes.chunks_exact_mut(4)) {
+                            let sample = sample.to_le_bytes();
+                            chunk[..2].copy_from_slice(&sample);
+                            chunk[2..].copy_from_slice(&sample);
                         }
 
                         if microphone_audio.write(&bytes).await.is_err() {
                             break;
                         }
+                    }
+                }
+            },
+            async move {
+                loop {
+                    microphone_feedback.wait_enabled().await;
+
+                    while microphone_feedback
+                        .write(&USB_AUDIO_FEEDBACK_48K)
+                        .await
+                        .is_ok()
+                    {
+                        Timer::after(Duration::from_millis(
+                            USB_MICROPHONE_FEEDBACK_PERIOD_MS as u64,
+                        ))
+                        .await;
                     }
                 }
             },
