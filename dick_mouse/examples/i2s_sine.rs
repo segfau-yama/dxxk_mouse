@@ -4,8 +4,7 @@
 use embassy_executor::Spawner;
 use esp_backtrace as _;
 use esp_hal::{
-    i2s::master::{Channels, Config as I2sConfig, DataFormat, I2s},
-    interrupt::software::SoftwareInterruptControl,
+    i2s::master::{Channels, DataFormat, I2s, TdmConfig as I2sConfig},
     time::Rate,
     timer::timg::TimerGroup,
 };
@@ -24,9 +23,8 @@ async fn main(_spawner: Spawner) {
 
     let peripherals = esp_hal::init(esp_hal::Config::default());
 
-    let sw_int = SoftwareInterruptControl::new(peripherals.SW_INTERRUPT);
     let timg0 = TimerGroup::new(peripherals.TIMG0);
-    esp_rtos::start(timg0.timer0, sw_int.software_interrupt0);
+    esp_rtos::start(timg0.timer0, peripherals.FROM_CPU_INTR0);
 
     let (_rx_descriptors, tx_descriptors) =
         esp_hal::dma_descriptors!(STEREO_FRAME_BYTES, STEREO_FRAME_BYTES);
