@@ -144,19 +144,24 @@ pub async fn usb_task(usb: Usb<'static>) {
             async move {
                 loop {
                     speaker_stream.wait_connection().await;
+                    let mut frame = [0; AUDIO_FRAME_SAMPLES];
+                    let mut frame_samples = 0;
 
                     loop {
                         let mut packet = [0; USB_SPEAKER_MAX_PACKET_BYTES];
 
                         match speaker_stream.read_packet(&mut packet).await {
                             Ok(size) if size > 0 => {
-                                let mut frame = [0; AUDIO_FRAME_SAMPLES];
-                                for (sample, chunk) in
-                                    frame.iter_mut().zip(packet[..size].chunks_exact(2))
-                                {
-                                    *sample = i16::from_le_bytes([chunk[0], chunk[1]]);
+                                for chunk in packet[..size].chunks_exact(2) {
+                                    frame[frame_samples] = i16::from_le_bytes([chunk[0], chunk[1]]);
+                                    frame_samples += 1;
+
+                                    if frame_samples == AUDIO_FRAME_SAMPLES {
+                                        let _ = SPEAKER_FRAMES.try_send(frame);
+                                        frame = [0; AUDIO_FRAME_SAMPLES];
+                                        frame_samples = 0;
+                                    }
                                 }
-                                let _ = SPEAKER_FRAMES.try_send(frame);
                             }
                             Ok(_) => {}
                             Err(_) => break,
