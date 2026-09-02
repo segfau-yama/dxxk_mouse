@@ -17,9 +17,9 @@ use embassy_usb::{
         },
     },
 };
-use esp_hal::otg_fs::{
+use esp_hal::usb::otg::{
     Usb,
-    asynch::{Config as UsbDriverConfig, Driver as UsbDriver},
+    embassy_usb_device::{Config as UsbDriverConfig, Driver as UsbDriver},
 };
 use static_cell::StaticCell;
 use usbd_hid::descriptor::{KeyboardReport, MouseReport};
