@@ -5,12 +5,11 @@ use embassy_executor::Spawner;
 use esp_backtrace as _;
 use esp_hal::{
     gpio::Pin,
-    i2s::master::{Channels, Config as I2sConfig, DataFormat, I2s},
-    interrupt::software::SoftwareInterruptControl,
-    otg_fs::Usb,
+    i2s::master::{Channels, DataFormat, I2s, TdmConfig as I2sConfig},
     pcnt::Pcnt,
     time::Rate,
     timer::timg::TimerGroup,
+    usb::otg::Usb,
 };
 
 esp_bootloader_esp_idf::esp_app_desc!();
@@ -22,9 +21,8 @@ use tasks::audio::{I2S_FRAME_BYTES, SPEAKER_I2S_FRAME_BYTES};
 async fn main(spawner: Spawner) {
     let peripherals = esp_hal::init(esp_hal::Config::default());
 
-    let sw_int = SoftwareInterruptControl::new(peripherals.SW_INTERRUPT);
     let timg0 = TimerGroup::new(peripherals.TIMG0);
-    esp_rtos::start(timg0.timer0, sw_int.software_interrupt0);
+    esp_rtos::start(timg0.timer0, peripherals.FROM_CPU_INTR0);
 
     let pcnt = Pcnt::new(peripherals.PCNT);
     let (rx_descriptors, _) = esp_hal::dma_descriptors!(I2S_FRAME_BYTES, 0);
@@ -60,7 +58,7 @@ async fn main(spawner: Spawner) {
     .with_ws(peripherals.GPIO36)
     .with_dout(peripherals.GPIO37)
     .build(tx_descriptors);
-    let usb = Usb::new(peripherals.USB0, peripherals.GPIO20, peripherals.GPIO19);
+    let usb = Usb::new_fs(peripherals.USB_FS, peripherals.GPIO20, peripherals.GPIO19);
 
     spawner.spawn(
         tasks::hid::hid_task(peripherals.GPIO21.degrade()).expect("failed to create HID task"),
