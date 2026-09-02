@@ -14,14 +14,13 @@ use embassy_usb::{
 use esp_backtrace as _;
 use esp_hal::{
     Async,
-    i2s::master::{Channels, Config as I2sConfig, DataFormat, I2s, I2sRx},
-    interrupt::software::SoftwareInterruptControl,
-    otg_fs::{
-        Usb,
-        asynch::{Config as UsbDriverConfig, Driver as UsbDriver},
-    },
+    i2s::master::{Channels, DataFormat, I2s, I2sRx, TdmConfig as I2sConfig},
     time::Rate,
     timer::timg::TimerGroup,
+    usb::otg::{
+        Usb,
+        embassy_usb_device::{Config as UsbDriverConfig, Driver as UsbDriver},
+    },
 };
 use esp_println::println;
 use static_cell::StaticCell;
@@ -132,9 +131,8 @@ async fn microphone_feedback(mut feedback: AudioSourceEpIn<'static, UsbDriver<'s
 async fn main(spawner: Spawner) {
     let peripherals = esp_hal::init(esp_hal::Config::default());
 
-    let sw_int = SoftwareInterruptControl::new(peripherals.SW_INTERRUPT);
     let timg0 = TimerGroup::new(peripherals.TIMG0);
-    esp_rtos::start(timg0.timer0, sw_int.software_interrupt0);
+    esp_rtos::start(timg0.timer0, peripherals.FROM_CPU_INTR0);
 
     let (rx_descriptors, _) = esp_hal::dma_descriptors!(I2S_FRAME_BYTES, 0);
     let i2s_rx = I2s::new(
@@ -154,7 +152,7 @@ async fn main(spawner: Spawner) {
     .build(rx_descriptors);
     println!("microphone: i2s rx ready: bclk=GPIO5 ws=GPIO6 din=GPIO7");
 
-    let usb = Usb::new(peripherals.USB0, peripherals.GPIO20, peripherals.GPIO19);
+    let usb = Usb::new_fs(peripherals.USB_FS, peripherals.GPIO20, peripherals.GPIO19);
     let driver = UsbDriver::new(
         usb,
         USB_EP_OUT_BUFFER.init([0; USB_EP_OUT_BUFFER_SIZE]),
