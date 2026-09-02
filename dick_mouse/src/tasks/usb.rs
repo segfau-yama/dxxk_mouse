@@ -1,4 +1,4 @@
-use embassy_futures::join::{join, join5};
+use embassy_futures::join::{join, join4};
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_time::{Duration, Timer};
 use embassy_usb::{
@@ -130,11 +130,17 @@ pub async fn usb_task(usb: Usb<'static>) {
     let mut speaker_stream = speaker.stream;
     let mut speaker_feedback = speaker.feedback;
     let mut microphone_audio = microphone.audio_ep_in;
-    let mut microphone_feedback = microphone.feedback_ep_in;
+
+    // Embassy's standard AudioSource currently allocates a feedback IN endpoint for the
+    // microphone. Keep the class and descriptor standard, but do not submit transfers to
+    // that endpoint. The asynchronous capture source is driven by its audio IN packets,
+    // and an unpolled feedback IN transfer can otherwise create an incomplete ISO IN before
+    // the first microphone audio write reaches the controller.
+    let _microphone_feedback = microphone.feedback_ep_in;
 
     join(
         device.run(),
-        join5(
+        join4(
             async move {
                 loop {
                     speaker_stream.wait_connection().await;
@@ -193,22 +199,6 @@ pub async fn usb_task(usb: Usb<'static>) {
                         if microphone_audio.write(&bytes).await.is_err() {
                             break;
                         }
-                    }
-                }
-            },
-            async move {
-                loop {
-                    microphone_feedback.wait_enabled().await;
-
-                    while microphone_feedback
-                        .write(&USB_AUDIO_FEEDBACK_48K)
-                        .await
-                        .is_ok()
-                    {
-                        Timer::after(Duration::from_millis(u64::from(
-                            USB_MICROPHONE_FEEDBACK_REFRESH_MS,
-                        )))
-                        .await;
                     }
                 }
             },
