@@ -33,7 +33,6 @@ const I2S_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i32>()
 const USB_AUDIO_FRAME_BYTES: usize =
     AUDIO_FRAME_SAMPLES * USB_AUDIO_CHANNELS * core::mem::size_of::<i16>();
 const USB_MICROPHONE_FEEDBACK_REFRESH_MS: u8 = 8;
-const USB_AUDIO_FEEDBACK_48K: [u8; 3] = [0x00, 0x00, 0x0c];
 const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
 const USB_BOS_DESCRIPTOR_SIZE: usize = 128;
 const USB_MSOS_DESCRIPTOR_SIZE: usize = 128;
@@ -91,7 +90,7 @@ async fn microphone_stream(mut audio: AudioSourceEpIn<'static, UsbDriver<'static
             let samples = MICROPHONE_FRAMES.receive().await;
             let mut packet = [0u8; USB_AUDIO_FRAME_BYTES];
 
-            // Embassy's current UAC1 AudioSource advertises two channels.
+            // Embassy's UAC1 AudioSource currently advertises two channels.
             // Duplicate the mono INMP441 sample into left and right channels.
             for (sample, chunk) in samples.iter().zip(packet.chunks_exact_mut(4)) {
                 let sample = sample.to_le_bytes();
@@ -109,20 +108,6 @@ async fn microphone_stream(mut audio: AudioSourceEpIn<'static, UsbDriver<'static
                     break;
                 }
             }
-        }
-    }
-}
-
-#[embassy_executor::task]
-async fn microphone_feedback(mut feedback: AudioSourceEpIn<'static, UsbDriver<'static>>) {
-    loop {
-        feedback.wait_enabled().await;
-
-        while feedback.write(&USB_AUDIO_FEEDBACK_48K).await.is_ok() {
-            Timer::after(Duration::from_millis(u64::from(
-                USB_MICROPHONE_FEEDBACK_REFRESH_MS,
-            )))
-            .await;
         }
     }
 }
@@ -175,7 +160,7 @@ async fn main(spawner: Spawner) {
 
     let AudioSource {
         audio_ep_in,
-        feedback_ep_in,
+        feedback_ep_in: _feedback_ep_in,
         handler,
     } = AudioSource::new(
         &mut builder,
@@ -187,12 +172,15 @@ async fn main(spawner: Spawner) {
     builder.handler(USB_MICROPHONE_HANDLER.init(handler));
     let device = builder.build();
 
+    // The standard Embassy AudioSource descriptor includes a feedback IN endpoint.
+    // Do not submit microphone feedback transfers here: an asynchronous capture source
+    // communicates its rate through the amount of audio data it produces. Leaving this
+    // endpoint idle also avoids creating an unpolled periodic IN transfer before audio.write().
+    let _ = _feedback_ep_in;
+
     spawner.spawn(microphone_capture(i2s_rx).expect("failed to spawn microphone capture task"));
     spawner.spawn(usb_task(device).expect("failed to spawn USB task"));
     spawner.spawn(microphone_stream(audio_ep_in).expect("failed to spawn microphone USB task"));
-    spawner.spawn(
-        microphone_feedback(feedback_ep_in).expect("failed to spawn microphone feedback task"),
-    );
     println!("microphone: Embassy UAC1 source 48k S16_LE ready (UART0 115200 8N1)");
 
     core::future::pending::<()>().await;
