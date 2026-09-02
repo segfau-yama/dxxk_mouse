@@ -12,12 +12,11 @@ use embassy_usb::{
 };
 use esp_backtrace as _;
 use esp_hal::{
-    interrupt::software::SoftwareInterruptControl,
-    otg_fs::{
-        Usb,
-        asynch::{Config as UsbDriverConfig, Driver as UsbDriver},
-    },
     timer::timg::TimerGroup,
+    usb::otg::{
+        Usb,
+        embassy_usb_device::{Config as UsbDriverConfig, Driver as UsbDriver},
+    },
 };
 use esp_println::println;
 use static_cell::StaticCell;
@@ -100,11 +99,10 @@ async fn speaker_feedback(mut feedback: speaker::Feedback<'static, UsbDriver<'st
 async fn main(spawner: Spawner) {
     let peripherals = esp_hal::init(esp_hal::Config::default());
 
-    let sw_int = SoftwareInterruptControl::new(peripherals.SW_INTERRUPT);
     let timg0 = TimerGroup::new(peripherals.TIMG0);
-    esp_rtos::start(timg0.timer0, sw_int.software_interrupt0);
+    esp_rtos::start(timg0.timer0, peripherals.FROM_CPU_INTR0);
 
-    let usb = Usb::new(peripherals.USB0, peripherals.GPIO20, peripherals.GPIO19);
+    let usb = Usb::new_fs(peripherals.USB_FS, peripherals.GPIO20, peripherals.GPIO19);
     let driver = UsbDriver::new(
         usb,
         USB_EP_OUT_BUFFER.init([0; USB_EP_OUT_BUFFER_SIZE]),
