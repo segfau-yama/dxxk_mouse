@@ -31,10 +31,19 @@ pub(crate) const SPEAKER_USB_IDLE_TIMEOUT_MS: u32 = 100;
 const MICROPHONE_DMA_BUFFER_BYTES: usize = I2S_FRAME_BYTES * 16;
 const SPEAKER_DMA_BUFFER_BYTES: usize = 4096;
 pub(crate) const SPEAKER_DMA_CHUNK_BYTES: usize = 512;
+const SPEAKER_DMA_PRIME_BYTES: usize = SPEAKER_DMA_CHUNK_BYTES * 2;
 
 fn reset_speaker_dma_buffer(buffer: DmaTxStreamBuf) -> DmaTxStreamBuf {
     let (descriptors, buffer) = buffer.split();
     DmaTxStreamBuf::new(descriptors, buffer).expect("failed to reset speaker DMA buffer")
+}
+
+fn prime_speaker_dma_buffer(buffer: &mut DmaTxStreamBuf) {
+    let _ = buffer.push_with(|bytes| {
+        let len = bytes.len().min(SPEAKER_DMA_PRIME_BYTES);
+        bytes[..len].fill(0);
+        len
+    });
 }
 
 // Transport validation must not clip the INMP441 signal.
@@ -216,23 +225,31 @@ pub async fn microphone_task(
 
 pub(crate) fn update_speaker_feedback() {
     const NOMINAL_Q14: u32 = 48 << 14;
-    // Low-bandwidth occupancy controller. The I2S stream is continuous, so this
-    // observes a smooth sample ring instead of the old 20 ms dequeue burst.
+    const MAX_CORRECTION_Q14: i32 = 8 << 10; // ±0.5 sample/frame
+    const KP_Q14_PER_SAMPLE: i32 = 8;
+    const KI_Q14_PER_SAMPLE: i32 = 1;
+    // The I2S stream is continuous, so this observes a smooth sample ring. The
+    // gains deliberately fill an empty ring in seconds, not tens of seconds.
     let ring = SPEAKER_RING.len() as i32;
     let error = ring - SPEAKER_RING_TARGET as i32;
     let integral = SPEAKER_FEEDBACK_INTEGRAL
         .load(Ordering::Relaxed)
-        .saturating_add(error / 8)
-        .clamp(-2048, 2048);
+        .saturating_add(error / 16)
+        .clamp(-4096, 4096);
     SPEAKER_FEEDBACK_INTEGRAL.store(integral, Ordering::Relaxed);
-    let correction = (error / 8 + integral / 8).clamp(-2048, 2048);
-    let desired = (NOMINAL_Q14 as i32 - correction)
-        .clamp((NOMINAL_Q14 - 2048) as i32, (NOMINAL_Q14 + 2048) as i32) as u32;
+    let correction = (error
+        .saturating_mul(KP_Q14_PER_SAMPLE)
+        .saturating_add(integral.saturating_mul(KI_Q14_PER_SAMPLE)))
+    .clamp(-MAX_CORRECTION_Q14, MAX_CORRECTION_Q14);
+    let desired = (NOMINAL_Q14 as i32 - correction).clamp(
+        NOMINAL_Q14 as i32 - MAX_CORRECTION_Q14,
+        NOMINAL_Q14 as i32 + MAX_CORRECTION_Q14,
+    ) as u32;
     let current = SPEAKER_FEEDBACK_Q14.load(Ordering::Relaxed);
     let next = if desired >= current {
-        current + (desired - current) / 8
+        current + (desired - current) / 2
     } else {
-        current - (current - desired) / 8
+        current - (current - desired) / 2
     };
     SPEAKER_FEEDBACK_Q14.store(next, Ordering::Relaxed);
 }
@@ -258,12 +275,9 @@ pub async fn speaker_task(
     let mut volume = DEFAULT_VOLUME_PERCENT;
     let mut dma_buffer =
         esp_hal::dma_tx_stream_buffer!(SPEAKER_DMA_BUFFER_BYTES, SPEAKER_DMA_CHUNK_BYTES);
-    // Start the clock with a complete buffer. At least two descriptors must be
-    // ready before the ESP32-S3 GDMA transfer starts.
-    let _ = dma_buffer.push_with(|buffer| {
-        buffer.fill(0);
-        buffer.len()
-    });
+    // Start the clock with two complete descriptors. The producer fills the rest
+    // after DMA owns the stream, avoiding a long pre-start critical section.
+    prime_speaker_dma_buffer(&mut dma_buffer);
     let mut last_sample = 0i16;
 
     loop {
@@ -273,25 +287,30 @@ pub async fn speaker_task(
                 SPEAKER_DMA_RESTARTS.fetch_add(1, Ordering::Relaxed);
                 i2s_tx = tx;
                 dma_buffer = reset_speaker_dma_buffer(buffer);
-                let _ = dma_buffer.push_with(|buffer| {
-                    buffer.fill(0);
-                    buffer.len()
-                });
+                prime_speaker_dma_buffer(&mut dma_buffer);
                 continue;
             }
         };
 
         loop {
+            // TotalEof can be latched while one or more descriptors are still
+            // CPU-owned. Detect it before consuming more ring samples.
+            if transfer.is_done() {
+                SPEAKER_DMA_RESTARTS.fetch_add(1, Ordering::Relaxed);
+                let (tx, buffer) = transfer.stop();
+                i2s_tx = tx;
+                dma_buffer = reset_speaker_dma_buffer(buffer);
+                prime_speaker_dma_buffer(&mut dma_buffer);
+                break;
+            }
+
             if transfer.available_bytes() == 0 {
                 if transfer.wait_for_available_async().await.is_err() {
                     SPEAKER_DMA_RESTARTS.fetch_add(1, Ordering::Relaxed);
                     let (tx, buffer) = transfer.stop();
                     i2s_tx = tx;
                     dma_buffer = reset_speaker_dma_buffer(buffer);
-                    let _ = dma_buffer.push_with(|buffer| {
-                        buffer.fill(0);
-                        buffer.len()
-                    });
+                    prime_speaker_dma_buffer(&mut dma_buffer);
                     Timer::after(Duration::from_millis(1)).await;
                     break;
                 }
