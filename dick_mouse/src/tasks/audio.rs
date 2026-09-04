@@ -1,6 +1,8 @@
 use crate::device::{Button, RotaryEncoder};
-use core::sync::atomic::{AtomicBool, AtomicI32, AtomicU32, Ordering};
-use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
+use core::{
+    cell::UnsafeCell,
+    sync::atomic::{AtomicBool, AtomicI32, AtomicU32, AtomicUsize, Ordering},
+};
 use embassy_time::{Duration, Timer};
 use esp_hal::{
     Async,
@@ -52,12 +54,90 @@ pub(crate) const DEFAULT_VOLUME_PERCENT: u8 = 100;
 pub(crate) const VOLUME_STEP_PERCENT: i32 = 5;
 const COUNTS_PER_DETENT: i32 = 4;
 
-pub(crate) static MICROPHONE_RING: Channel<CriticalSectionRawMutex, i16, AUDIO_RING_CAPACITY> =
-    Channel::new();
-pub(crate) static SPEAKER_RING: Channel<CriticalSectionRawMutex, i16, AUDIO_RING_CAPACITY> =
-    Channel::new();
+const AUDIO_RING_STORAGE_CAPACITY: usize = AUDIO_RING_CAPACITY + 1;
+
+/// Fixed-size lock-free ring for one producer and one consumer.
+///
+/// `head` is written only by the producer and `tail` only by the consumer.
+/// The extra storage slot lets the public capacity remain `AUDIO_RING_CAPACITY`.
+pub(crate) struct SampleRing {
+    buffer: UnsafeCell<[i16; AUDIO_RING_STORAGE_CAPACITY]>,
+    head: AtomicUsize,
+    tail: AtomicUsize,
+}
+
+unsafe impl Sync for SampleRing {}
+
+impl SampleRing {
+    pub const fn new() -> Self {
+        Self {
+            buffer: UnsafeCell::new([0; AUDIO_RING_STORAGE_CAPACITY]),
+            head: AtomicUsize::new(0),
+            tail: AtomicUsize::new(0),
+        }
+    }
+
+    #[inline]
+    fn next(index: usize) -> usize {
+        let next = index + 1;
+        if next == AUDIO_RING_STORAGE_CAPACITY {
+            0
+        } else {
+            next
+        }
+    }
+
+    #[inline]
+    pub fn try_send(&self, sample: i16) -> Result<(), i16> {
+        let head = self.head.load(Ordering::Relaxed);
+        let next = Self::next(head);
+        if next == self.tail.load(Ordering::Acquire) {
+            return Err(sample);
+        }
+
+        // The producer owns this slot until the release-store publishes head.
+        unsafe { (*self.buffer.get())[head] = sample };
+        self.head.store(next, Ordering::Release);
+        Ok(())
+    }
+
+    #[inline]
+    pub fn try_receive(&self) -> Result<i16, ()> {
+        let tail = self.tail.load(Ordering::Relaxed);
+        if tail == self.head.load(Ordering::Acquire) {
+            return Err(());
+        }
+
+        // Acquire observes the producer's sample before the release-store above.
+        let sample = unsafe { (*self.buffer.get())[tail] };
+        self.tail.store(Self::next(tail), Ordering::Release);
+        Ok(sample)
+    }
+
+    #[inline]
+    pub fn len(&self) -> usize {
+        let head = self.head.load(Ordering::Acquire);
+        let tail = self.tail.load(Ordering::Acquire);
+        if head >= tail {
+            head - tail
+        } else {
+            AUDIO_RING_STORAGE_CAPACITY - tail + head
+        }
+    }
+
+    /// Discard queued samples at a stream boundary (Alt 0/disconnect).
+    #[inline]
+    pub fn clear(&self) {
+        self.tail
+            .store(self.head.load(Ordering::Acquire), Ordering::Release);
+    }
+}
+
+pub(crate) static MICROPHONE_RING: SampleRing = SampleRing::new();
+pub(crate) static SPEAKER_RING: SampleRing = SampleRing::new();
 pub(crate) static MICROPHONE_STREAMING: AtomicBool = AtomicBool::new(false);
 pub(crate) static SPEAKER_STREAMING: AtomicBool = AtomicBool::new(false);
+pub(crate) static SPEAKER_RING_FLUSH: AtomicBool = AtomicBool::new(false);
 pub(crate) static SPEAKER_LAST_PACKET_MS: AtomicU32 = AtomicU32::new(0);
 pub(crate) static SPEAKER_FEEDBACK_Q14: AtomicU32 = AtomicU32::new(48 << 14);
 static SPEAKER_FEEDBACK_INTEGRAL: AtomicI32 = AtomicI32::new(0);
@@ -198,10 +278,9 @@ pub async fn microphone_task(
 
                     if MICROPHONE_STREAMING.load(Ordering::Acquire) {
                         if MICROPHONE_RING.try_send(sample).is_err() {
-                            // Keep the newest sample and record the exceptional overflow.
+                            // An overflow is exceptional; drop the incoming sample rather
+                            // than reading the consumer side from the producer task.
                             MICROPHONE_OVERFLOWS.fetch_add(1, Ordering::Relaxed);
-                            let _ = MICROPHONE_RING.try_receive();
-                            let _ = MICROPHONE_RING.try_send(sample);
                         }
                     }
                 }
@@ -293,6 +372,12 @@ pub async fn speaker_task(
         };
 
         loop {
+            if SPEAKER_RING_FLUSH.swap(false, Ordering::AcqRel) {
+                // The consumer owns tail, so stream-boundary flushing remains SPSC-safe.
+                SPEAKER_RING.clear();
+                last_sample = 0;
+            }
+
             // TotalEof can be latched while one or more descriptors are still
             // CPU-owned. Detect it before consuming more ring samples.
             if transfer.is_done() {

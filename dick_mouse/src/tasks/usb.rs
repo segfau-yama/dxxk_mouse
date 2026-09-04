@@ -31,8 +31,8 @@ use super::audio::{
     MICROPHONE_RING_LOW_WATERMARK, MICROPHONE_RING_MAX, MICROPHONE_RING_MIN, MICROPHONE_STREAMING,
     MICROPHONE_UNDERFLOWS, MICROPHONE_USB_ERRORS, MICROPHONE_USB_PACKETS, SPEAKER_ALT0,
     SPEAKER_ALT1, SPEAKER_FEEDBACK_Q14, SPEAKER_LAST_PACKET_MS, SPEAKER_OVERFLOWS, SPEAKER_RING,
-    SPEAKER_RING_MAX, SPEAKER_RING_MIN, SPEAKER_STREAMING, SPEAKER_USB_ERRORS, SPEAKER_USB_PACKETS,
-    reset_speaker_feedback, update_speaker_feedback,
+    SPEAKER_RING_FLUSH, SPEAKER_RING_MAX, SPEAKER_RING_MIN, SPEAKER_STREAMING, SPEAKER_USB_ERRORS,
+    SPEAKER_USB_PACKETS, reset_speaker_feedback, update_speaker_feedback,
 };
 
 pub(crate) const USB_HID_POLL_MS: u8 = 10;
@@ -146,7 +146,7 @@ pub async fn usb_task(usb: Usb<'static>) {
                 loop {
                     speaker_stream.wait_connection().await;
                     SPEAKER_ALT1.fetch_add(1, Ordering::Relaxed);
-                    SPEAKER_RING.clear();
+                    SPEAKER_RING_FLUSH.store(true, Ordering::Release);
                     reset_speaker_feedback();
                     SPEAKER_LAST_PACKET_MS
                         .store(Instant::now().as_millis() as u32, Ordering::Release);
@@ -176,7 +176,7 @@ pub async fn usb_task(usb: Usb<'static>) {
                                 SPEAKER_USB_ERRORS.fetch_add(1, Ordering::Relaxed);
                                 SPEAKER_ALT0.fetch_add(1, Ordering::Relaxed);
                                 SPEAKER_STREAMING.store(false, Ordering::Release);
-                                SPEAKER_RING.clear();
+                                SPEAKER_RING_FLUSH.store(true, Ordering::Release);
                                 break;
                             }
                         }
