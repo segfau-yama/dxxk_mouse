@@ -1,7 +1,7 @@
 use core::sync::atomic::Ordering;
 use embassy_futures::join::{join, join4};
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
-use embassy_time::{Duration, Timer};
+use embassy_time::{Duration, Instant, Timer};
 use embassy_usb::{
     Builder as UsbBuilder, Config as UsbConfig,
     class::{
@@ -30,9 +30,9 @@ use super::audio::{
     MICROPHONE_PACKET_49, MICROPHONE_RING, MICROPHONE_RING_HYSTERESIS,
     MICROPHONE_RING_LOW_WATERMARK, MICROPHONE_RING_MAX, MICROPHONE_RING_MIN, MICROPHONE_STREAMING,
     MICROPHONE_UNDERFLOWS, MICROPHONE_USB_ERRORS, MICROPHONE_USB_PACKETS, SPEAKER_ALT0,
-    SPEAKER_ALT1, SPEAKER_FEEDBACK_Q14, SPEAKER_OVERFLOWS, SPEAKER_RING, SPEAKER_RING_MAX,
-    SPEAKER_RING_MIN, SPEAKER_USB_ERRORS, SPEAKER_USB_PACKETS, reset_speaker_feedback,
-    update_speaker_feedback,
+    SPEAKER_ALT1, SPEAKER_FEEDBACK_Q14, SPEAKER_LAST_PACKET_MS, SPEAKER_OVERFLOWS, SPEAKER_RING,
+    SPEAKER_RING_MAX, SPEAKER_RING_MIN, SPEAKER_STREAMING, SPEAKER_USB_ERRORS, SPEAKER_USB_PACKETS,
+    reset_speaker_feedback, update_speaker_feedback,
 };
 
 pub(crate) const USB_HID_POLL_MS: u8 = 10;
@@ -148,12 +148,18 @@ pub async fn usb_task(usb: Usb<'static>) {
                     SPEAKER_ALT1.fetch_add(1, Ordering::Relaxed);
                     SPEAKER_RING.clear();
                     reset_speaker_feedback();
+                    SPEAKER_LAST_PACKET_MS
+                        .store(Instant::now().as_millis() as u32, Ordering::Release);
+                    SPEAKER_STREAMING.store(true, Ordering::Release);
 
                     loop {
                         let mut packet = [0; USB_SPEAKER_MAX_PACKET_BYTES];
 
                         match speaker_stream.read_packet(&mut packet).await {
                             Ok(size) if size > 0 => {
+                                SPEAKER_LAST_PACKET_MS
+                                    .store(Instant::now().as_millis() as u32, Ordering::Release);
+                                SPEAKER_STREAMING.store(true, Ordering::Release);
                                 for chunk in packet[..size].chunks_exact(2) {
                                     let sample = i16::from_le_bytes([chunk[0], chunk[1]]);
                                     if SPEAKER_RING.try_send(sample).is_err() {
@@ -169,6 +175,8 @@ pub async fn usb_task(usb: Usb<'static>) {
                             Err(_) => {
                                 SPEAKER_USB_ERRORS.fetch_add(1, Ordering::Relaxed);
                                 SPEAKER_ALT0.fetch_add(1, Ordering::Relaxed);
+                                SPEAKER_STREAMING.store(false, Ordering::Release);
+                                SPEAKER_RING.clear();
                                 break;
                             }
                         }

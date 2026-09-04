@@ -25,6 +25,9 @@ pub(crate) const MICROPHONE_RING_TARGET: usize = 256;
 pub(crate) const MICROPHONE_RING_LOW_WATERMARK: usize = 128;
 pub(crate) const MICROPHONE_RING_HYSTERESIS: usize = 32;
 pub(crate) const SPEAKER_RING_TARGET: usize = AUDIO_RING_CAPACITY / 2;
+// The ESP32-S3 board has no VBUS sense GPIO. Treat a prolonged lack of USB
+// speaker packets as a disconnect while keeping the I2S clock running.
+pub(crate) const SPEAKER_USB_IDLE_TIMEOUT_MS: u32 = 100;
 const MICROPHONE_DMA_BUFFER_BYTES: usize = I2S_FRAME_BYTES * 16;
 const SPEAKER_DMA_BUFFER_BYTES: usize = 4096;
 pub(crate) const SPEAKER_DMA_CHUNK_BYTES: usize = 512;
@@ -45,6 +48,8 @@ pub(crate) static MICROPHONE_RING: Channel<CriticalSectionRawMutex, i16, AUDIO_R
 pub(crate) static SPEAKER_RING: Channel<CriticalSectionRawMutex, i16, AUDIO_RING_CAPACITY> =
     Channel::new();
 pub(crate) static MICROPHONE_STREAMING: AtomicBool = AtomicBool::new(false);
+pub(crate) static SPEAKER_STREAMING: AtomicBool = AtomicBool::new(false);
+pub(crate) static SPEAKER_LAST_PACKET_MS: AtomicU32 = AtomicU32::new(0);
 pub(crate) static SPEAKER_FEEDBACK_Q14: AtomicU32 = AtomicU32::new(48 << 14);
 static SPEAKER_FEEDBACK_INTEGRAL: AtomicI32 = AtomicI32::new(0);
 
@@ -292,8 +297,18 @@ pub async fn speaker_task(
                 }
             }
 
-            let now_ms = Instant::now().duration_since_epoch().as_millis();
-            mute_button = mute_button.update(mute_input.level(), now_ms);
+            let now_millis = Instant::now().duration_since_epoch().as_millis();
+            let now_ms = now_millis as u32;
+            if SPEAKER_STREAMING.load(Ordering::Acquire)
+                && now_ms.wrapping_sub(SPEAKER_LAST_PACKET_MS.load(Ordering::Acquire))
+                    > SPEAKER_USB_IDLE_TIMEOUT_MS
+            {
+                // No VBUS sense is available on this board. Stop feeding stale
+                // samples after a short USB inactivity window instead.
+                SPEAKER_STREAMING.store(false, Ordering::Release);
+                SPEAKER_RING.clear();
+            }
+            mute_button = mute_button.update(mute_input.level(), now_millis);
             if mute_button.changed() && mute_button.is_pressed() {
                 muted = !muted;
             }
@@ -303,7 +318,7 @@ pub async fn speaker_task(
                         &volume_unit,
                         &mut volume_encoder,
                         &mut reported_count,
-                        now_ms,
+                        now_millis,
                     )
                     .saturating_mul(VOLUME_STEP_PERCENT),
                 )
@@ -321,7 +336,15 @@ pub async fn speaker_task(
                             }
                             Err(_) => {
                                 SPEAKER_UNDERFLOWS.fetch_add(1, Ordering::Relaxed);
-                                last_sample
+                                if SPEAKER_STREAMING.load(Ordering::Acquire) {
+                                    last_sample
+                                } else {
+                                    // Fade the held sample instead of outputting a
+                                    // permanent DC level after USB disconnect.
+                                    let faded = (i32::from(last_sample) * 15 / 16) as i16;
+                                    last_sample = if faded.abs() < 8 { 0 } else { faded };
+                                    last_sample
+                                }
                             }
                         };
                         let sample = (i32::from(sample) * i32::from(volume) / 100) as i16;
