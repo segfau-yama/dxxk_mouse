@@ -22,22 +22,23 @@ use esp_hal::usb::otg::{
     Usb,
     embassy_usb_device::{Config as UsbDriverConfig, Driver as UsbDriver},
 };
-use esp_println::println;
 use static_cell::StaticCell;
 use usbd_hid::descriptor::{KeyboardReport, MouseReport};
 
 use super::audio::{
     MICROPHONE_ALT0, MICROPHONE_ALT1, MICROPHONE_PACKET_47, MICROPHONE_PACKET_48,
-    MICROPHONE_PACKET_49, MICROPHONE_RING, MICROPHONE_RING_MAX, MICROPHONE_RING_MIN,
-    MICROPHONE_STREAMING, MICROPHONE_UNDERFLOWS, MICROPHONE_USB_ERRORS, MICROPHONE_USB_PACKETS,
-    SPEAKER_ALT0, SPEAKER_ALT1, SPEAKER_FEEDBACK_Q14, SPEAKER_OVERFLOWS, SPEAKER_RING,
-    SPEAKER_RING_MAX, SPEAKER_RING_MIN, SPEAKER_USB_ERRORS, SPEAKER_USB_PACKETS,
-    reset_speaker_feedback, update_speaker_feedback,
+    MICROPHONE_PACKET_49, MICROPHONE_RING, MICROPHONE_RING_HYSTERESIS,
+    MICROPHONE_RING_LOW_WATERMARK, MICROPHONE_RING_MAX, MICROPHONE_RING_MIN, MICROPHONE_STREAMING,
+    MICROPHONE_UNDERFLOWS, MICROPHONE_USB_ERRORS, MICROPHONE_USB_PACKETS, SPEAKER_ALT0,
+    SPEAKER_ALT1, SPEAKER_FEEDBACK_Q14, SPEAKER_OVERFLOWS, SPEAKER_RING, SPEAKER_RING_MAX,
+    SPEAKER_RING_MIN, SPEAKER_USB_ERRORS, SPEAKER_USB_PACKETS, reset_speaker_feedback,
+    update_speaker_feedback,
 };
 
 pub(crate) const USB_HID_POLL_MS: u8 = 10;
 const USB_HID_REPORT_BYTES: usize = 9;
 const USB_MICROPHONE_CHANNELS: usize = 2;
+const MICROPHONE_STARTUP_PACKETS: u8 = 8;
 const USB_MICROPHONE_MAX_PACKET_BYTES: usize = 49 * USB_MICROPHONE_CHANNELS * 2;
 // One mono 16-bit sample per USB frame: 48 nominal, 49 worst case.
 const USB_SPEAKER_MAX_PACKET_BYTES: usize = 49 * core::mem::size_of::<i16>();
@@ -159,24 +160,10 @@ pub async fn usb_task(usb: Usb<'static>) {
                                         SPEAKER_OVERFLOWS.fetch_add(1, Ordering::Relaxed);
                                     }
                                 }
-                                let packets = SPEAKER_USB_PACKETS.fetch_add(1, Ordering::Relaxed) + 1;
+                                SPEAKER_USB_PACKETS.fetch_add(1, Ordering::Relaxed);
                                 let ring = SPEAKER_RING.len() as u32;
                                 SPEAKER_RING_MIN.fetch_min(ring, Ordering::Relaxed);
                                 SPEAKER_RING_MAX.fetch_max(ring, Ordering::Relaxed);
-                                if packets % 5_000 == 0 {
-                                    println!(
-                                        "speaker: packets={}, alt={}/{}, ring={}, ring_min={}, ring_max={}, overflows={}, usb_errors={}, dma_restarts={}",
-                                        packets,
-                                        SPEAKER_ALT1.load(Ordering::Relaxed),
-                                        SPEAKER_ALT0.load(Ordering::Relaxed),
-                                        ring,
-                                        SPEAKER_RING_MIN.load(Ordering::Relaxed),
-                                        SPEAKER_RING_MAX.load(Ordering::Relaxed),
-                                        SPEAKER_OVERFLOWS.load(Ordering::Relaxed),
-                                        SPEAKER_USB_ERRORS.load(Ordering::Relaxed),
-                                        super::audio::SPEAKER_DMA_RESTARTS.load(Ordering::Relaxed),
-                                    );
-                                }
                             }
                             Ok(_) => {}
                             Err(_) => {
@@ -191,8 +178,6 @@ pub async fn usb_task(usb: Usb<'static>) {
             async move {
                 loop {
                     speaker_feedback.wait_connection().await;
-                    let mut ticks = 0u32;
-
                     loop {
                         update_speaker_feedback();
                         let value = SPEAKER_FEEDBACK_Q14.load(Ordering::Relaxed) & 0x00ff_ffff;
@@ -200,22 +185,6 @@ pub async fn usb_task(usb: Usb<'static>) {
                         if speaker_feedback.write_packet(&packet).await.is_err() {
                             SPEAKER_USB_ERRORS.fetch_add(1, Ordering::Relaxed);
                             break;
-                        }
-                        ticks = ticks.wrapping_add(1);
-                        if ticks % 320 == 0 {
-                            println!(
-                                "speaker: packets={}, alt={}/{}, ring={}, ring_min={}, ring_max={}, fb_q14={}, overflows={}, underflows={}, dma_restarts={}",
-                                SPEAKER_USB_PACKETS.load(Ordering::Relaxed),
-                                SPEAKER_ALT1.load(Ordering::Relaxed),
-                                SPEAKER_ALT0.load(Ordering::Relaxed),
-                                SPEAKER_RING.len(),
-                                SPEAKER_RING_MIN.load(Ordering::Relaxed),
-                                SPEAKER_RING_MAX.load(Ordering::Relaxed),
-                                value,
-                                SPEAKER_OVERFLOWS.load(Ordering::Relaxed),
-                                super::audio::SPEAKER_UNDERFLOWS.load(Ordering::Relaxed),
-                                super::audio::SPEAKER_DMA_RESTARTS.load(Ordering::Relaxed),
-                            );
                         }
                         Timer::after(Duration::from_millis(
                             FeedbackRefresh::Period32Frames.frame_count() as u64,
@@ -233,14 +202,25 @@ pub async fn usb_task(usb: Usb<'static>) {
                     MICROPHONE_STREAMING.store(false, Ordering::Release);
                     MICROPHONE_RING.clear();
                     MICROPHONE_STREAMING.store(true, Ordering::Release);
+                    let mut startup_packets = MICROPHONE_STARTUP_PACKETS;
                     let mut last_sample = 0i16;
 
                     loop {
                         let ring = MICROPHONE_RING.len();
-                        let sample_count = if ring > super::audio::MICROPHONE_RING_TARGET + 128 {
+                        let sample_count = if startup_packets != 0 {
+                            // Do not use 47-sample packets while the freshly-cleared ring is
+                            // being brought online.
+                            MICROPHONE_PACKET_48.fetch_add(1, Ordering::Relaxed);
+                            48
+                        } else if ring
+                            > super::audio::MICROPHONE_RING_TARGET + MICROPHONE_RING_HYSTERESIS
+                        {
                             MICROPHONE_PACKET_49.fetch_add(1, Ordering::Relaxed);
                             49
-                        } else if ring + 128 < super::audio::MICROPHONE_RING_TARGET {
+                        } else if ring >= MICROPHONE_RING_LOW_WATERMARK
+                            && ring + MICROPHONE_RING_HYSTERESIS
+                                < super::audio::MICROPHONE_RING_TARGET
+                        {
                             MICROPHONE_PACKET_47.fetch_add(1, Ordering::Relaxed);
                             47
                         } else {
@@ -270,28 +250,11 @@ pub async fn usb_task(usb: Usb<'static>) {
 
                         match microphone_audio.write(&bytes[..packet_bytes]).await {
                             Ok(()) => {
-                                let packets = MICROPHONE_USB_PACKETS.fetch_add(1, Ordering::Relaxed) + 1;
+                                startup_packets = startup_packets.saturating_sub(1);
+                                MICROPHONE_USB_PACKETS.fetch_add(1, Ordering::Relaxed);
                                 let ring = MICROPHONE_RING.len() as u32;
                                 MICROPHONE_RING_MIN.fetch_min(ring, Ordering::Relaxed);
                                 MICROPHONE_RING_MAX.fetch_max(ring, Ordering::Relaxed);
-                                if packets % 5_000 == 0 {
-                                    println!(
-                                        "microphone: packets={}, alt={}/{}, ring={}, ring_min={}, ring_max={}, 47/48/49={}/{}/{}, underflows={}, overflows={}, usb_errors={}, dma_restarts={}",
-                                        packets,
-                                        MICROPHONE_ALT1.load(Ordering::Relaxed),
-                                        MICROPHONE_ALT0.load(Ordering::Relaxed),
-                                        ring,
-                                        MICROPHONE_RING_MIN.load(Ordering::Relaxed),
-                                        MICROPHONE_RING_MAX.load(Ordering::Relaxed),
-                                        MICROPHONE_PACKET_47.load(Ordering::Relaxed),
-                                        MICROPHONE_PACKET_48.load(Ordering::Relaxed),
-                                        MICROPHONE_PACKET_49.load(Ordering::Relaxed),
-                                        MICROPHONE_UNDERFLOWS.load(Ordering::Relaxed),
-                                        super::audio::MICROPHONE_OVERFLOWS.load(Ordering::Relaxed),
-                                        MICROPHONE_USB_ERRORS.load(Ordering::Relaxed),
-                                        super::audio::MICROPHONE_DMA_RESTARTS.load(Ordering::Relaxed),
-                                    );
-                                }
                             }
                             Err(_) => {
                                 MICROPHONE_USB_ERRORS.fetch_add(1, Ordering::Relaxed);

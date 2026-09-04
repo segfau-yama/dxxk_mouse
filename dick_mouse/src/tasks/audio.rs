@@ -10,7 +10,6 @@ use esp_hal::{
     pcnt::{channel, unit::Unit},
     time::Instant,
 };
-use esp_println::println;
 
 pub(crate) const AUDIO_FRAME_SAMPLES: usize = 48;
 // USB and application frames contain 16-bit PCM samples.
@@ -20,8 +19,11 @@ pub(crate) const AUDIO_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::siz
 pub const I2S_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i32>();
 
 // These are sample rings, not frame queues. USB and I2S run from independent clocks.
-pub(crate) const AUDIO_RING_CAPACITY: usize = 8192;
-pub(crate) const MICROPHONE_RING_TARGET: usize = AUDIO_RING_CAPACITY / 2;
+pub(crate) const AUDIO_RING_CAPACITY: usize = 2048;
+// Keep startup latency bounded; a zeroed stream must not spend seconds sending 47-sample packets.
+pub(crate) const MICROPHONE_RING_TARGET: usize = 256;
+pub(crate) const MICROPHONE_RING_LOW_WATERMARK: usize = 128;
+pub(crate) const MICROPHONE_RING_HYSTERESIS: usize = 32;
 pub(crate) const SPEAKER_RING_TARGET: usize = AUDIO_RING_CAPACITY / 2;
 const MICROPHONE_DMA_BUFFER_BYTES: usize = I2S_FRAME_BYTES * 16;
 const SPEAKER_DMA_BUFFER_BYTES: usize = 4096;
@@ -131,9 +133,6 @@ pub async fn microphone_task(
     let mut dma_buffer =
         esp_hal::dma_rx_stream_buffer!(MICROPHONE_DMA_BUFFER_BYTES, I2S_FRAME_BYTES);
     let mut bytes = [0; I2S_FRAME_BYTES];
-    let mut captured_frames = 0u32;
-    let mut raw_peak = 0i16;
-    let mut usb_peak = 0i16;
 
     loop {
         let mut transfer = match i2s_rx.read(dma_buffer) {
@@ -179,11 +178,9 @@ pub async fn microphone_task(
                     // INMP441 data is left-aligned in each 32-bit I2S slot.
                     let raw = i32::from_le_bytes([chunk[0], chunk[1], chunk[2], chunk[3]]);
                     let raw_sample = (raw >> 16) as i16;
-                    raw_peak = raw_peak.max(raw_sample.saturating_abs());
                     let sample = (i32::from(raw_sample.saturating_mul(MICROPHONE_GAIN))
                         * i32::from(volume)
                         / 100) as i16;
-                    usb_peak = usb_peak.max(sample.saturating_abs());
 
                     if MICROPHONE_STREAMING.load(Ordering::Acquire) {
                         if MICROPHONE_RING.try_send(sample).is_err() {
@@ -198,18 +195,6 @@ pub async fn microphone_task(
                 let ring = MICROPHONE_RING.len() as u32;
                 MICROPHONE_RING_MIN.fetch_min(ring, Ordering::Relaxed);
                 MICROPHONE_RING_MAX.fetch_max(ring, Ordering::Relaxed);
-                captured_frames = captured_frames.wrapping_add(1);
-                if captured_frames % 10_000 == 0 {
-                    println!(
-                        "microphone: i2s raw_peak={}, usb_peak={}, ring={}, streaming={}",
-                        raw_peak,
-                        usb_peak,
-                        ring,
-                        MICROPHONE_STREAMING.load(Ordering::Acquire)
-                    );
-                    raw_peak = 0;
-                    usb_peak = 0;
-                }
             }
 
             if wait_error {

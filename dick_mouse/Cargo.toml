@@ -36,10 +36,11 @@ embassy-sync = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483
 embassy-time = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483a7036f23a9925a339152396bec4c041" }
 embassy-time-driver = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483a7036f23a9925a339152396bec4c041" }
 embassy-usb-driver = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483a7036f23a9925a339152396bec4c041" }
-embassy-usb-synopsys-otg = { git = "https://github.com/embassy-rs/embassy", rev = "cd7570483a7036f23a9925a339152396bec4c041" }
+embassy-usb-synopsys-otg = { path = "../vendor/embassy-usb-synopsys-otg" }
 
 [patch."https://github.com/embassy-rs/embassy"]
 embassy-usb = { path = "../vendor/embassy-usb" }
+embassy-usb-synopsys-otg = { path = "../vendor/embassy-usb-synopsys-otg" }
 
 [lib]
 harness = false

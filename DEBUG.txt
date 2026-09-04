@@ -1,6 +1,61 @@
-lsusb -d c0de:0001
-lsusb -v -d c0de:0001
-arecord -l
-cat /proc/asound/cards
-wpctl status
-dmesg -w
+重要な問題
+
+1. 最優先：UARTログがUSB/I²Sを停止させます
+
+[audio.rs:202](/home/suichan/Documents/programming/dxxk_mouse/dick_mouse/src/tasks/audio.rs:202) と [usb.rs:166](/home/suichan/Documents/programming/dxxk_mouse/dick_mouse/src/tasks/usb.rs:166) などで、5秒・10秒周期の長い `println!` をリアルタイム経路内から出しています。
+
+[esp-println設定](/home/suichan/Documents/programming/dxxk_mouse/dick_mouse/Cargo.toml:21) はUART＋critical-sectionで、使用されるmutexは割り込みを停止します。115200 baudでは長い1行に約10〜20 msかかります。
+
+一方、現在のDMA余裕は以下です。
+
+- RX：約16 ms
+- TX：約21 ms
+- USB Isochronous期限：1 ms
+
+特にマイクは5000 packetごと、つまり約5秒ごとにログが入り、5秒録音の成功率が開始タイミングで変わる現象とよく一致します。
+
+2. マイク開始時の47 sample制御が間違っています
+
+Alt 1開始時にリングを空にした直後、[usb.rs:239](/home/suichan/Documents/programming/dxxk_mouse/dick_mouse/src/tasks/usb.rs:239) はリングが4096付近になるまで47 sample packetを送ります。
+
+- I²S生成：48 sample/ms
+- USB送信：47 sample/ms
+- 4096まで貯める時間：約4秒
+
+つまり録音開始後の約4秒間、固定48 kHzを宣言しながら実質47 ksample/sしか渡しません。これはALSA/PipeWireの開始時XRUNを説明できます。8192 sampleリングと4096 targetは大きすぎます。
+
+3. Alt切替時のOTG driverに再接続raceがあります
+
+現在固定しているSynopsys OTG実装には次があります。
+
+- [IN FIFO待機](/home/suichan/.cargo/git/checkouts/embassy-c08a80187403f815/cd75704/embassy-usb-synopsys-otg/src/lib.rs:1779)中にAlt 0になっても、endpoint enabledを再確認せず転送をqueueする
+- OUT endpointを無効化しても、未読の`out_size`を消さない
+- Isochronous OUT再有効化時にodd/even frameを再設定しない
+
+このためAlt 0→1で、マイクINが無効なendpointへ書き込まれたり、スピーカーが古いpacketを再利用したり、最初のOUT frameを受け取れなくなる可能性があります。
+
+4. USB切断を検出できません
+
+[usb.rs:83](/home/suichan/Documents/programming/dxxk_mouse/dick_mouse/src/tasks/usb.rs:83) は `UsbDriverConfig::default()`、つまりVBUS検出なしです。
+
+開発ボードを別のデバッグUSBから給電したままネイティブUSBを抜く場合、ESP32-S3は自己給電デバイスになります。この構成ではVBUSをGPIOへ分圧して監視する必要があります。[Espressif公式資料](https://docs.espressif.com/projects/esp-usb/en/latest/esp32s3/usb_device.html)
+
+現在の回路には専用VBUS検出GPIOがないため、単に`vbus_detection=true`へ変更するだけでは不十分です。
+
+5. スピーカーが切断後も最後のsampleを出し続けます
+
+[audio.rs:332](/home/suichan/Documents/programming/dxxk_mouse/dick_mouse/src/tasks/audio.rs:332) はリングが空になると、[last_sample](/home/suichan/Documents/programming/dxxk_mouse/dick_mouse/src/tasks/audio.rs:277)を永久に繰り返します。
+
+最後が非ゼロならPCM5102AへDCを出し続けます。イヤホン挿抜時の大きなクリック、ノイズ、再開時の不安定さにつながります。Alt 0ではゼロへランプダウンし、`last_sample`もリセットすべきです。
+
+6. スピーカーfeedbackの回復が遅すぎます
+
+[audio.rs:227](/home/suichan/Documents/programming/dxxk_mouse/dick_mouse/src/tasks/audio.rs:227)のPI制御は、空リングから4096 sample targetへ到達するのに理論上約87秒かかります。再接続直後は長時間underflow状態になります。
+
+7. TX停止後に正常データを捨てる経路があります
+
+[audio.rs:295](/home/suichan/Documents/programming/dxxk_mouse/dick_mouse/src/tasks/audio.rs:295)は、`TotalEof`済みでも空descriptorを先に補充し、その際リングから音声を取り出します。その後DMA停止を検出すると、バッファを再生成してゼロ埋めするため、取り出した音声を破棄します。
+
+8. sampleリングはSPSCではありません
+
+[audio.rs:41](/home/suichan/Documents/programming/dxxk_mouse/dick_mouse/src/tasks/audio.rs:41)は`Channel<CriticalSectionRawMutex, i16>`です。これはSPSCリングではなく、約19.2万回/秒のmutex付きqueue操作になります。USBの1 ms期限に対して無視できない負荷です。

@@ -543,7 +543,6 @@ dependencies = [
 [[package]]
 name = "embassy-usb-synopsys-otg"
 version = "0.4.0"
-source = "git+https://github.com/embassy-rs/embassy?rev=cd7570483a7036f23a9925a339152396bec4c041#cd7570483a7036f23a9925a339152396bec4c041"
 dependencies = [
  "document-features",
  "embassy-sync 0.8.0",
