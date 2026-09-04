@@ -27,7 +27,7 @@ const USB_MAX_PACKET_SIZE: usize = 192;
 const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
 const USB_BOS_DESCRIPTOR_SIZE: usize = 128;
 const USB_MSOS_DESCRIPTOR_SIZE: usize = 128;
-const USB_CONTROL_BUFFER_SIZE: usize = 64;
+const USB_CONTROL_BUFFER_SIZE: usize = 128;
 const USB_EP_OUT_BUFFER_SIZE: usize = 256;
 const USB_AUDIO_FEEDBACK_48K: [u8; 3] = [0x00, 0x00, 0x0c];
 

@@ -1,6 +1,7 @@
 #![no_std]
 #![no_main]
 
+use core::sync::atomic::{AtomicBool, Ordering};
 use embassy_executor::Spawner;
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_time::{Duration, Timer};
@@ -28,6 +29,7 @@ use static_cell::StaticCell;
 esp_bootloader_esp_idf::esp_app_desc!();
 
 const SAMPLE_RATE_HZ: u32 = 48_000;
+const MICROPHONE_GAIN: i16 = 4;
 const I2S_FRAME_SAMPLES: usize = 48;
 const I2S_FRAME_BYTES: usize = I2S_FRAME_SAMPLES * core::mem::size_of::<i32>();
 const USB_CHANNELS: usize = 2;
@@ -36,17 +38,18 @@ const USB_MIN_SAMPLES: usize = 47;
 const USB_NOMINAL_SAMPLES: usize = 48;
 const USB_MAX_SAMPLES: usize = 49;
 const USB_MAX_PACKET_BYTES: usize = USB_MAX_SAMPLES * USB_SAMPLE_BYTES;
-const RING_CAPACITY: usize = 512;
+const RING_CAPACITY: usize = 2048;
 const RING_LOW_WATERMARK: usize = 240;
 const RING_HIGH_WATERMARK: usize = 272;
 const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
 const USB_BOS_DESCRIPTOR_SIZE: usize = 128;
 const USB_MSOS_DESCRIPTOR_SIZE: usize = 128;
-const USB_CONTROL_BUFFER_SIZE: usize = 64;
+const USB_CONTROL_BUFFER_SIZE: usize = 128;
 const USB_EP_OUT_BUFFER_SIZE: usize = 256;
 
 static USB_SAMPLE_RATES: [u32; 1] = [SAMPLE_RATE_HZ];
 static MICROPHONE_RING: Channel<CriticalSectionRawMutex, i16, RING_CAPACITY> = Channel::new();
+static MICROPHONE_STREAMING: AtomicBool = AtomicBool::new(false);
 static USB_EP_OUT_BUFFER: StaticCell<[u8; USB_EP_OUT_BUFFER_SIZE]> = StaticCell::new();
 static USB_CONFIG_DESCRIPTOR: StaticCell<[u8; USB_CONFIG_DESCRIPTOR_SIZE]> = StaticCell::new();
 static USB_BOS_DESCRIPTOR: StaticCell<[u8; USB_BOS_DESCRIPTOR_SIZE]> = StaticCell::new();
@@ -61,11 +64,13 @@ async fn usb_task(mut device: UsbDevice<'static, UsbDriver<'static>>) {
 
 #[embassy_executor::task]
 async fn microphone_capture(mut i2s_rx: I2sRx<'static, Async>) {
+    // ponytail: the esp-hal 1.2 stream-buffer path raises DescriptorError on
+    // this ESP32-S3 board; re-arm the known-good finite DMA buffer instead.
     let mut dma_buffer =
         esp_hal::dma_rx_buffer!(I2S_FRAME_BYTES).expect("failed to allocate microphone DMA buffer");
+    let mut input = [0u8; I2S_FRAME_BYTES];
 
     loop {
-        let mut input = [0u8; I2S_FRAME_BYTES];
         let transfer = match i2s_rx.read(dma_buffer) {
             Ok(transfer) => transfer,
             Err((error, rx, buffer)) => {
@@ -76,24 +81,22 @@ async fn microphone_capture(mut i2s_rx: I2sRx<'static, Async>) {
                 continue;
             }
         };
-
         let (result, rx, buffer) = transfer.wait_async().await;
         i2s_rx = rx;
         dma_buffer = buffer;
-        if let Err(error) = result {
-            println!("microphone: i2s read error = {:?}", error);
+        if result.is_err() || dma_buffer.read_received_data(&mut input) != input.len() {
             Timer::after(Duration::from_millis(1)).await;
-            continue;
-        }
-        if dma_buffer.read_received_data(&mut input) != input.len() {
-            println!("microphone: short I2S frame");
             continue;
         }
 
         for raw in input.chunks_exact(4) {
             let sample = i32::from_le_bytes([raw[0], raw[1], raw[2], raw[3]]);
             // INMP441 data is left-aligned in each 32-bit I2S slot.
-            MICROPHONE_RING.send((sample >> 16) as i16).await;
+            if MICROPHONE_STREAMING.load(Ordering::Acquire) {
+                MICROPHONE_RING
+                    .send(((sample >> 16) as i16).saturating_mul(MICROPHONE_GAIN))
+                    .await;
+            }
         }
     }
 }
@@ -110,9 +113,12 @@ fn samples_per_packet() -> usize {
 #[embassy_executor::task]
 async fn microphone_stream(mut audio: AudioSourceEpIn<'static, UsbDriver<'static>>) {
     let mut packet = [0u8; USB_MAX_PACKET_BYTES];
+    let mut last_sample = 0i16;
 
     loop {
         audio.wait_enabled().await;
+        while MICROPHONE_RING.try_receive().is_ok() {}
+        MICROPHONE_STREAMING.store(true, Ordering::Release);
         println!("microphone: USB IN endpoint enabled");
 
         loop {
@@ -120,7 +126,14 @@ async fn microphone_stream(mut audio: AudioSourceEpIn<'static, UsbDriver<'static
             for chunk in
                 packet[..sample_count * USB_SAMPLE_BYTES].chunks_exact_mut(USB_SAMPLE_BYTES)
             {
-                let sample = MICROPHONE_RING.receive().await.to_le_bytes();
+                let sample = match MICROPHONE_RING.try_receive() {
+                    Ok(sample) => {
+                        last_sample = sample;
+                        sample
+                    }
+                    Err(_) => last_sample,
+                }
+                .to_le_bytes();
                 chunk[..2].copy_from_slice(&sample);
                 chunk[2..4].copy_from_slice(&sample);
             }
@@ -134,6 +147,7 @@ async fn microphone_stream(mut audio: AudioSourceEpIn<'static, UsbDriver<'static
                     error,
                     MICROPHONE_RING.len()
                 );
+                MICROPHONE_STREAMING.store(false, Ordering::Release);
                 break;
             }
         }

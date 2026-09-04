@@ -1,3 +1,4 @@
+use core::sync::atomic::Ordering;
 use embassy_futures::join::{join, join4};
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_time::{Duration, Timer};
@@ -24,19 +25,22 @@ use esp_hal::usb::otg::{
 use static_cell::StaticCell;
 use usbd_hid::descriptor::{KeyboardReport, MouseReport};
 
-use super::audio::{AUDIO_FRAME_BYTES, AUDIO_FRAME_SAMPLES, MICROPHONE_FRAMES, SPEAKER_FRAMES};
+use super::audio::{
+    AUDIO_FRAME_BYTES, AUDIO_FRAME_SAMPLES, MICROPHONE_FRAMES, MICROPHONE_STREAMING,
+    SPEAKER_FEEDBACK_Q14, SPEAKER_FRAMES,
+};
 
 pub(crate) const USB_HID_POLL_MS: u8 = 10;
 const USB_HID_REPORT_BYTES: usize = 9;
 const USB_MICROPHONE_CHANNELS: usize = 2;
 const USB_MICROPHONE_PACKET_BYTES: usize = AUDIO_FRAME_BYTES * USB_MICROPHONE_CHANNELS;
-const USB_SPEAKER_MAX_PACKET_BYTES: usize = AUDIO_FRAME_BYTES * 2;
-const USB_AUDIO_FEEDBACK_48K: [u8; 3] = [0x00, 0x00, 0x0c];
+// One mono 16-bit sample per USB frame: 48 nominal, 49 worst case.
+const USB_SPEAKER_MAX_PACKET_BYTES: usize = 49 * core::mem::size_of::<i16>();
 const USB_EP_OUT_BUFFER_SIZE: usize = 256;
 const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
 const USB_BOS_DESCRIPTOR_SIZE: usize = 128;
 const USB_MSOS_DESCRIPTOR_SIZE: usize = 128;
-const USB_CONTROL_BUFFER_SIZE: usize = 64;
+const USB_CONTROL_BUFFER_SIZE: usize = 128;
 const USB_KEYBOARD_REPORT_ID: u8 = 1;
 const USB_MOUSE_REPORT_ID: u8 = 2;
 const USB_KEYBOARD_MOUSE_REPORT_DESCRIPTOR: &[u8] = &[
@@ -148,7 +152,8 @@ pub async fn usb_task(usb: Usb<'static>) {
                                     frame_samples += 1;
 
                                     if frame_samples == AUDIO_FRAME_SAMPLES {
-                                        let _ = SPEAKER_FRAMES.try_send(frame);
+                                        // Back-pressure the USB reader instead of dropping a frame.
+                                        SPEAKER_FRAMES.send(frame).await;
                                         frame = [0; AUDIO_FRAME_SAMPLES];
                                         frame_samples = 0;
                                     }
@@ -164,11 +169,12 @@ pub async fn usb_task(usb: Usb<'static>) {
                 loop {
                     speaker_feedback.wait_connection().await;
 
-                    while speaker_feedback
-                        .write_packet(&USB_AUDIO_FEEDBACK_48K)
-                        .await
-                        .is_ok()
-                    {
+                    loop {
+                        let value = SPEAKER_FEEDBACK_Q14.load(Ordering::Relaxed) & 0x00ff_ffff;
+                        let packet = [value as u8, (value >> 8) as u8, (value >> 16) as u8];
+                        if speaker_feedback.write_packet(&packet).await.is_err() {
+                            break;
+                        }
                         Timer::after(Duration::from_millis(
                             FeedbackRefresh::Period32Frames.frame_count() as u64,
                         ))
@@ -179,6 +185,7 @@ pub async fn usb_task(usb: Usb<'static>) {
             async move {
                 loop {
                     microphone_audio.wait_enabled().await;
+                    MICROPHONE_STREAMING.store(true, Ordering::Release);
 
                     loop {
                         let frame = MICROPHONE_FRAMES.receive().await;
@@ -193,6 +200,7 @@ pub async fn usb_task(usb: Usb<'static>) {
                         }
 
                         if microphone_audio.write(&bytes).await.is_err() {
+                            MICROPHONE_STREAMING.store(false, Ordering::Release);
                             break;
                         }
                     }

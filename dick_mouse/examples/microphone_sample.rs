@@ -28,6 +28,7 @@ use static_cell::StaticCell;
 esp_bootloader_esp_idf::esp_app_desc!();
 
 const AUDIO_FRAME_SAMPLES: usize = 48;
+const MICROPHONE_GAIN: i16 = 4;
 const USB_AUDIO_CHANNELS: usize = 2;
 const I2S_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i32>();
 const USB_AUDIO_FRAME_BYTES: usize =
@@ -35,7 +36,7 @@ const USB_AUDIO_FRAME_BYTES: usize =
 const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
 const USB_BOS_DESCRIPTOR_SIZE: usize = 128;
 const USB_MSOS_DESCRIPTOR_SIZE: usize = 128;
-const USB_CONTROL_BUFFER_SIZE: usize = 64;
+const USB_CONTROL_BUFFER_SIZE: usize = 128;
 const USB_EP_OUT_BUFFER_SIZE: usize = 256;
 const MICROPHONE_QUEUE_DEPTH: usize = 8;
 
@@ -92,7 +93,7 @@ async fn microphone_capture(mut i2s_rx: I2sRx<'static, Async>) {
 
         for (sample, raw) in frame.iter_mut().zip(input.chunks_exact(4)) {
             let raw = i32::from_le_bytes([raw[0], raw[1], raw[2], raw[3]]);
-            *sample = (raw >> 16) as i16;
+            *sample = ((raw >> 16) as i16).saturating_mul(MICROPHONE_GAIN);
         }
 
         MICROPHONE_FRAMES.send(frame).await;
