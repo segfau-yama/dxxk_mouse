@@ -87,6 +87,8 @@ pub async fn microphone_task(
     let (mut volume_encoder, mut reported_count) =
         setup_volume_encoder(&volume_unit, volume_gpio_a, volume_gpio_b);
     let mut volume = DEFAULT_VOLUME_PERCENT;
+    let mut dma_buffer =
+        esp_hal::dma_rx_buffer!(I2S_FRAME_BYTES).expect("failed to allocate microphone DMA buffer");
 
     loop {
         let now_ms = Instant::now().duration_since_epoch().as_millis();
@@ -107,8 +109,21 @@ pub async fn microphone_task(
             .clamp(0, 100) as u8;
         let mut bytes = [0; I2S_FRAME_BYTES];
 
-        match i2s_rx.read_dma_async(&mut bytes).await {
-            Ok(()) => {
+        let transfer = match i2s_rx.read(dma_buffer) {
+            Ok(transfer) => transfer,
+            Err((_, rx, buffer)) => {
+                i2s_rx = rx;
+                dma_buffer = buffer;
+                Timer::after(Duration::from_millis(1)).await;
+                continue;
+            }
+        };
+        let (result, rx, buffer) = transfer.wait_async().await;
+        i2s_rx = rx;
+        dma_buffer = buffer;
+
+        match result {
+            Ok(()) if dma_buffer.read_received_data(&mut bytes) == bytes.len() => {
                 let mut frame = [0; AUDIO_FRAME_SAMPLES];
                 for (sample, chunk) in frame.iter_mut().zip(bytes.chunks_exact(4)) {
                     // INMP441 data is left-aligned in each 32-bit I2S slot; keep its top 16 bits.
@@ -122,7 +137,7 @@ pub async fn microphone_task(
                 let microphone = Microphone::new(frame);
                 MICROPHONE_FRAMES.send(*microphone.buffer()).await;
             }
-            Err(_) => Timer::after(Duration::from_millis(1)).await,
+            _ => Timer::after(Duration::from_millis(1)).await,
         }
     }
 }
@@ -141,6 +156,8 @@ pub async fn speaker_task(
     let (mut volume_encoder, mut reported_count) =
         setup_volume_encoder(&volume_unit, volume_gpio_a, volume_gpio_b);
     let mut volume = DEFAULT_VOLUME_PERCENT;
+    let mut dma_buffer = esp_hal::dma_tx_buffer!(SPEAKER_I2S_FRAME_BYTES)
+        .expect("failed to allocate speaker DMA buffer");
 
     loop {
         let mut samples = [0; SPEAKER_I2S_FRAME_SAMPLES];
@@ -176,7 +193,18 @@ pub async fn speaker_task(
             chunk[2..].copy_from_slice(&sample);
         }
 
-        // ponytail: one-shot DMA is enough for bring-up; use circular DMA if 20 ms chunks click.
-        let _ = i2s_tx.write_dma_async(&mut bytes).await;
+        dma_buffer.fill(&bytes);
+        match i2s_tx.write(dma_buffer) {
+            Ok(transfer) => {
+                let (_, tx, buffer) = transfer.wait_async().await;
+                i2s_tx = tx;
+                dma_buffer = buffer;
+            }
+            Err((_, tx, buffer)) => {
+                i2s_tx = tx;
+                dma_buffer = buffer;
+                Timer::after(Duration::from_millis(1)).await;
+            }
+        }
     }
 }

@@ -26,8 +26,6 @@ async fn main(_spawner: Spawner) {
     let timg0 = TimerGroup::new(peripherals.TIMG0);
     esp_rtos::start(timg0.timer0, peripherals.FROM_CPU_INTR0);
 
-    let (_rx_descriptors, tx_descriptors) =
-        esp_hal::dma_descriptors!(STEREO_FRAME_BYTES, STEREO_FRAME_BYTES);
     let mut i2s_tx = I2s::new(
         peripherals.I2S0,
         peripherals.DMA_CH0,
@@ -42,7 +40,10 @@ async fn main(_spawner: Spawner) {
     .with_bclk(peripherals.GPIO35)
     .with_ws(peripherals.GPIO36)
     .with_dout(peripherals.GPIO37)
-    .build(tx_descriptors);
+    .build();
+
+    let mut dma_buffer =
+        esp_hal::dma_tx_buffer!(STEREO_FRAME_BYTES).expect("failed to allocate I2S DMA buffer");
 
     esp_println::println!("i2s_sine ready: s_ks002.wav");
 
@@ -54,8 +55,21 @@ async fn main(_spawner: Spawner) {
                 channels[2..].copy_from_slice(sample);
             }
 
-            if i2s_tx.write_dma_async(&mut frame).await.is_err() {
-                esp_println::println!("i2s_sine write error");
+            dma_buffer.fill(&frame);
+            match i2s_tx.write(dma_buffer) {
+                Ok(transfer) => {
+                    let (result, tx, buffer) = transfer.wait_async().await;
+                    i2s_tx = tx;
+                    dma_buffer = buffer;
+                    if result.is_err() {
+                        esp_println::println!("i2s_sine write error");
+                    }
+                }
+                Err((_, tx, buffer)) => {
+                    i2s_tx = tx;
+                    dma_buffer = buffer;
+                    esp_println::println!("i2s_sine DMA setup error");
+                }
             }
         }
     }

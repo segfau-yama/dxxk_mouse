@@ -32,7 +32,6 @@ const USB_AUDIO_CHANNELS: usize = 2;
 const I2S_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i32>();
 const USB_AUDIO_FRAME_BYTES: usize =
     AUDIO_FRAME_SAMPLES * USB_AUDIO_CHANNELS * core::mem::size_of::<i16>();
-const USB_MICROPHONE_FEEDBACK_REFRESH_MS: u8 = 8;
 const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
 const USB_BOS_DESCRIPTOR_SIZE: usize = 128;
 const USB_MSOS_DESCRIPTOR_SIZE: usize = 128;
@@ -60,12 +59,32 @@ async fn usb_task(mut device: UsbDevice<'static, UsbDriver<'static>>) {
 
 #[embassy_executor::task]
 async fn microphone_capture(mut i2s_rx: I2sRx<'static, Async>) {
+    let mut dma_buffer =
+        esp_hal::dma_rx_buffer!(I2S_FRAME_BYTES).expect("failed to allocate microphone DMA buffer");
+
     loop {
         let mut input = [0u8; I2S_FRAME_BYTES];
 
-        if let Err(error) = i2s_rx.read_dma_async(&mut input).await {
+        let transfer = match i2s_rx.read(dma_buffer) {
+            Ok(transfer) => transfer,
+            Err((error, rx, buffer)) => {
+                println!("microphone: i2s read error = {:?}", error);
+                i2s_rx = rx;
+                dma_buffer = buffer;
+                Timer::after(Duration::from_millis(1)).await;
+                continue;
+            }
+        };
+        let (result, rx, buffer) = transfer.wait_async().await;
+        i2s_rx = rx;
+        dma_buffer = buffer;
+        if let Err(error) = result {
             println!("microphone: i2s read error = {:?}", error);
             Timer::after(Duration::from_millis(1)).await;
+            continue;
+        }
+        if dma_buffer.read_received_data(&mut input) != input.len() {
+            println!("microphone: short I2S frame");
             continue;
         }
 
@@ -119,7 +138,6 @@ async fn main(spawner: Spawner) {
     let timg0 = TimerGroup::new(peripherals.TIMG0);
     esp_rtos::start(timg0.timer0, peripherals.FROM_CPU_INTR0);
 
-    let (rx_descriptors, _) = esp_hal::dma_descriptors!(I2S_FRAME_BYTES, 0);
     let i2s_rx = I2s::new(
         peripherals.I2S0,
         peripherals.DMA_CH0,
@@ -134,7 +152,7 @@ async fn main(spawner: Spawner) {
     .with_bclk(peripherals.GPIO5)
     .with_ws(peripherals.GPIO6)
     .with_din(peripherals.GPIO7)
-    .build(rx_descriptors);
+    .build();
     println!("microphone: i2s rx ready: bclk=GPIO5 ws=GPIO6 din=GPIO7");
 
     let usb = Usb::new_fs(peripherals.USB_FS, peripherals.GPIO20, peripherals.GPIO19);
@@ -160,23 +178,15 @@ async fn main(spawner: Spawner) {
 
     let AudioSource {
         audio_ep_in,
-        feedback_ep_in: _feedback_ep_in,
         handler,
     } = AudioSource::new(
         &mut builder,
         &USB_MICROPHONE_SAMPLE_RATES,
         SampleWidth::Width2Byte,
-        USB_MICROPHONE_FEEDBACK_REFRESH_MS,
         None,
     );
     builder.handler(USB_MICROPHONE_HANDLER.init(handler));
     let device = builder.build();
-
-    // The standard Embassy AudioSource descriptor includes a feedback IN endpoint.
-    // Do not submit microphone feedback transfers here: an asynchronous capture source
-    // communicates its rate through the amount of audio data it produces. Leaving this
-    // endpoint idle also avoids creating an unpolled periodic IN transfer before audio.write().
-    let _ = _feedback_ep_in;
 
     spawner.spawn(microphone_capture(i2s_rx).expect("failed to spawn microphone capture task"));
     spawner.spawn(usb_task(device).expect("failed to spawn USB task"));

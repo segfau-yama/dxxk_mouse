@@ -32,7 +32,6 @@ const USB_MICROPHONE_CHANNELS: usize = 2;
 const USB_MICROPHONE_PACKET_BYTES: usize = AUDIO_FRAME_BYTES * USB_MICROPHONE_CHANNELS;
 const USB_SPEAKER_MAX_PACKET_BYTES: usize = AUDIO_FRAME_BYTES * 2;
 const USB_AUDIO_FEEDBACK_48K: [u8; 3] = [0x00, 0x00, 0x0c];
-const USB_MICROPHONE_FEEDBACK_REFRESH_MS: u8 = 8;
 const USB_EP_OUT_BUFFER_SIZE: usize = 256;
 const USB_CONFIG_DESCRIPTOR_SIZE: usize = 512;
 const USB_BOS_DESCRIPTOR_SIZE: usize = 128;
@@ -96,7 +95,6 @@ pub async fn usb_task(usb: Usb<'static>) {
         &mut builder,
         &USB_MICROPHONE_SAMPLE_RATES,
         SampleWidth::Width2Byte,
-        USB_MICROPHONE_FEEDBACK_REFRESH_MS,
         None,
     );
 
@@ -130,13 +128,6 @@ pub async fn usb_task(usb: Usb<'static>) {
     let mut speaker_stream = speaker.stream;
     let mut speaker_feedback = speaker.feedback;
     let mut microphone_audio = microphone.audio_ep_in;
-
-    // Embassy's standard AudioSource currently allocates a feedback IN endpoint for the
-    // microphone. Keep the class and descriptor standard, but do not submit transfers to
-    // that endpoint. The asynchronous capture source is driven by its audio IN packets,
-    // and an unpolled feedback IN transfer can otherwise create an incomplete ISO IN before
-    // the first microphone audio write reaches the controller.
-    let _microphone_feedback = microphone.feedback_ep_in;
 
     join(
         device.run(),
