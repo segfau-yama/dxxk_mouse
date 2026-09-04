@@ -48,9 +48,11 @@ const OUTPUT_UNIT_ID: u8 = 0x03;
 const MAX_AUDIO_CHANNEL_COUNT: usize = 0x02;
 const FIXED_SAMPLE_RATE_HZ: u32 = 48_000;
 
-// Maximum number of supported discrete sample rates.
+// Allocate one extra sample per USB frame for ring-buffer rate matching.
 fn calculate_max_packet_size(sample_rate_hz: u32, num_channels: u8, b_subframe_size: u8) -> u16 {
-    let bytes_per_ms = (sample_rate_hz * num_channels as u32 * b_subframe_size as u32) / 1000;
+    // Leave room for the ±1 sample adjustment used by the elastic USB/I2S buffer.
+    let samples_per_ms = sample_rate_hz.div_ceil(1000) + 1;
+    let bytes_per_ms = samples_per_ms * num_channels as u32 * b_subframe_size as u32;
 
     debug!(
         "calculate_max_packet_size: {}Hz × {}ch × {}bytes = {} bytes/ms",
