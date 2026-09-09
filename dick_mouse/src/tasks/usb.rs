@@ -1,4 +1,5 @@
 use super::audio_format::{MicrophonePacketizer, fade_to_zero};
+use super::usb_diagnostics::MicrophoneDiagnostics;
 use core::sync::atomic::Ordering;
 use embassy_futures::join::{join3, join4};
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
@@ -21,7 +22,7 @@ use embassy_usb::{
 };
 use esp_hal::usb::otg::{
     Usb,
-    embassy_usb_device::{Config as UsbDriverConfig, Driver as UsbDriver},
+    embassy_usb_device::{Config as UsbDriverConfig, Driver as UsbDriver, fs_in_transfer_counts},
 };
 use heapless::spsc::{Consumer, Producer};
 use static_cell::StaticCell;
@@ -78,6 +79,7 @@ static USB_MSOS_DESCRIPTOR: StaticCell<[u8; USB_MSOS_DESCRIPTOR_SIZE]> = StaticC
 static USB_CONTROL_BUFFER: StaticCell<[u8; USB_CONTROL_BUFFER_SIZE]> = StaticCell::new();
 static USB_HID_STATE: StaticCell<UsbHidState<'static>> = StaticCell::new();
 static USB_MICROPHONE_HANDLER: StaticCell<UsbMicrophoneControlHandler> = StaticCell::new();
+static USB_MICROPHONE_DIAGNOSTICS: StaticCell<MicrophoneDiagnostics> = StaticCell::new();
 static USB_SPEAKER_STATE: StaticCell<UsbSpeakerState<'static>> = StaticCell::new();
 
 #[embassy_executor::task]
@@ -113,6 +115,13 @@ pub async fn usb_task(
         SampleWidth::Width2Byte,
         None,
     );
+
+    // Capture the allocated address; EP1 is not assumed by the diagnostic reader.
+    builder.handler(USB_MICROPHONE_DIAGNOSTICS.init(MicrophoneDiagnostics::new(
+        microphone.handler.get_audio_ep_addr(),
+        microphone.handler.get_stream_iface_num(),
+        fs_in_transfer_counts,
+    )));
 
     let speaker = UsbSpeakerClass::new(
         &mut builder,

@@ -15,6 +15,16 @@ use embassy_usb_synopsys_otg::{
 
 use crate::usb::otg::Usb;
 
+/// Read lifetime (queued, hardware XFRC) counters for a non-control FS IN endpoint.
+/// This does not clear counters, touch endpoint state, or print from an interrupt.
+#[cfg(usb_otg_driver_supported)]
+pub fn fs_in_transfer_counts(address: u8) -> Option<(u32, u32)> {
+    if address & 0xf0 != 0x80 {
+        return None;
+    }
+    crate::peripherals::USB_FS::device_state().in_transfer_counts((address & 0x0f) as usize)
+}
+
 /// Asynchronous USB driver.
 pub struct Driver<'d> {
     inner: OtgDriver<'d>,

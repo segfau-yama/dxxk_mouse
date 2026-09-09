@@ -1,12 +1,50 @@
 #![cfg(test)]
 #[path = "../../src/tasks/audio_format.rs"]
 mod audio_format;
+#[path = "../../src/tasks/usb_diagnostics.rs"]
+mod usb_diagnostics;
 
 use audio_format::*;
 use embassy_usb::class::uac1::{SampleWidth, source::AudioSource};
 use embassy_usb::control::{Recipient, Request, RequestType};
 use embassy_usb::driver::*;
 use embassy_usb::{Builder, Config, Handler};
+
+#[test]
+fn microphone_diagnostics_are_read_only_and_keep_queue_and_xfrc_separate() {
+    use embassy_usb::{control::InResponse, types::InterfaceNumber};
+    use usb_diagnostics::MicrophoneDiagnostics;
+    let mut handler = MicrophoneDiagnostics::new(0x83, 5, |ep| {
+        assert_eq!(ep, 0x83);
+        Some((5001, 4999))
+    });
+    handler.reset();
+    handler.set_alternate_setting(InterfaceNumber(4), 1); // another function
+    handler.set_alternate_setting(InterfaceNumber(5), 0);
+    handler.set_alternate_setting(InterfaceNumber(5), 1);
+    let req = Request { direction: Direction::In, request_type: RequestType::Vendor,
+        recipient: Recipient::Device, request: 0x5a, value: 0x4d49, index: 0, length: 32 };
+    let mut buf = [0; 128];
+    for _ in 0..2 {
+        let Some(InResponse::Accepted(data)) = handler.control_in(req, &mut buf) else {
+            panic!("diagnostic request rejected");
+        };
+        let words: Vec<_> = data.chunks_exact(4)
+            .map(|c| u32::from_le_bytes(c.try_into().unwrap())).collect();
+        assert_eq!(words, [u32::from_le_bytes(*b"MIC1"), 0x83, 5001, 4999, 1, 1, 1, 1]);
+    }
+    handler.reset();
+    let Some(InResponse::Accepted(data)) = handler.control_in(req, &mut buf) else { panic!() };
+    assert_eq!(&data[8..16], &[0x89, 0x13, 0, 0, 0x87, 0x13, 0, 0]); // counters not reset
+    assert_eq!(data[16], 2);
+    assert_eq!(data[28], 0);
+    assert!(handler.control_in(Request { request_type: RequestType::Class, ..req }, &mut buf).is_none());
+    assert!(handler.control_in(Request { recipient: Recipient::Interface, ..req }, &mut buf).is_none());
+    assert!(handler.control_in(Request { value: 0, ..req }, &mut buf).is_none());
+    assert!(matches!(handler.control_in(Request { length: 64, ..req }, &mut buf), Some(InResponse::Rejected)));
+    assert!(matches!(handler.control_in(req, &mut [0; 16]), Some(InResponse::Rejected)));
+    assert!(handler.control_out(req, &[]).is_none());
+}
 
 // Allocation-only driver: exercise the actual descriptor builder without hardware.
 struct TestDriver {
