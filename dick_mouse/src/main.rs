@@ -106,7 +106,7 @@ async fn main(spawner: Spawner) {
             peripherals.GPIO14.degrade(),
         )
         .expect("failed to create speaker task"),
-    );z
+    );
     spawner.spawn(
         tasks::keyboard::keyboard_task(
             peripherals.GPIO40.degrade(),
