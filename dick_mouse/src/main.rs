@@ -68,8 +68,8 @@ async fn main(spawner: Spawner) {
             peripherals.ADC1,
             peripherals.GPIO1,
             peripherals.GPIO2,
-            peripherals.GPIO37.degrade(),
-            peripherals.GPIO36.degrade(),
+            peripherals.GPIO47.degrade(),
+            peripherals.GPIO48.degrade(),
         )
         .expect("failed to create mouse task"),
     );
@@ -97,8 +97,8 @@ async fn main(spawner: Spawner) {
     spawner.spawn(
         tasks::keyboard::keyboard_task(
             peripherals.GPIO42.degrade(),
-            peripherals.GPIO41.degrade(),
             peripherals.GPIO40.degrade(),
+            peripherals.GPIO41.degrade(),
         )
         .expect("failed to create keyboard task"),
     );
