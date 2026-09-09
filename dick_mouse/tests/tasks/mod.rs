@@ -31,7 +31,7 @@ mod tests {
             forward_pressed: true,
         };
         let normal = tasks::hid::keyboard_report(false, keyboard, Default::default());
-        assert_eq!(normal.modifier, 0x04);
+        assert_eq!(normal.modifier, 0x01);
         assert_eq!(
             normal.keycodes,
             [
@@ -51,7 +51,7 @@ mod tests {
             },
             Default::default(),
         );
-        assert_eq!(remaining.modifier, 0x04);
+        assert_eq!(remaining.modifier, 0x01);
         assert_eq!(
             remaining.keycodes,
             [KeyboardUsage::KeyboardLeftArrow as u8, 0, 0, 0, 0, 0]

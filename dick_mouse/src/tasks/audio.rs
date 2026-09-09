@@ -1,6 +1,6 @@
+use super::audio_format::{fade_to_zero, microphone_sample, speaker_frame};
 use crate::device::{Button, RotaryEncoder};
 use core::sync::atomic::{AtomicBool, AtomicI32, AtomicU32, Ordering};
-use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
 use embassy_time::{Duration, Timer};
 use esp_hal::{
     Async,
@@ -10,7 +10,8 @@ use esp_hal::{
     pcnt::{channel, unit::Unit},
     time::Instant,
 };
-use esp_println::println;
+use heapless::spsc::{Consumer, Producer, Queue};
+use static_cell::StaticCell;
 
 pub(crate) const AUDIO_FRAME_SAMPLES: usize = 48;
 // USB and application frames contain 16-bit PCM samples.
@@ -20,11 +21,12 @@ pub(crate) const AUDIO_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::siz
 pub const I2S_FRAME_BYTES: usize = AUDIO_FRAME_SAMPLES * core::mem::size_of::<i32>();
 
 // These are sample rings, not frame queues. USB and I2S run from independent clocks.
-pub(crate) const AUDIO_RING_CAPACITY: usize = 8192;
-pub(crate) const MICROPHONE_RING_TARGET: usize = AUDIO_RING_CAPACITY / 2;
-pub(crate) const SPEAKER_RING_TARGET: usize = AUDIO_RING_CAPACITY / 2;
+// heapless reserves one slot; usable capacity is 2047 mono samples.
+pub(crate) const AUDIO_RING_CAPACITY: usize = 2048;
+pub(crate) const SPEAKER_RING_TARGET: usize = 256;
 const MICROPHONE_DMA_BUFFER_BYTES: usize = I2S_FRAME_BYTES * 16;
-const SPEAKER_DMA_BUFFER_BYTES: usize = 4096;
+// Stereo S32 occupies 8 bytes/sample; retain about 21 ms of DMA headroom.
+const SPEAKER_DMA_BUFFER_BYTES: usize = 8192;
 pub(crate) const SPEAKER_DMA_CHUNK_BYTES: usize = 512;
 
 fn reset_speaker_dma_buffer(buffer: DmaTxStreamBuf) -> DmaTxStreamBuf {
@@ -38,10 +40,18 @@ pub(crate) const DEFAULT_VOLUME_PERCENT: u8 = 100;
 pub(crate) const VOLUME_STEP_PERCENT: i32 = 5;
 const COUNTS_PER_DETENT: i32 = 4;
 
-pub(crate) static MICROPHONE_RING: Channel<CriticalSectionRawMutex, i16, AUDIO_RING_CAPACITY> =
-    Channel::new();
-pub(crate) static SPEAKER_RING: Channel<CriticalSectionRawMutex, i16, AUDIO_RING_CAPACITY> =
-    Channel::new();
+pub struct SpeakerSample {
+    pub(crate) epoch: u32,
+    pub(crate) pcm: i16,
+}
+
+pub static MICROPHONE_RING: StaticCell<Queue<i16, AUDIO_RING_CAPACITY>> = StaticCell::new();
+pub static SPEAKER_RING: StaticCell<Queue<SpeakerSample, AUDIO_RING_CAPACITY>> = StaticCell::new();
+pub(crate) static SPEAKER_EPOCH: AtomicU32 = AtomicU32::new(0);
+pub(crate) static SPEAKER_RING_LEVEL: AtomicU32 = AtomicU32::new(0);
+pub(crate) static SPEAKER_STREAMING: AtomicBool = AtomicBool::new(false);
+pub(crate) static SPEAKER_LAST_PACKET_MS: AtomicU32 = AtomicU32::new(0);
+pub(crate) static SPEAKER_USB_GAIN_Q15: AtomicU32 = AtomicU32::new(32768);
 pub(crate) static MICROPHONE_STREAMING: AtomicBool = AtomicBool::new(false);
 pub(crate) static SPEAKER_FEEDBACK_Q14: AtomicU32 = AtomicU32::new(48 << 14);
 static SPEAKER_FEEDBACK_INTEGRAL: AtomicI32 = AtomicI32::new(0);
@@ -117,6 +127,7 @@ fn encoder_detents<const NUM: usize>(
 #[embassy_executor::task]
 pub async fn microphone_task(
     mut i2s_rx: I2sRx<'static, Async>,
+    mut microphone_ring: Producer<'static, i16>,
     mute_gpio: AnyPin<'static>,
     volume_unit: Unit<'static, 1>,
     volume_gpio_a: AnyPin<'static>,
@@ -124,16 +135,13 @@ pub async fn microphone_task(
 ) {
     let mute_input = Input::new(mute_gpio, InputConfig::default().with_pull(Pull::Up));
     let mut mute_button = Button::new(mute_input.level(), Level::Low, 5);
-    let mut muted = false;
+    let mut muted = mute_button.is_pressed();
     let (mut volume_encoder, mut reported_count) =
         setup_volume_encoder(&volume_unit, volume_gpio_a, volume_gpio_b);
     let mut volume = DEFAULT_VOLUME_PERCENT;
     let mut dma_buffer =
         esp_hal::dma_rx_stream_buffer!(MICROPHONE_DMA_BUFFER_BYTES, I2S_FRAME_BYTES);
     let mut bytes = [0; I2S_FRAME_BYTES];
-    let mut captured_frames = 0u32;
-    let mut raw_peak = 0i16;
-    let mut usb_peak = 0i16;
 
     loop {
         let mut transfer = match i2s_rx.read(dma_buffer) {
@@ -177,39 +185,22 @@ pub async fn microphone_task(
                 let volume = if muted { 0 } else { volume };
                 for chunk in bytes.chunks_exact(4) {
                     // INMP441 data is left-aligned in each 32-bit I2S slot.
-                    let raw = i32::from_le_bytes([chunk[0], chunk[1], chunk[2], chunk[3]]);
-                    let raw_sample = (raw >> 16) as i16;
-                    raw_peak = raw_peak.max(raw_sample.saturating_abs());
+                    let raw_sample = microphone_sample(chunk);
                     let sample = (i32::from(raw_sample.saturating_mul(MICROPHONE_GAIN))
                         * i32::from(volume)
                         / 100) as i16;
-                    usb_peak = usb_peak.max(sample.saturating_abs());
 
                     if MICROPHONE_STREAMING.load(Ordering::Acquire) {
-                        if MICROPHONE_RING.try_send(sample).is_err() {
-                            // Keep the newest sample and record the exceptional overflow.
+                        if microphone_ring.enqueue(sample).is_err() {
+                            // Exceptional overflow: the producer must never move the consumer cursor.
                             MICROPHONE_OVERFLOWS.fetch_add(1, Ordering::Relaxed);
-                            let _ = MICROPHONE_RING.try_receive();
-                            let _ = MICROPHONE_RING.try_send(sample);
                         }
                     }
                 }
 
-                let ring = MICROPHONE_RING.len() as u32;
+                let ring = microphone_ring.len() as u32;
                 MICROPHONE_RING_MIN.fetch_min(ring, Ordering::Relaxed);
                 MICROPHONE_RING_MAX.fetch_max(ring, Ordering::Relaxed);
-                captured_frames = captured_frames.wrapping_add(1);
-                if captured_frames % 10_000 == 0 {
-                    println!(
-                        "microphone: i2s raw_peak={}, usb_peak={}, ring={}, streaming={}",
-                        raw_peak,
-                        usb_peak,
-                        ring,
-                        MICROPHONE_STREAMING.load(Ordering::Acquire)
-                    );
-                    raw_peak = 0;
-                    usb_peak = 0;
-                }
             }
 
             if wait_error {
@@ -228,7 +219,7 @@ pub(crate) fn update_speaker_feedback() {
     const NOMINAL_Q14: u32 = 48 << 14;
     // Low-bandwidth occupancy controller. The I2S stream is continuous, so this
     // observes a smooth sample ring instead of the old 20 ms dequeue burst.
-    let ring = SPEAKER_RING.len() as i32;
+    let ring = SPEAKER_RING_LEVEL.load(Ordering::Relaxed) as i32;
     let error = ring - SPEAKER_RING_TARGET as i32;
     let integral = SPEAKER_FEEDBACK_INTEGRAL
         .load(Ordering::Relaxed)
@@ -255,6 +246,7 @@ pub(crate) fn reset_speaker_feedback() {
 #[embassy_executor::task]
 pub async fn speaker_task(
     mut i2s_tx: I2sTx<'static, Async>,
+    mut speaker_ring: Consumer<'static, SpeakerSample>,
     mute_gpio: AnyPin<'static>,
     volume_unit: Unit<'static, 2>,
     volume_gpio_a: AnyPin<'static>,
@@ -262,7 +254,7 @@ pub async fn speaker_task(
 ) {
     let mute_input = Input::new(mute_gpio, InputConfig::default().with_pull(Pull::Up));
     let mut mute_button = Button::new(mute_input.level(), Level::Low, 5);
-    let mut muted = false;
+    let mut muted = mute_button.is_pressed();
     let (mut volume_encoder, mut reported_count) =
         setup_volume_encoder(&volume_unit, volume_gpio_a, volume_gpio_b);
     let mut volume = DEFAULT_VOLUME_PERCENT;
@@ -275,6 +267,7 @@ pub async fn speaker_task(
         buffer.len()
     });
     let mut last_sample = 0i16;
+    let mut epoch = SPEAKER_EPOCH.load(Ordering::Acquire);
 
     loop {
         let mut transfer = match i2s_tx.write(dma_buffer) {
@@ -287,11 +280,27 @@ pub async fn speaker_task(
                     buffer.fill(0);
                     buffer.len()
                 });
+                // A persistent DMA setup error must still yield to USB enumeration.
+                Timer::after(Duration::from_millis(1)).await;
                 continue;
             }
         };
 
         loop {
+            // Check TotalEof before consuming any ring data; stopped descriptors
+            // must not absorb samples that will be discarded during reset.
+            if transfer.is_done() {
+                SPEAKER_DMA_RESTARTS.fetch_add(1, Ordering::Relaxed);
+                let (tx, buffer) = transfer.stop();
+                i2s_tx = tx;
+                dma_buffer = reset_speaker_dma_buffer(buffer);
+                let _ = dma_buffer.push_with(|bytes| {
+                    bytes.fill(0);
+                    bytes.len()
+                });
+                Timer::after(Duration::from_millis(1)).await;
+                break;
+            }
             if transfer.available_bytes() == 0 {
                 if transfer.wait_for_available_async().await.is_err() {
                     SPEAKER_DMA_RESTARTS.fetch_add(1, Ordering::Relaxed);
@@ -307,7 +316,30 @@ pub async fn speaker_task(
                 }
             }
 
+            let current_epoch = SPEAKER_EPOCH.load(Ordering::Acquire);
+            if epoch != current_epoch {
+                epoch = current_epoch;
+                last_sample = 0;
+                // Discard only old sessions. Fresh packets queued after Alt 1
+                // are retained, even if the audio task handles the change late.
+                while speaker_ring
+                    .peek()
+                    .is_some_and(|sample| sample.epoch != epoch)
+                {
+                    let _ = speaker_ring.dequeue();
+                }
+            }
             let now_ms = Instant::now().duration_since_epoch().as_millis();
+            let streaming = SPEAKER_STREAMING.load(Ordering::Acquire)
+                && (now_ms as u32).wrapping_sub(SPEAKER_LAST_PACKET_MS.load(Ordering::Acquire))
+                    < 100;
+            if !streaming {
+                // Only this consumer advances the read cursor.
+                let queued = speaker_ring.len();
+                for _ in 0..queued {
+                    let _ = speaker_ring.dequeue();
+                }
+            }
             mute_button = mute_button.update(mute_input.level(), now_ms);
             if mute_button.changed() && mute_button.is_pressed() {
                 muted = !muted;
@@ -324,31 +356,33 @@ pub async fn speaker_task(
                 )
                 .clamp(0, 100) as u8;
             let volume = if muted { 0 } else { volume };
+            let usb_gain = SPEAKER_USB_GAIN_Q15.load(Ordering::Acquire);
 
             while transfer.available_bytes() > 0 {
                 let _ = transfer.push_with(|buffer| {
                     let mut written = 0;
-                    for chunk in buffer.chunks_exact_mut(4) {
-                        let sample = match SPEAKER_RING.try_receive() {
-                            Ok(sample) => {
-                                last_sample = sample;
-                                sample
+                    for chunk in buffer.chunks_exact_mut(8) {
+                        let sample = match speaker_ring.dequeue() {
+                            Some(sample) if sample.epoch == epoch && streaming => {
+                                last_sample = sample.pcm;
+                                sample.pcm
                             }
-                            Err(_) => {
-                                SPEAKER_UNDERFLOWS.fetch_add(1, Ordering::Relaxed);
+                            _ => {
+                                if streaming {
+                                    SPEAKER_UNDERFLOWS.fetch_add(1, Ordering::Relaxed);
+                                }
+                                last_sample = fade_to_zero(last_sample);
                                 last_sample
                             }
                         };
-                        let sample = (i32::from(sample) * i32::from(volume) / 100) as i16;
-                        let sample = sample.to_le_bytes();
-                        chunk[..2].copy_from_slice(&sample);
-                        chunk[2..].copy_from_slice(&sample);
-                        written += 4;
+                        chunk.copy_from_slice(&speaker_frame(sample, volume, usb_gain));
+                        written += 8;
                     }
                     written
                 });
             }
-            let ring = SPEAKER_RING.len() as u32;
+            let ring = speaker_ring.len() as u32;
+            SPEAKER_RING_LEVEL.store(ring, Ordering::Relaxed);
             SPEAKER_RING_MIN.fetch_min(ring, Ordering::Relaxed);
             SPEAKER_RING_MAX.fetch_max(ring, Ordering::Relaxed);
         }

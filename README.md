@@ -87,7 +87,7 @@ flowchart TD
     MicMuteGpio["PERIPHERAL: GPIO4 microphone mute"]
     MicVolumePcnt["PERIPHERAL: PCNT1 GPIO13/14 volume encoder"]
     MicrophoneTask["TASK: microphone_task"]
-    MicrophoneFrames["CHANNEL: MICROPHONE_FRAMES"]
+    MicrophoneFrames["SPSC: MICROPHONE_RING"]
     I2sMic --> MicrophoneTask
     MicMuteGpio --> MicrophoneTask
     MicVolumePcnt --> MicrophoneTask
@@ -96,7 +96,7 @@ flowchart TD
 
   subgraph Speaker["speaker"]
     direction TB
-    SpeakerFrames["CHANNEL: SPEAKER_FRAMES"]
+    SpeakerFrames["SPSC: SPEAKER_RING"]
     SpeakerMuteGpio["PERIPHERAL: GPIO5 speaker mute"]
     SpeakerVolumePcnt["PERIPHERAL: PCNT2 GPIO40/41 volume encoder"]
     SpeakerTask["TASK: speaker_task"]
@@ -175,10 +175,10 @@ USB HID と USB Audio は、同じ列で入力、処理、出力を示します�
 
 | task | 入力 | 処理 | 出力 |
 | --- | --- | --- | --- |
-| `microphone_task` | I2S RX、mute GPIO、volume encoder の PCNT | mute と音量を反映し、I2S frame を音声フレームへ変換する | `MICROPHONE_FRAMES` |
-| `usb_task`（microphone） | `MICROPHONE_FRAMES` | mono sample を左右へ複製し、UAC1 packet を組み立てる | USB UAC1 microphone |
-| `usb_task`（speaker） | USB UAC1 speaker | UAC1 packet を音声フレームへ変換する | `SPEAKER_FRAMES` |
-| `speaker_task` | `SPEAKER_FRAMES`、mute GPIO、volume encoder の PCNT | mute と音量を反映し、音声フレームをI2S frameへ変換する | I2S TX |
+| `microphone_task` | I2S RX、mute GPIO、volume encoder の PCNT | DMAを常時drainし、muteと音量を反映したmono S16を格納する | `MICROPHONE_RING` |
+| `usb_task`（microphone） | `MICROPHONE_RING` | リングを待たずに47/48/49 sampleのmono packetを組み立てる | USB UAC1 microphone |
+| `usb_task`（speaker） | USB UAC1 speaker | mono S16を格納し、USB mute/volumeも監視する | `SPEAKER_RING` |
+| `speaker_task` | `SPEAKER_RING`、mute GPIO、volume encoder の PCNT | USBと物理入力のmute/volumeを反映し、連続DMAへstereo S32を補充する | I2S TX |
 
 ## 入力割り当て
 
@@ -204,13 +204,17 @@ USB HID と USB Audio は、同じ列で入力、処理、出力を示します�
 | --- | --- | --- | --- |
 | Keyboard | HID、report ID `1` | ESP32-S3 から PC | modifier、6 keycodes |
 | Mouse | HID、report ID `2` | ESP32-S3 から PC | buttons、X/Y、wheel、pan |
-| Microphone | UAC1 source | ESP32-S3 から PC | 48 kHz、16-bit、stereo |
+| Microphone | UAC1 source | ESP32-S3 から PC | 48 kHz、16-bit、mono、単一IN、feedbackなし |
 | Speaker | UAC1 speaker | PC から ESP32-S3 | 48 kHz、16-bit、mono（Left Front） |
 
-I2S は RX、TX ともに 48 kHz、32-bit slot、mono で動作します。
-INMP441 の 24-bit データを RX で 16-bit PCM に変換し、USB へ送信します。
+I2S は RX、TX ともに 48 kHz、32-bit slot で動作します。
+RX はINMP441の左スロットだけをDMAへ取り込み、符号付き24-bitから16-bit PCMへ変換します（L/R端子はLow）。
+TX はUSBのmono S16を32-bitの上位16 bitへ配置し、左右両スロットへ複製します。
+マイクは未実装のUSB音量制御を広告せず、スピーカーはUSBのmute/volumeと物理ボタンをPCMへ反映します。
+音声にはheaplessのSPSCキューを使用し、USB/I2S処理中にUARTログを出しません。
 
-USB microphone には、I2S RX の mono sample を左右の channel へ複製して送信します。
+現在の試作機の配線と再録音の確認方法は [AUDIO_CHECK.md](AUDIO_CHECK.md) を参照してください。
+以下の回路設計用ピン表と試作機の `main.rs` は異なるため、配線の変更時には `main.rs` を確認してください。
 
 ## ピン割り当て
 

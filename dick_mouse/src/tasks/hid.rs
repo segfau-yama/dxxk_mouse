@@ -38,7 +38,7 @@ pub(crate) fn keyboard_report(
 ) -> KeyboardReport {
     let mut report = KeyboardReport::default();
     if !game_mode && (keyboard.back_pressed || keyboard.forward_pressed) {
-        report.modifier = 0x04;
+        report.modifier = 0x01; // Left Ctrl (0x04 is Left Alt).
     }
     let mut keycode_index = 0;
     let mut push_key = |key: KeyboardUsage, pressed: bool| {

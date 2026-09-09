@@ -4,12 +4,6 @@
 	(generator_version "10.0")
 	(uuid "3f611c79-1bfe-4c28-9232-503c7924e111")
 	(paper "A3")
-	(title_block
-		(title "おちんちんマウス回路")
-		(date "2026-08-16")
-		(rev "v0.1.0")
-		(company "株式会社ウメモドキ")
-	)
 	(lib_symbols
 		(symbol "Audio:PCM5102A"
 			(exclude_from_sim no)
@@ -5031,207 +5025,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Switch:SW_Wuerth_450301014042"
-			(pin_names
-				(offset 1)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "SW"
-				(at 0 5.08 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "SW_Wuerth_450301014042"
-				(at 0 -5.08 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "Button_Switch_THT:SW_Slide-03_Wuerth-WS-SLTV_10x2.5x6.4_P2.54mm"
-				(at 0 -10.16 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" "https://www.we-online.com/components/products/datasheet/450301014042.pdf"
-				(at 0 -7.62 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Switch slide, single pole double throw"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "changeover single-pole opposite-side-connection double-throw spdt ON-ON"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "SW*Wuerth*WS*SLTV*10x2.5x6.4*P2.54mm*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "SW_Wuerth_450301014042_0_1"
-				(circle
-					(center -2.032 0)
-					(radius 0.4572)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.651 0.254) (xy 1.651 2.286)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 2.032 2.54)
-					(radius 0.4572)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 2.032 -2.54)
-					(radius 0.4572)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "SW_Wuerth_450301014042_1_1"
-				(rectangle
-					(start -3.175 3.81)
-					(end 3.175 -3.81)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(pin passive line
-					(at -5.08 0 0)
-					(length 2.54)
-					(name "B"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 -2.54 180)
-					(length 2.54)
-					(name "C"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 2.54 180)
-					(length 2.54)
-					(name "A"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "power:+3.3V"
 			(power global)
 			(pin_numbers
@@ -5920,10 +5713,6 @@
 		(uuid "114e1e8d-ab5d-4b6d-a6df-a0030c2b9426")
 	)
 	(no_connect
-		(at 62.23 233.68)
-		(uuid "a034d124-e2bc-499d-be22-ac4cc27aaf64")
-	)
-	(no_connect
 		(at 53.34 57.15)
 		(uuid "d228cc42-0189-4870-9b53-fa20280763b7")
 	)
@@ -5956,16 +5745,6 @@
 			(type default)
 		)
 		(uuid "0193f0e9-c3a7-4ca5-9478-413849a549b0")
-	)
-	(wire
-		(pts
-			(xy 52.07 231.14) (xy 50.8 231.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "01ddf797-9ceb-49f7-add7-5bf7d8043960")
 	)
 	(wire
 		(pts
@@ -7699,6 +7478,16 @@
 	)
 	(wire
 		(pts
+			(xy 52.07 228.6) (xy 50.8 228.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c0f18092-8c06-4280-b66c-e7bbabaa74ac")
+	)
+	(wire
+		(pts
 			(xy 203.2 123.19) (xy 196.85 123.19)
 		)
 		(stroke
@@ -8557,16 +8346,6 @@
 		)
 		(uuid "73c3ab5b-abf0-4fd9-b1ba-8cf1b3544267")
 	)
-	(label "SW7"
-		(at 50.8 231.14 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "7f19c582-66dd-45f5-98f2-1fdbc8f78644")
-	)
 	(label "ENC2_B"
 		(at 342.9 57.15 0)
 		(effects
@@ -8726,6 +8505,16 @@
 			(justify right bottom)
 		)
 		(uuid "a62a4836-34f9-4cf5-b5b4-dc8586a8785d")
+	)
+	(label "SW7"
+		(at 50.8 228.6 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a7505b78-b20b-463f-bb8f-9f4d9262ba7b")
 	)
 	(label "IO45"
 		(at 38.1 152.4 0)
@@ -9119,7 +8908,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "01514144-fc5a-4688-b473-03dba2c22a75")
-		(property "Reference" "D3"
+		(property "Reference" "D4"
 			(at 63.8175 22.86 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9181,7 +8970,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "D3")
+					(reference "D4")
 					(unit 1)
 				)
 			)
@@ -9199,7 +8988,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "04519b15-1b0e-457a-94af-43b041be02aa")
-		(property "Reference" "#PWR047"
+		(property "Reference" "#PWR049"
 			(at 342.9 119.38 0)
 			(hide yes)
 			(show_name no)
@@ -9259,171 +9048,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR047")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 317.5 107.95 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "048a379f-1717-4c44-a6bb-ce53e6851460")
-		(property "Reference" "C17"
-			(at 321.31 106.6799 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10u"
-			(at 321.31 109.2199 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 318.4652 111.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 317.5 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor"
-			(at 317.5 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "1be129ee-e980-42e0-a31e-a2d0b3815f0e")
-		)
-		(pin "1"
-			(uuid "ad8c04b2-1ed2-49d1-9010-81e7dcb41c6b")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "C17")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 279.4 146.05 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "04dad62f-86ee-4797-8a5a-182b47ebad9a")
-		(property "Reference" "C15"
-			(at 283.21 144.7799 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10u"
-			(at 283.21 147.3199 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 280.3652 149.86 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 279.4 146.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor"
-			(at 279.4 146.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "9cb010a2-8fc2-4ac6-a6ea-92e6284b824d")
-		)
-		(pin "1"
-			(uuid "1528564d-32f8-4493-85c1-d0f8240895fd")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "C15")
+					(reference "#PWR049")
 					(unit 1)
 				)
 			)
@@ -9519,7 +9144,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0abf1d12-5133-453c-ad13-7a3210818efe")
-		(property "Reference" "#PWR049"
+		(property "Reference" "#PWR051"
 			(at 342.9 245.11 0)
 			(hide yes)
 			(show_name no)
@@ -9579,7 +9204,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR049")
+					(reference "#PWR051")
 					(unit 1)
 				)
 			)
@@ -9775,7 +9400,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" ""
 			(at 204.1652 118.11 0)
 			(hide yes)
 			(show_name no)
@@ -9824,6 +9449,88 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C_Polarized")
+		(at 317.5 107.95 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "124e2c71-e152-44ad-bfa9-64dbe369625d")
+		(property "Reference" "C17"
+			(at 321.31 105.7909 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10u"
+			(at 321.31 108.3309 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 318.4652 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 317.5 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Polarized capacitor"
+			(at 317.5 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "f0512951-15a7-4bbd-bb9a-5ce2a30d5eb1")
+		)
+		(pin "1"
+			(uuid "1e8fbc97-0a0e-4b5b-afb2-dd93d4e8bb2d")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "C17")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C")
 		(at 266.7 120.65 0)
 		(unit 1)
@@ -9857,7 +9564,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" ""
 			(at 267.6652 124.46 0)
 			(hide yes)
 			(show_name no)
@@ -10152,7 +9859,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1eec9ea9-4605-48ee-919d-0f87c5ac7f07")
-		(property "Reference" "#PWR051"
+		(property "Reference" "#PWR053"
 			(at 374.65 54.61 0)
 			(hide yes)
 			(show_name no)
@@ -10212,7 +9919,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR051")
+					(reference "#PWR053")
 					(unit 1)
 				)
 			)
@@ -10230,7 +9937,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1f4d38f2-92b4-4e72-b742-a5839c5e7283")
-		(property "Reference" "#PWR06"
+		(property "Reference" "#PWR07"
 			(at 63.5 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -10290,7 +9997,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR06")
+					(reference "#PWR07")
 					(unit 1)
 				)
 			)
@@ -10308,7 +10015,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2120c2ea-f8d3-48e3-8066-c96aa155ca11")
-		(property "Reference" "#PWR029"
+		(property "Reference" "#PWR031"
 			(at 184.15 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -10368,7 +10075,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR029")
+					(reference "#PWR031")
 					(unit 1)
 				)
 			)
@@ -10386,7 +10093,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "23ccb65b-5e23-4398-99cc-a1c4f1f7dbae")
-		(property "Reference" "#PWR045"
+		(property "Reference" "#PWR047"
 			(at 342.9 69.85 0)
 			(hide yes)
 			(show_name no)
@@ -10446,90 +10153,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR045")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Switch:SW_Wuerth_450301014042")
-		(at 57.15 231.14 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "27a1051d-8e2c-4802-8ad7-387e4914cdbf")
-		(property "Reference" "SW7"
-			(at 57.15 222.25 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SW_Wuerth_450301014042"
-			(at 57.15 224.79 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Button_Switch_THT:SW_Slide-03_Wuerth-WS-SLTV_10x2.5x6.4_P2.54mm"
-			(at 57.15 241.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.we-online.com/components/products/datasheet/450301014042.pdf"
-			(at 57.15 238.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Switch slide, single pole double throw"
-			(at 57.15 231.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "729d2147-286d-496c-9ec5-2f7045395c2d")
-		)
-		(pin "1"
-			(uuid "9c404c46-f520-4260-be81-55bcfc058c0c")
-		)
-		(pin "3"
-			(uuid "9fa04e43-e86c-4f9e-b745-7152b252723f")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "SW7")
+					(reference "#PWR047")
 					(unit 1)
 				)
 			)
@@ -10547,7 +10171,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2a29a9ec-7c8e-4ae1-89b9-bfa0746d60c1")
-		(property "Reference" "#PWR014"
+		(property "Reference" "#PWR06"
 			(at 69.85 33.02 0)
 			(hide yes)
 			(show_name no)
@@ -10607,7 +10231,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR014")
+					(reference "#PWR06")
 					(unit 1)
 				)
 			)
@@ -10625,7 +10249,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2b319833-266b-46c0-a26c-c937e6768202")
-		(property "Reference" "#PWR046"
+		(property "Reference" "#PWR048"
 			(at 342.9 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -10685,7 +10309,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR046")
+					(reference "#PWR048")
 					(unit 1)
 				)
 			)
@@ -10724,7 +10348,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" ""
 			(at 216.8652 114.3 0)
 			(hide yes)
 			(show_name no)
@@ -10862,7 +10486,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3c500b32-af66-4eb3-a579-a12ac8c6d9bc")
-		(property "Reference" "#PWR032"
+		(property "Reference" "#PWR034"
 			(at 279.4 105.41 0)
 			(hide yes)
 			(show_name no)
@@ -10922,7 +10546,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR032")
+					(reference "#PWR034")
 					(unit 1)
 				)
 			)
@@ -10940,7 +10564,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3cc59709-c8e5-4928-ac08-33436c08efc6")
-		(property "Reference" "#PWR027"
+		(property "Reference" "#PWR029"
 			(at 171.45 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -11000,7 +10624,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR027")
+					(reference "#PWR029")
 					(unit 1)
 				)
 			)
@@ -11038,7 +10662,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KSC6xxG"
+		(property "Footprint" ""
 			(at 57.15 166.37 0)
 			(hide yes)
 			(show_name no)
@@ -11120,7 +10744,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" ""
 			(at 305.7652 111.76 0)
 			(hide yes)
 			(show_name no)
@@ -11202,7 +10826,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:CP_Elec_5x5.9"
+		(property "Footprint" ""
 			(at 115.2652 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -11284,7 +10908,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+		(property "Footprint" ""
 			(at 355.6 106.68 0)
 			(hide yes)
 			(show_name no)
@@ -11366,7 +10990,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
+		(property "Footprint" ""
 			(at 25.4 196.85 0)
 			(hide yes)
 			(show_name no)
@@ -11537,7 +11161,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
+		(property "Footprint" ""
 			(at 355.6 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -11600,7 +11224,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "54ff47a3-fe0b-4bc4-94c0-96d088a08bc9")
-		(property "Reference" "#PWR036"
+		(property "Reference" "#PWR038"
 			(at 317.5 105.41 0)
 			(hide yes)
 			(show_name no)
@@ -11660,7 +11284,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR036")
+					(reference "#PWR038")
 					(unit 1)
 				)
 			)
@@ -11912,7 +11536,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "5e865fe0-e5a7-4c7c-a984-4981768d0e3d")
-		(property "Reference" "D4"
+		(property "Reference" "D3"
 			(at 97.79 38.4174 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11934,7 +11558,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
+		(property "Footprint" ""
 			(at 101.6 38.1 0)
 			(hide yes)
 			(show_name no)
@@ -11987,7 +11611,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "D4")
+					(reference "D3")
 					(unit 1)
 				)
 			)
@@ -12005,7 +11629,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5facca94-c70b-4b74-87bb-68f420c8de71")
-		(property "Reference" "U4"
+		(property "Reference" "U5"
 			(at 188.8333 95.25 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12123,7 +11747,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "U4")
+					(reference "U5")
 					(unit 1)
 				)
 			)
@@ -12141,7 +11765,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6487f0e5-503e-4e1c-b758-abb27073d981")
-		(property "Reference" "#PWR013"
+		(property "Reference" "#PWR014"
 			(at 63.5 241.3 0)
 			(hide yes)
 			(show_name no)
@@ -12201,7 +11825,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR013")
+					(reference "#PWR014")
 					(unit 1)
 				)
 			)
@@ -12241,7 +11865,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical"
+		(property "Footprint" ""
 			(at 355.6 184.15 0)
 			(hide yes)
 			(show_name no)
@@ -12388,7 +12012,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6a72a54d-18d7-41cc-81eb-a23cc5d5ca19")
-		(property "Reference" "#PWR044"
+		(property "Reference" "#PWR046"
 			(at 342.9 44.45 0)
 			(hide yes)
 			(show_name no)
@@ -12448,7 +12072,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR044")
+					(reference "#PWR046")
 					(unit 1)
 				)
 			)
@@ -12485,7 +12109,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+		(property "Footprint" ""
 			(at 58.42 32.512 90)
 			(hide yes)
 			(show_name no)
@@ -12623,7 +12247,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6dc1c5ee-5c74-4815-84f1-70e6a9dd5569")
-		(property "Reference" "#PWR048"
+		(property "Reference" "#PWR050"
 			(at 342.9 144.78 0)
 			(hide yes)
 			(show_name no)
@@ -12683,7 +12307,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR048")
+					(reference "#PWR050")
 					(unit 1)
 				)
 			)
@@ -12723,7 +12347,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" ""
 			(at 267.6652 162.56 0)
 			(hide yes)
 			(show_name no)
@@ -12889,7 +12513,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical"
+		(property "Footprint" ""
 			(at 355.6 158.75 0)
 			(hide yes)
 			(show_name no)
@@ -12948,6 +12572,86 @@
 	)
 	(symbol
 		(lib_id "Switch:SW_Push")
+		(at 57.15 228.6 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "76bba479-4881-41b9-8e1e-0ace70f989f5")
+		(property "Reference" "SW7"
+			(at 57.15 220.98 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SW_Push"
+			(at 57.15 223.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 57.15 223.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 57.15 223.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Push button switch, generic, two pins"
+			(at 57.15 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "b0dcce4d-afca-49f6-9aef-f80d79c07b8c")
+		)
+		(pin "2"
+			(uuid "39e4402d-7582-4bdf-977f-e4b3cad0890e")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "SW7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push")
 		(at 57.15 209.55 0)
 		(unit 1)
 		(body_style 1)
@@ -12978,7 +12682,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KSC6xxG"
+		(property "Footprint" ""
 			(at 57.15 204.47 0)
 			(hide yes)
 			(show_name no)
@@ -13058,7 +12762,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KSC6xxG"
+		(property "Footprint" ""
 			(at 57.15 185.42 0)
 			(hide yes)
 			(show_name no)
@@ -13196,7 +12900,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7f2704a5-2524-4890-a76f-d35d4c46b62f")
-		(property "Reference" "#PWR050"
+		(property "Reference" "#PWR052"
 			(at 374.65 49.53 0)
 			(hide yes)
 			(show_name no)
@@ -13256,7 +12960,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR050")
+					(reference "#PWR052")
 					(unit 1)
 				)
 			)
@@ -13294,7 +12998,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KSC6xxG"
+		(property "Footprint" ""
 			(at 57.15 109.22 0)
 			(hide yes)
 			(show_name no)
@@ -13454,7 +13158,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" ""
 			(at 127.9652 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -13661,7 +13365,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
+		(property "Footprint" ""
 			(at 355.6 82.55 0)
 			(hide yes)
 			(show_name no)
@@ -13746,7 +13450,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
+		(property "Footprint" ""
 			(at 355.6 31.75 0)
 			(hide yes)
 			(show_name no)
@@ -13809,7 +13513,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "876e2b7a-e6ff-4a68-80a4-4b6e3a6e08d8")
-		(property "Reference" "#PWR035"
+		(property "Reference" "#PWR037"
 			(at 279.4 171.45 0)
 			(hide yes)
 			(show_name no)
@@ -13869,7 +13573,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR035")
+					(reference "#PWR037")
 					(unit 1)
 				)
 			)
@@ -13909,7 +13613,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+		(property "Footprint" ""
 			(at 27.178 209.55 90)
 			(hide yes)
 			(show_name no)
@@ -13989,7 +13693,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KSC6xxG"
+		(property "Footprint" ""
 			(at 57.15 147.32 0)
 			(hide yes)
 			(show_name no)
@@ -14327,7 +14031,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8eeb040d-4232-46b5-ac00-55c3cd3dfa57")
-		(property "Reference" "#PWR07"
+		(property "Reference" "#PWR08"
 			(at 63.5 128.27 0)
 			(hide yes)
 			(show_name no)
@@ -14387,7 +14091,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR07")
+					(reference "#PWR08")
 					(unit 1)
 				)
 			)
@@ -14427,7 +14131,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" ""
 			(at 267.6652 111.76 0)
 			(hide yes)
 			(show_name no)
@@ -14585,7 +14289,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KSC6xxG"
+		(property "Footprint" ""
 			(at 57.15 128.27 0)
 			(hide yes)
 			(show_name no)
@@ -14667,7 +14371,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" ""
 			(at 24.4348 137.16 0)
 			(hide yes)
 			(show_name no)
@@ -14727,7 +14431,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9e4f97a9-1bae-4951-aa9d-bb1dd2afd23d")
-		(property "Reference" "#PWR011"
+		(property "Reference" "#PWR012"
 			(at 63.5 204.47 0)
 			(hide yes)
 			(show_name no)
@@ -14787,7 +14491,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR011")
+					(reference "#PWR012")
 					(unit 1)
 				)
 			)
@@ -14827,7 +14531,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
+		(property "Footprint" ""
 			(at 355.6 208.28 0)
 			(hide yes)
 			(show_name no)
@@ -14893,7 +14597,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a445a102-e07e-4b44-b13b-9c0e7ccc3762")
-		(property "Reference" "#PWR038"
+		(property "Reference" "#PWR044"
 			(at 330.2 209.55 0)
 			(hide yes)
 			(show_name no)
@@ -14953,7 +14657,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR038")
+					(reference "#PWR044")
 					(unit 1)
 				)
 			)
@@ -14993,7 +14697,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+		(property "Footprint" ""
 			(at 209.55 107.188 90)
 			(hide yes)
 			(show_name no)
@@ -15053,7 +14757,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a7b645ee-1158-4815-bba5-b7d6aac53433")
-		(property "Reference" "#PWR034"
+		(property "Reference" "#PWR036"
 			(at 279.4 143.51 0)
 			(hide yes)
 			(show_name no)
@@ -15113,7 +14817,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR034")
+					(reference "#PWR036")
 					(unit 1)
 				)
 			)
@@ -15231,7 +14935,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+		(property "Footprint" ""
 			(at 27.178 171.45 90)
 			(hide yes)
 			(show_name no)
@@ -15280,6 +14984,88 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C_Polarized")
+		(at 279.4 146.05 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "aebefb93-7493-4710-a7b8-d9174d14f5e9")
+		(property "Reference" "C15"
+			(at 283.21 143.8909 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10u"
+			(at 283.21 146.4309 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 280.3652 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 279.4 146.05 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Polarized capacitor"
+			(at 279.4 146.05 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "6eecd10d-b45c-4b4e-b574-1268ea0d303f")
+		)
+		(pin "1"
+			(uuid "77fcddbf-5817-4ecf-9245-4decb44f9f7a")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "C15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 209.55 102.87 90)
 		(mirror x)
@@ -15313,7 +15099,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+		(property "Footprint" ""
 			(at 209.55 101.092 90)
 			(hide yes)
 			(show_name no)
@@ -15395,7 +15181,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+		(property "Footprint" ""
 			(at 355.6 132.08 0)
 			(hide yes)
 			(show_name no)
@@ -15444,88 +15230,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 279.4 120.65 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "b6f824e6-0cfc-4782-959a-07f3345fdbde")
-		(property "Reference" "C14"
-			(at 283.21 119.3799 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10u"
-			(at 283.21 121.9199 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 280.3652 124.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 279.4 120.65 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor"
-			(at 279.4 120.65 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "8f95806a-c482-4c36-a183-64e6bb908f59")
-		)
-		(pin "1"
-			(uuid "dc3632aa-5f90-4091-a97e-934b17e8257f")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "C14")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R")
 		(at 101.6 50.8 0)
 		(mirror y)
@@ -15559,7 +15263,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+		(property "Footprint" ""
 			(at 103.378 50.8 90)
 			(hide yes)
 			(show_name no)
@@ -15738,7 +15442,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:CP_Elec_5x5.9"
+		(property "Footprint" ""
 			(at 185.1152 54.61 0)
 			(hide yes)
 			(show_name no)
@@ -15798,7 +15502,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c26946b1-6aeb-4193-b4eb-71a68cf8a42d")
-		(property "Reference" "#PWR012"
+		(property "Reference" "#PWR013"
 			(at 63.5 222.25 0)
 			(hide yes)
 			(show_name no)
@@ -15858,7 +15562,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR012")
+					(reference "#PWR013")
 					(unit 1)
 				)
 			)
@@ -16032,7 +15736,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c6650282-3e81-4cdc-aec7-8cb4706f0f71")
-		(property "Reference" "#PWR033"
+		(property "Reference" "#PWR035"
 			(at 279.4 133.35 0)
 			(hide yes)
 			(show_name no)
@@ -16092,7 +15796,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR033")
+					(reference "#PWR035")
 					(unit 1)
 				)
 			)
@@ -16110,7 +15814,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c9a46836-dc41-4653-beb0-d96fe155d3c5")
-		(property "Reference" "#PWR039"
+		(property "Reference" "#PWR045"
 			(at 330.2 220.98 0)
 			(hide yes)
 			(show_name no)
@@ -16170,7 +15874,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR039")
+					(reference "#PWR045")
 					(unit 1)
 				)
 			)
@@ -16266,7 +15970,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "cd6ae710-5c62-4b20-b1a5-d7b211fe3848")
-		(property "Reference" "#PWR09"
+		(property "Reference" "#PWR010"
 			(at 63.5 166.37 0)
 			(hide yes)
 			(show_name no)
@@ -16326,7 +16030,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR09")
+					(reference "#PWR010")
 					(unit 1)
 				)
 			)
@@ -16344,7 +16048,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d13e5ebf-4baa-40f3-b1c9-035931aa35d9")
-		(property "Reference" "#PWR028"
+		(property "Reference" "#PWR030"
 			(at 184.15 41.91 0)
 			(hide yes)
 			(show_name no)
@@ -16404,7 +16108,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR028")
+					(reference "#PWR030")
 					(unit 1)
 				)
 			)
@@ -16444,7 +16148,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+		(property "Footprint" ""
 			(at 27.178 120.65 90)
 			(hide yes)
 			(show_name no)
@@ -16493,8 +16197,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 279.4 107.95 0)
+		(lib_id "Device:C_Polarized")
+		(at 279.4 120.65 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -16503,9 +16207,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "ddee3403-066b-42ac-b4e6-126d5d69a3b6")
-		(property "Reference" "C13"
-			(at 283.21 106.6799 0)
+		(uuid "dab9f587-e317-4594-8059-11d3dcac6bc0")
+		(property "Reference" "C14"
+			(at 283.21 118.4909 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16516,7 +16220,7 @@
 			)
 		)
 		(property "Value" "10u"
-			(at 283.21 109.2199 0)
+			(at 283.21 121.0309 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16526,8 +16230,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 280.3652 111.76 0)
+		(property "Footprint" ""
+			(at 280.3652 124.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16538,7 +16242,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 279.4 107.95 0)
+			(at 279.4 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16548,8 +16252,8 @@
 				)
 			)
 		)
-		(property "Description" "Unpolarized capacitor"
-			(at 279.4 107.95 0)
+		(property "Description" "Polarized capacitor"
+			(at 279.4 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16560,15 +16264,15 @@
 			)
 		)
 		(pin "2"
-			(uuid "0a9f9a1f-cb42-47da-a5f8-a3e9cca588ea")
+			(uuid "606f76a5-bcf7-46d3-a3f0-b3bbf38f649e")
 		)
 		(pin "1"
-			(uuid "d388385c-ff35-4701-a4d8-1d9a1f38618d")
+			(uuid "a2fd55bb-d2c1-4c93-a383-1f3a79a6d54b")
 		)
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "C13")
+					(reference "C14")
 					(unit 1)
 				)
 			)
@@ -16586,7 +16290,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e0b55ae3-3e94-4250-b884-5b0f324f2f70")
-		(property "Reference" "#PWR010"
+		(property "Reference" "#PWR011"
 			(at 63.5 184.15 0)
 			(hide yes)
 			(show_name no)
@@ -16646,7 +16350,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR010")
+					(reference "#PWR011")
 					(unit 1)
 				)
 			)
@@ -16686,7 +16390,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
+		(property "Footprint" ""
 			(at 25.4 158.75 0)
 			(hide yes)
 			(show_name no)
@@ -16835,7 +16539,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e5e46d58-ca72-4649-8706-a5b0e4908f1b")
-		(property "Reference" "#PWR030"
+		(property "Reference" "#PWR032"
 			(at 215.9 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -16895,7 +16599,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR030")
+					(reference "#PWR032")
 					(unit 1)
 				)
 			)
@@ -16935,7 +16639,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x09_P2.54mm_Vertical"
+		(property "Footprint" ""
 			(at 393.7 38.1 0)
 			(hide yes)
 			(show_name no)
@@ -17016,7 +16720,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e940e56a-963d-48cb-9dbe-19951d1c813c")
-		(property "Reference" "#PWR037"
+		(property "Reference" "#PWR039"
 			(at 317.5 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -17076,7 +16780,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR037")
+					(reference "#PWR039")
 					(unit 1)
 				)
 			)
@@ -17094,7 +16798,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e95e5217-f5ad-4430-a309-438aa40bcb0c")
-		(property "Reference" "#PWR08"
+		(property "Reference" "#PWR09"
 			(at 63.5 146.05 0)
 			(hide yes)
 			(show_name no)
@@ -17154,7 +16858,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR08")
+					(reference "#PWR09")
 					(unit 1)
 				)
 			)
@@ -17193,7 +16897,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" ""
 			(at 229.5652 114.3 0)
 			(hide yes)
 			(show_name no)
@@ -17253,7 +16957,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "eca49537-7ff0-4b57-b196-700755afaf8d")
-		(property "Reference" "#PWR025"
+		(property "Reference" "#PWR027"
 			(at 165.1 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -17313,7 +17017,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR025")
+					(reference "#PWR027")
 					(unit 1)
 				)
 			)
@@ -17331,7 +17035,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "eca7b4fc-d741-413b-8fcf-1074c3b1e144")
-		(property "Reference" "#PWR031"
+		(property "Reference" "#PWR033"
 			(at 228.6 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -17391,7 +17095,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR031")
+					(reference "#PWR033")
 					(unit 1)
 				)
 			)
@@ -17409,7 +17113,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ef36f07c-f20f-4cc3-b3ab-038dbc5f5f38")
-		(property "Reference" "U3"
+		(property "Reference" "U4"
 			(at 171.45 36.83 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17474,7 +17178,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "U3")
+					(reference "U4")
 					(unit 1)
 				)
 			)
@@ -17514,7 +17218,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" ""
 			(at 267.6652 149.86 0)
 			(hide yes)
 			(show_name no)
@@ -17574,7 +17278,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f08873bf-a23b-466e-8e5e-70f4a70c459a")
-		(property "Reference" "#PWR026"
+		(property "Reference" "#PWR028"
 			(at 168.91 129.54 0)
 			(hide yes)
 			(show_name no)
@@ -17634,7 +17338,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR026")
+					(reference "#PWR028")
 					(unit 1)
 				)
 			)
@@ -17672,7 +17376,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+		(property "Footprint" ""
 			(at 58.42 38.608 90)
 			(hide yes)
 			(show_name no)
@@ -17722,6 +17426,88 @@
 	)
 	(symbol
 		(lib_id "Device:C_Polarized")
+		(at 279.4 107.95 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f4073efc-2758-4d51-a650-da4373a2d995")
+		(property "Reference" "C13"
+			(at 283.21 105.7909 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10u"
+			(at 283.21 108.3309 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 280.3652 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 279.4 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Polarized capacitor"
+			(at 279.4 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "7a1536d4-0c68-4888-a10f-a5717e68cddf")
+		)
+		(pin "1"
+			(uuid "27ef4b1b-aec1-4c7d-a391-f6cd65bca96a")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "C13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Polarized")
 		(at 158.75 50.8 0)
 		(unit 1)
 		(body_style 1)
@@ -17754,7 +17540,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:CP_Elec_5x5.9"
+		(property "Footprint" ""
 			(at 159.7152 54.61 0)
 			(hide yes)
 			(show_name no)

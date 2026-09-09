@@ -24,13 +24,21 @@ async fn main(spawner: Spawner) {
     esp_rtos::start(timg0.timer0, peripherals.FROM_CPU_INTR0);
 
     let pcnt = Pcnt::new(peripherals.PCNT);
+    let (microphone_producer, microphone_consumer) = tasks::audio::MICROPHONE_RING
+        .init(heapless::spsc::Queue::new())
+        .split();
+    let (speaker_producer, speaker_consumer) = tasks::audio::SPEAKER_RING
+        .init(heapless::spsc::Queue::new())
+        .split();
     let i2s_rx = I2s::new(
         peripherals.I2S0,
         peripherals.DMA_CH0,
         I2sConfig::new_tdm_philips()
             .with_sample_rate(Rate::from_hz(48_000))
             .with_data_format(DataFormat::Data32Channel32)
-            .with_channels(Channels::MONO),
+            // INMP441 L/R must be tied low: capture the WS-low (left) slot.
+            // Both 32-bit slots remain clocked: BCLK = 64 * 48 kHz.
+            .with_channels(Channels::LEFT),
     )
     .expect("failed to create I2S")
     .into_async()
@@ -45,7 +53,7 @@ async fn main(spawner: Spawner) {
         peripherals.DMA_CH1,
         I2sConfig::new_tdm_philips()
             .with_sample_rate(Rate::from_hz(48_000))
-            .with_data_format(DataFormat::Data16Channel16)
+            .with_data_format(DataFormat::Data32Channel32)
             .with_channels(Channels::STEREO),
     )
     .expect("failed to create speaker I2S")
@@ -76,6 +84,7 @@ async fn main(spawner: Spawner) {
     spawner.spawn(
         tasks::audio::microphone_task(
             i2s_rx,
+            microphone_producer,
             peripherals.GPIO38.degrade(),
             pcnt.unit1,
             peripherals.GPIO11.degrade(),
@@ -83,22 +92,26 @@ async fn main(spawner: Spawner) {
         )
         .expect("failed to create microphone task"),
     );
-    spawner.spawn(tasks::usb::usb_task(usb).expect("failed to create usb task"));
+    spawner.spawn(
+        tasks::usb::usb_task(usb, microphone_consumer, speaker_producer)
+            .expect("failed to create usb task"),
+    );
     spawner.spawn(
         tasks::audio::speaker_task(
             i2s_tx,
+            speaker_consumer,
             peripherals.GPIO39.degrade(),
             pcnt.unit2,
             peripherals.GPIO13.degrade(),
             peripherals.GPIO14.degrade(),
         )
         .expect("failed to create speaker task"),
-    );
+    );z
     spawner.spawn(
         tasks::keyboard::keyboard_task(
-            peripherals.GPIO42.degrade(),
             peripherals.GPIO40.degrade(),
             peripherals.GPIO41.degrade(),
+            peripherals.GPIO42.degrade(),
         )
         .expect("failed to create keyboard task"),
     );

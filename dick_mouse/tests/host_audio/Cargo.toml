@@ -1,0 +1,16 @@
+[package]
+name = "audio-regression"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[workspace]
+
+[lib]
+path = "lib.rs"
+
+[dependencies]
+embassy-usb = { path = "../../../vendor/embassy-usb", default-features = false, features = ["max-interface-count-8"] }
+critical-section = { version = "1", features = ["std"] }
+heapless = "0.9.3"
+
