@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "project": "dick_mouse.kicad_pro",
+  "current": "2026-09-13_2005",
+  "runs": {
+    "2026-09-13_2005": {
+      "source_hashes": {
+        "dick_mouse.kicad_pcb": "sha256:49c11818f94d2ce4c0fc1d1a0aada83f3a5df70f2a453715eb7e4de26d08a10a",
+        "dick_mouse.kicad_sch": "sha256:23e32b3ed43dc751756e784b08821861a876d53a1908470dffad02ad59c73ec1",
+        "schematic.json": "sha256:f316cb42e8e913b9bf57eb9752e8ca7ea006a4a9b95302a3236cd7a522796820",
+        "pcb.json": "sha256:7fe14eb0a0acf8dbfb27e7a4d67de424ecd7020fb746ad096642a2c39e2ea29d"
+      },
+      "outputs": {
+        "pcb": "pcb.json",
+        "schematic": "schematic.json",
+        "cross_analysis": "cross_analysis.json",
+        "emc": "emc.json",
+        "spice": "spice.json",
+        "thermal": "thermal.json"
+      },
+      "scripts": {
+        "pcb": "analyze_pcb.py dick_mouse.kicad_pcb"
+      },
+      "generated": "2026-09-13T20:08:20+09:00",
+      "pinned": false
+    }
+  }
+}
