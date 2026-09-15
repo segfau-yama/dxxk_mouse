@@ -1,5 +1,5 @@
 use super::audio_format::{fade_to_zero, microphone_sample, speaker_frame};
-use crate::device::{Button, RotaryEncoder};
+use crate::device::Button;
 use core::sync::atomic::{AtomicBool, AtomicI32, AtomicU32, Ordering};
 use embassy_time::{Duration, Timer};
 use esp_hal::{
@@ -7,7 +7,7 @@ use esp_hal::{
     dma::DmaTxStreamBuf,
     gpio::{AnyPin, Input, InputConfig, Level, Pull},
     i2s::master::{I2sRx, I2sTx},
-    pcnt::{channel, unit::Unit},
+    pcnt::unit::Unit,
     time::Instant,
 };
 use heapless::spsc::{Consumer, Producer, Queue};
@@ -31,14 +31,19 @@ pub(crate) const SPEAKER_DMA_CHUNK_BYTES: usize = 512;
 
 fn reset_speaker_dma_buffer(buffer: DmaTxStreamBuf) -> DmaTxStreamBuf {
     let (descriptors, buffer) = buffer.split();
-    DmaTxStreamBuf::new(descriptors, buffer).expect("failed to reset speaker DMA buffer")
+    let mut buffer =
+        DmaTxStreamBuf::new(descriptors, buffer).expect("failed to reset speaker DMA buffer");
+    let _ = buffer.push_with(|bytes| {
+        bytes.fill(0);
+        bytes.len()
+    });
+    buffer
 }
 
 // Transport validation must not clip the INMP441 signal.
 const MICROPHONE_GAIN: i16 = 1;
 pub(crate) const DEFAULT_VOLUME_PERCENT: u8 = 100;
 pub(crate) const VOLUME_STEP_PERCENT: i32 = 5;
-const COUNTS_PER_DETENT: i32 = 4;
 
 pub struct SpeakerSample {
     pub(crate) epoch: u32,
@@ -56,74 +61,6 @@ pub(crate) static MICROPHONE_STREAMING: AtomicBool = AtomicBool::new(false);
 pub(crate) static SPEAKER_FEEDBACK_Q14: AtomicU32 = AtomicU32::new(48 << 14);
 static SPEAKER_FEEDBACK_INTEGRAL: AtomicI32 = AtomicI32::new(0);
 
-pub(crate) static MICROPHONE_ALT1: AtomicU32 = AtomicU32::new(0);
-pub(crate) static MICROPHONE_ALT0: AtomicU32 = AtomicU32::new(0);
-pub(crate) static MICROPHONE_USB_PACKETS: AtomicU32 = AtomicU32::new(0);
-pub(crate) static MICROPHONE_PACKET_47: AtomicU32 = AtomicU32::new(0);
-pub(crate) static MICROPHONE_PACKET_48: AtomicU32 = AtomicU32::new(0);
-pub(crate) static MICROPHONE_PACKET_49: AtomicU32 = AtomicU32::new(0);
-pub(crate) static MICROPHONE_UNDERFLOWS: AtomicU32 = AtomicU32::new(0);
-pub(crate) static MICROPHONE_OVERFLOWS: AtomicU32 = AtomicU32::new(0);
-pub(crate) static MICROPHONE_DMA_RESTARTS: AtomicU32 = AtomicU32::new(0);
-pub(crate) static MICROPHONE_USB_ERRORS: AtomicU32 = AtomicU32::new(0);
-pub(crate) static MICROPHONE_RING_MIN: AtomicU32 = AtomicU32::new(AUDIO_RING_CAPACITY as u32);
-pub(crate) static MICROPHONE_RING_MAX: AtomicU32 = AtomicU32::new(0);
-
-pub(crate) static SPEAKER_ALT1: AtomicU32 = AtomicU32::new(0);
-pub(crate) static SPEAKER_ALT0: AtomicU32 = AtomicU32::new(0);
-pub(crate) static SPEAKER_USB_PACKETS: AtomicU32 = AtomicU32::new(0);
-pub(crate) static SPEAKER_UNDERFLOWS: AtomicU32 = AtomicU32::new(0);
-pub(crate) static SPEAKER_OVERFLOWS: AtomicU32 = AtomicU32::new(0);
-pub(crate) static SPEAKER_DMA_RESTARTS: AtomicU32 = AtomicU32::new(0);
-pub(crate) static SPEAKER_USB_ERRORS: AtomicU32 = AtomicU32::new(0);
-pub(crate) static SPEAKER_RING_MIN: AtomicU32 = AtomicU32::new(AUDIO_RING_CAPACITY as u32);
-pub(crate) static SPEAKER_RING_MAX: AtomicU32 = AtomicU32::new(0);
-
-fn setup_volume_encoder<const NUM: usize>(
-    unit: &Unit<'static, NUM>,
-    gpio_a: AnyPin<'static>,
-    gpio_b: AnyPin<'static>,
-) -> (RotaryEncoder, i32) {
-    let input_a = Input::new(gpio_a, InputConfig::default().with_pull(Pull::Up));
-    let input_b = Input::new(gpio_b, InputConfig::default().with_pull(Pull::Up));
-    let signal_a = input_a.peripheral_input();
-    let signal_b = input_b.peripheral_input();
-
-    unit.set_filter(Some(800)).expect("invalid pcnt filter");
-
-    let ch0 = &unit.channel0;
-    ch0.set_ctrl_signal(signal_a.clone());
-    ch0.set_edge_signal(signal_b.clone());
-    ch0.set_ctrl_mode(channel::CtrlMode::Reverse, channel::CtrlMode::Keep);
-    ch0.set_input_mode(channel::EdgeMode::Increment, channel::EdgeMode::Decrement);
-
-    let ch1 = &unit.channel1;
-    ch1.set_ctrl_signal(signal_b.clone());
-    ch1.set_edge_signal(signal_a.clone());
-    ch1.set_ctrl_mode(channel::CtrlMode::Reverse, channel::CtrlMode::Keep);
-    ch1.set_input_mode(channel::EdgeMode::Decrement, channel::EdgeMode::Increment);
-
-    let count = unit.value() as i32;
-    let now_ms = Instant::now().duration_since_epoch().as_millis();
-    (RotaryEncoder::new(count, now_ms, 2), count)
-}
-
-fn encoder_detents<const NUM: usize>(
-    unit: &Unit<'static, NUM>,
-    encoder: &mut RotaryEncoder,
-    reported_count: &mut i32,
-    now_ms: u64,
-) -> i32 {
-    *encoder = encoder.update(unit.value() as i32, now_ms);
-    let detents = encoder.stable_count().saturating_sub(*reported_count) / COUNTS_PER_DETENT;
-
-    if detents != 0 {
-        *reported_count = reported_count.saturating_add(detents.saturating_mul(COUNTS_PER_DETENT));
-    }
-
-    detents
-}
-
 #[embassy_executor::task]
 pub async fn microphone_task(
     mut i2s_rx: I2sRx<'static, Async>,
@@ -137,7 +74,7 @@ pub async fn microphone_task(
     let mut mute_button = Button::new(mute_input.level(), Level::Low, 5);
     let mut muted = mute_button.is_pressed();
     let (mut volume_encoder, mut reported_count) =
-        setup_volume_encoder(&volume_unit, volume_gpio_a, volume_gpio_b);
+        super::encoder::setup(&volume_unit, volume_gpio_a, volume_gpio_b);
     let mut volume = DEFAULT_VOLUME_PERCENT;
     let mut dma_buffer =
         esp_hal::dma_rx_stream_buffer!(MICROPHONE_DMA_BUFFER_BYTES, I2S_FRAME_BYTES);
@@ -147,7 +84,6 @@ pub async fn microphone_task(
         let mut transfer = match i2s_rx.read(dma_buffer) {
             Ok(transfer) => transfer,
             Err((_, rx, buffer)) => {
-                MICROPHONE_DMA_RESTARTS.fetch_add(1, Ordering::Relaxed);
                 i2s_rx = rx;
                 dma_buffer = buffer;
                 Timer::after(Duration::from_millis(1)).await;
@@ -172,7 +108,7 @@ pub async fn microphone_task(
                 }
                 volume = i32::from(volume)
                     .saturating_add(
-                        encoder_detents(
+                        super::encoder::detents(
                             &volume_unit,
                             &mut volume_encoder,
                             &mut reported_count,
@@ -191,20 +127,13 @@ pub async fn microphone_task(
                         / 100) as i16;
 
                     if MICROPHONE_STREAMING.load(Ordering::Acquire) {
-                        if microphone_ring.enqueue(sample).is_err() {
-                            // Exceptional overflow: the producer must never move the consumer cursor.
-                            MICROPHONE_OVERFLOWS.fetch_add(1, Ordering::Relaxed);
-                        }
+                        // A full ring drops the newest sample; only the consumer moves its cursor.
+                        let _ = microphone_ring.enqueue(sample);
                     }
                 }
-
-                let ring = microphone_ring.len() as u32;
-                MICROPHONE_RING_MIN.fetch_min(ring, Ordering::Relaxed);
-                MICROPHONE_RING_MAX.fetch_max(ring, Ordering::Relaxed);
             }
 
             if wait_error {
-                MICROPHONE_DMA_RESTARTS.fetch_add(1, Ordering::Relaxed);
                 let (rx, buffer) = transfer.stop();
                 i2s_rx = rx;
                 dma_buffer = buffer;
@@ -256,7 +185,7 @@ pub async fn speaker_task(
     let mut mute_button = Button::new(mute_input.level(), Level::Low, 5);
     let mut muted = mute_button.is_pressed();
     let (mut volume_encoder, mut reported_count) =
-        setup_volume_encoder(&volume_unit, volume_gpio_a, volume_gpio_b);
+        super::encoder::setup(&volume_unit, volume_gpio_a, volume_gpio_b);
     let mut volume = DEFAULT_VOLUME_PERCENT;
     let mut dma_buffer =
         esp_hal::dma_tx_stream_buffer!(SPEAKER_DMA_BUFFER_BYTES, SPEAKER_DMA_CHUNK_BYTES);
@@ -273,13 +202,8 @@ pub async fn speaker_task(
         let mut transfer = match i2s_tx.write(dma_buffer) {
             Ok(transfer) => transfer,
             Err((_, tx, buffer)) => {
-                SPEAKER_DMA_RESTARTS.fetch_add(1, Ordering::Relaxed);
                 i2s_tx = tx;
                 dma_buffer = reset_speaker_dma_buffer(buffer);
-                let _ = dma_buffer.push_with(|buffer| {
-                    buffer.fill(0);
-                    buffer.len()
-                });
                 // A persistent DMA setup error must still yield to USB enumeration.
                 Timer::after(Duration::from_millis(1)).await;
                 continue;
@@ -290,27 +214,17 @@ pub async fn speaker_task(
             // Check TotalEof before consuming any ring data; stopped descriptors
             // must not absorb samples that will be discarded during reset.
             if transfer.is_done() {
-                SPEAKER_DMA_RESTARTS.fetch_add(1, Ordering::Relaxed);
                 let (tx, buffer) = transfer.stop();
                 i2s_tx = tx;
                 dma_buffer = reset_speaker_dma_buffer(buffer);
-                let _ = dma_buffer.push_with(|bytes| {
-                    bytes.fill(0);
-                    bytes.len()
-                });
                 Timer::after(Duration::from_millis(1)).await;
                 break;
             }
             if transfer.available_bytes() == 0 {
                 if transfer.wait_for_available_async().await.is_err() {
-                    SPEAKER_DMA_RESTARTS.fetch_add(1, Ordering::Relaxed);
                     let (tx, buffer) = transfer.stop();
                     i2s_tx = tx;
                     dma_buffer = reset_speaker_dma_buffer(buffer);
-                    let _ = dma_buffer.push_with(|buffer| {
-                        buffer.fill(0);
-                        buffer.len()
-                    });
                     Timer::after(Duration::from_millis(1)).await;
                     break;
                 }
@@ -346,7 +260,7 @@ pub async fn speaker_task(
             }
             volume = i32::from(volume)
                 .saturating_add(
-                    encoder_detents(
+                    super::encoder::detents(
                         &volume_unit,
                         &mut volume_encoder,
                         &mut reported_count,
@@ -368,9 +282,6 @@ pub async fn speaker_task(
                                 sample.pcm
                             }
                             _ => {
-                                if streaming {
-                                    SPEAKER_UNDERFLOWS.fetch_add(1, Ordering::Relaxed);
-                                }
                                 last_sample = fade_to_zero(last_sample);
                                 last_sample
                             }
@@ -383,8 +294,6 @@ pub async fn speaker_task(
             }
             let ring = speaker_ring.len() as u32;
             SPEAKER_RING_LEVEL.store(ring, Ordering::Relaxed);
-            SPEAKER_RING_MIN.fetch_min(ring, Ordering::Relaxed);
-            SPEAKER_RING_MAX.fetch_max(ring, Ordering::Relaxed);
         }
     }
 }

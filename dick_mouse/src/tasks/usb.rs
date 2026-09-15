@@ -29,13 +29,9 @@ use static_cell::StaticCell;
 use usbd_hid::descriptor::{KeyboardReport, MouseReport};
 
 use super::audio::{
-    MICROPHONE_ALT0, MICROPHONE_ALT1, MICROPHONE_PACKET_47, MICROPHONE_PACKET_48,
-    MICROPHONE_PACKET_49, MICROPHONE_RING_MAX, MICROPHONE_RING_MIN, MICROPHONE_STREAMING,
-    MICROPHONE_UNDERFLOWS, MICROPHONE_USB_ERRORS, MICROPHONE_USB_PACKETS, SPEAKER_ALT0,
-    SPEAKER_ALT1, SPEAKER_EPOCH, SPEAKER_FEEDBACK_Q14, SPEAKER_LAST_PACKET_MS, SPEAKER_OVERFLOWS,
-    SPEAKER_RING_LEVEL, SPEAKER_RING_MAX, SPEAKER_RING_MIN, SPEAKER_STREAMING, SPEAKER_USB_ERRORS,
-    SPEAKER_USB_GAIN_Q15, SPEAKER_USB_PACKETS, SpeakerSample, reset_speaker_feedback,
-    update_speaker_feedback,
+    MICROPHONE_STREAMING, SPEAKER_EPOCH, SPEAKER_FEEDBACK_Q14, SPEAKER_LAST_PACKET_MS,
+    SPEAKER_RING_LEVEL, SPEAKER_STREAMING, SPEAKER_USB_GAIN_Q15, SpeakerSample,
+    reset_speaker_feedback, update_speaker_feedback,
 };
 
 pub(crate) const USB_HID_POLL_MS: u8 = 10;
@@ -173,7 +169,6 @@ pub async fn usb_task(
             async move {
                 loop {
                     speaker_stream.wait_connection().await;
-                    SPEAKER_ALT1.fetch_add(1, Ordering::Relaxed);
                     let epoch = SPEAKER_EPOCH.fetch_add(1, Ordering::AcqRel).wrapping_add(1);
                     SPEAKER_STREAMING.store(true, Ordering::Release);
                     SPEAKER_LAST_PACKET_MS
@@ -189,23 +184,14 @@ pub async fn usb_task(
                                     .store(Instant::now().as_millis() as u32, Ordering::Release);
                                 for chunk in packet[..size].chunks_exact(2) {
                                     let sample = i16::from_le_bytes([chunk[0], chunk[1]]);
-                                    if speaker_ring
-                                        .enqueue(SpeakerSample { epoch, pcm: sample })
-                                        .is_err()
-                                    {
-                                        SPEAKER_OVERFLOWS.fetch_add(1, Ordering::Relaxed);
-                                    }
+                                    let _ =
+                                        speaker_ring.enqueue(SpeakerSample { epoch, pcm: sample });
                                 }
-                                SPEAKER_USB_PACKETS.fetch_add(1, Ordering::Relaxed);
                                 let ring = speaker_ring.len() as u32;
                                 SPEAKER_RING_LEVEL.store(ring, Ordering::Relaxed);
-                                SPEAKER_RING_MIN.fetch_min(ring, Ordering::Relaxed);
-                                SPEAKER_RING_MAX.fetch_max(ring, Ordering::Relaxed);
                             }
                             Ok(_) => {}
                             Err(_) => {
-                                SPEAKER_USB_ERRORS.fetch_add(1, Ordering::Relaxed);
-                                SPEAKER_ALT0.fetch_add(1, Ordering::Relaxed);
                                 SPEAKER_STREAMING.store(false, Ordering::Release);
                                 break;
                             }
@@ -222,7 +208,6 @@ pub async fn usb_task(
                         let value = SPEAKER_FEEDBACK_Q14.load(Ordering::Relaxed) & 0x00ff_ffff;
                         let packet = [value as u8, (value >> 8) as u8, (value >> 16) as u8];
                         if speaker_feedback.write_packet(&packet).await.is_err() {
-                            SPEAKER_USB_ERRORS.fetch_add(1, Ordering::Relaxed);
                             break;
                         }
                         Timer::after(Duration::from_millis(
@@ -235,7 +220,6 @@ pub async fn usb_task(
             async move {
                 loop {
                     microphone_audio.wait_enabled().await;
-                    MICROPHONE_ALT1.fetch_add(1, Ordering::Relaxed);
                     // The producer continuously drains I2S, but samples captured while
                     // the host had Alt 0 are not part of the next recording.
                     MICROPHONE_STREAMING.store(false, Ordering::Release);
@@ -249,12 +233,6 @@ pub async fn usb_task(
 
                     loop {
                         let (sample_count, priming) = packetizer.next(microphone_ring.len());
-                        match sample_count {
-                            47 => &MICROPHONE_PACKET_47,
-                            49 => &MICROPHONE_PACKET_49,
-                            _ => &MICROPHONE_PACKET_48,
-                        }
-                        .fetch_add(1, Ordering::Relaxed);
                         let packet_bytes = sample_count * USB_MICROPHONE_CHANNELS * 2;
                         let mut bytes = [0; USB_MICROPHONE_MAX_PACKET_BYTES];
 
@@ -262,25 +240,15 @@ pub async fn usb_task(
                             for chunk in bytes[..packet_bytes].chunks_exact_mut(2) {
                                 last_sample = match microphone_ring.dequeue() {
                                     Some(sample) => sample,
-                                    None => {
-                                        MICROPHONE_UNDERFLOWS.fetch_add(1, Ordering::Relaxed);
-                                        fade_to_zero(last_sample)
-                                    }
+                                    None => fade_to_zero(last_sample),
                                 };
                                 chunk.copy_from_slice(&last_sample.to_le_bytes());
                             }
                         }
 
                         match microphone_audio.write(&bytes[..packet_bytes]).await {
-                            Ok(()) => {
-                                MICROPHONE_USB_PACKETS.fetch_add(1, Ordering::Relaxed);
-                                let ring = microphone_ring.len() as u32;
-                                MICROPHONE_RING_MIN.fetch_min(ring, Ordering::Relaxed);
-                                MICROPHONE_RING_MAX.fetch_max(ring, Ordering::Relaxed);
-                            }
+                            Ok(()) => {}
                             Err(_) => {
-                                MICROPHONE_USB_ERRORS.fetch_add(1, Ordering::Relaxed);
-                                MICROPHONE_ALT0.fetch_add(1, Ordering::Relaxed);
                                 MICROPHONE_STREAMING.store(false, Ordering::Release);
                                 let queued = microphone_ring.len();
                                 for _ in 0..queued {
