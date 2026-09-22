@@ -25,6 +25,23 @@ pub fn fs_in_transfer_counts(address: u8) -> Option<(u32, u32)> {
     crate::peripherals::USB_FS::device_state().in_transfer_counts((address & 0x0f) as usize)
 }
 
+/// Read IN counters and registers from an active FS device control handler.
+/// The word layout is documented by `State::in_transfer_snapshot` in the OTG
+/// driver. No read acknowledges interrupts or consumes FIFO data.
+#[cfg(usb_otg_driver_supported)]
+pub fn fs_in_transfer_snapshot(address: u8) -> Option<[u32; 22]> {
+    if address & 0xf0 != 0x80 {
+        return None;
+    }
+    // ESP's internal FS register mapping remains accessible without VBUS. The
+    // endpoint-allocation check also rejects calls before driver construction.
+    unsafe {
+        let regs = Otg::from_ptr(crate::peripherals::USB_FS::PTR.cast_mut().cast::<()>());
+        crate::peripherals::USB_FS::device_state()
+            .in_transfer_snapshot(regs, (address & 0x0f) as usize)
+    }
+}
+
 /// Asynchronous USB driver.
 pub struct Driver<'d> {
     inner: OtgDriver<'d>,

@@ -7,7 +7,7 @@ name = "audio-regression"
 version = "0.1.0"
 dependencies = [
  "critical-section",
- "embassy-usb",
+ "embassy-usb 0.6.0",
  "heapless",
 ]
 
@@ -98,6 +98,14 @@ dependencies = [
 [[package]]
 name = "embassy-usb"
 version = "0.6.0"
+dependencies = [
+ "embassy-usb 0.6.0 (git+https://github.com/embassy-rs/embassy?rev=cd7570483a7036f23a9925a339152396bec4c041)",
+]
+
+[[package]]
+name = "embassy-usb"
+version = "0.6.0"
+source = "git+https://github.com/embassy-rs/embassy?rev=cd7570483a7036f23a9925a339152396bec4c041#cd7570483a7036f23a9925a339152396bec4c041"
 dependencies = [
  "bitflags",
  "embassy-futures",

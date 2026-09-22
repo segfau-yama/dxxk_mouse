@@ -7,11 +7,12 @@ use embassy_usb::{
 };
 
 pub(crate) const SNAPSHOT_BYTES: usize = 32;
+pub(crate) const DETAIL_BYTES: usize = 112;
 
 pub(crate) struct MicrophoneDiagnostics {
     endpoint: u8,
     interface: u8,
-    read_counts: fn(u8) -> Option<(u32, u32)>,
+    read_snapshot: fn(u8) -> Option<[u32; 22]>,
     resets: u32,
     alt0: u32,
     alt1: u32,
@@ -22,12 +23,12 @@ impl MicrophoneDiagnostics {
     pub(crate) fn new(
         endpoint: u8,
         interface: u8,
-        read_counts: fn(u8) -> Option<(u32, u32)>,
+        read_snapshot: fn(u8) -> Option<[u32; 22]>,
     ) -> Self {
         Self {
             endpoint,
             interface,
-            read_counts,
+            read_snapshot,
             resets: 0,
             alt0: 0,
             alt1: 0,
@@ -61,28 +62,33 @@ impl Handler for MicrophoneDiagnostics {
     }
 
     fn control_in<'a>(&'a mut self, req: Request, buf: &'a mut [u8]) -> Option<InResponse<'a>> {
-        // C0 5A 494D 0000 2000: vendor/device IN, value 0x4d49, 32 bytes.
+        // Vendor/device IN: value 0x4d49. Index 0: MIC1/32B (unchanged).
+        // Index 1: MIC2/112B = same 8 header words + 20 driver detail words.
         // Do not intercept UAC, HID, MS OS descriptors or other vendor requests.
         if req.direction != Direction::In
             || req.request_type != RequestType::Vendor
             || req.recipient != Recipient::Device
             || req.request != 0x5a
             || req.value != 0x4d49
-            || req.index != 0
         {
             return None;
         }
-        if usize::from(req.length) != SNAPSHOT_BYTES || buf.len() < SNAPSHOT_BYTES {
+        let (size, magic) = match req.index {
+            0 => (SNAPSHOT_BYTES, *b"MIC1"),
+            1 => (DETAIL_BYTES, *b"MIC2"),
+            _ => return Some(InResponse::Rejected),
+        };
+        if usize::from(req.length) != size || buf.len() < size {
             return Some(InResponse::Rejected);
         }
-        let Some((queued, completed)) = (self.read_counts)(self.endpoint) else {
+        let Some(snapshot) = (self.read_snapshot)(self.endpoint) else {
             return Some(InResponse::Rejected);
         };
         let words = [
-            u32::from_le_bytes(*b"MIC1"),
+            u32::from_le_bytes(magic),
             u32::from(self.endpoint),
-            queued,
-            completed,
+            snapshot[0],
+            snapshot[1],
             self.resets,
             self.alt0,
             self.alt1,
@@ -91,6 +97,12 @@ impl Handler for MicrophoneDiagnostics {
         for (chunk, word) in buf[..SNAPSHOT_BYTES].chunks_exact_mut(4).zip(words) {
             chunk.copy_from_slice(&word.to_le_bytes());
         }
-        Some(InResponse::Accepted(&buf[..SNAPSHOT_BYTES]))
+        for (chunk, word) in buf[SNAPSHOT_BYTES..size]
+            .chunks_exact_mut(4)
+            .zip(&snapshot[2..])
+        {
+            chunk.copy_from_slice(&word.to_le_bytes());
+        }
+        Some(InResponse::Accepted(&buf[..size]))
     }
 }

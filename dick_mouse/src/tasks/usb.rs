@@ -22,7 +22,7 @@ use embassy_usb::{
 };
 use esp_hal::usb::otg::{
     Usb,
-    embassy_usb_device::{Config as UsbDriverConfig, Driver as UsbDriver, fs_in_transfer_counts},
+    embassy_usb_device::{Config as UsbDriverConfig, Driver as UsbDriver, fs_in_transfer_snapshot},
 };
 use heapless::spsc::{Consumer, Producer};
 use static_cell::StaticCell;
@@ -116,7 +116,7 @@ pub async fn usb_task(
     builder.handler(USB_MICROPHONE_DIAGNOSTICS.init(MicrophoneDiagnostics::new(
         microphone.handler.get_audio_ep_addr(),
         microphone.handler.get_stream_iface_num(),
-        fs_in_transfer_counts,
+        fs_in_transfer_snapshot,
     )));
 
     let speaker = UsbSpeakerClass::new(

@@ -16,7 +16,11 @@ fn microphone_diagnostics_are_read_only_and_keep_queue_and_xfrc_separate() {
     use usb_diagnostics::MicrophoneDiagnostics;
     let mut handler = MicrophoneDiagnostics::new(0x83, 5, |ep| {
         assert_eq!(ep, 0x83);
-        Some((5001, 4999))
+        let mut words = [0; 22];
+        words[0] = 5001;
+        words[1] = 4999;
+        for (i, word) in words[2..].iter_mut().enumerate() { *word = 100 + i as u32; }
+        Some(words)
     });
     handler.reset();
     handler.set_alternate_setting(InterfaceNumber(4), 1); // another function
@@ -44,6 +48,17 @@ fn microphone_diagnostics_are_read_only_and_keep_queue_and_xfrc_separate() {
     assert!(matches!(handler.control_in(Request { length: 64, ..req }, &mut buf), Some(InResponse::Rejected)));
     assert!(matches!(handler.control_in(req, &mut [0; 16]), Some(InResponse::Rejected)));
     assert!(handler.control_out(req, &[]).is_none());
+    let detailed = Request { index: 1, length: 112, ..req };
+    let Some(InResponse::Accepted(data)) = handler.control_in(detailed, &mut buf) else { panic!() };
+    assert_eq!(data.len(), 112);
+    assert_eq!(&data[..4], b"MIC2");
+    assert_eq!(&data[4..16], &[0x83, 0, 0, 0, 0x89, 0x13, 0, 0, 0x87, 0x13, 0, 0]);
+    let extra: Vec<_> = data[32..].chunks_exact(4)
+        .map(|c| u32::from_le_bytes(c.try_into().unwrap())).collect();
+    assert_eq!(extra, (100..120).collect::<Vec<u32>>());
+    assert!(matches!(handler.control_in(detailed, &mut [0; 111]), Some(InResponse::Rejected)));
+    assert!(matches!(handler.control_in(Request { length: 32, ..detailed }, &mut buf), Some(InResponse::Rejected)));
+    assert!(matches!(handler.control_in(Request { index: 2, ..detailed }, &mut buf), Some(InResponse::Rejected)));
 }
 
 // Allocation-only driver: exercise the actual descriptor builder without hardware.
