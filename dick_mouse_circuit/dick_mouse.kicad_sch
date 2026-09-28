@@ -2189,367 +2189,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Connector_Generic:Conn_01x09"
-			(pin_names
-				(offset 1.016)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "J"
-				(at 0 12.7 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "Conn_01x09"
-				(at 0 -12.7 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Generic connector, single row, 01x09, script generated (kicad-library-utils/schlib/autogen/connector/)"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "connector"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "Connector*:*_1x??_*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "Conn_01x09_1_1"
-				(rectangle
-					(start -1.27 11.43)
-					(end 1.27 -11.43)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(rectangle
-					(start -1.27 10.287)
-					(end 0 10.033)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 7.747)
-					(end 0 7.493)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 5.207)
-					(end 0 4.953)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 2.667)
-					(end 0 2.413)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 0.127)
-					(end 0 -0.127)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 -2.413)
-					(end 0 -2.667)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 -4.953)
-					(end 0 -5.207)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 -7.493)
-					(end 0 -7.747)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 -10.033)
-					(end 0 -10.287)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at -5.08 10.16 0)
-					(length 3.81)
-					(name "Pin_1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 7.62 0)
-					(length 3.81)
-					(name "Pin_2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 5.08 0)
-					(length 3.81)
-					(name "Pin_3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 2.54 0)
-					(length 3.81)
-					(name "Pin_4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 0 0)
-					(length 3.81)
-					(name "Pin_5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -2.54 0)
-					(length 3.81)
-					(name "Pin_6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -5.08 0)
-					(length 3.81)
-					(name "Pin_7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -7.62 0)
-					(length 3.81)
-					(name "Pin_8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -10.16 0)
-					(length 3.81)
-					(name "Pin_9"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "9"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Device:C"
 			(pin_numbers
 				(hide yes)
@@ -3384,6 +3023,105 @@
 								(size 1.27 1.27)
 							)
 						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Mechanical:MountingHole"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "H"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "MountingHole"
+				(at 0 3.175 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Mounting Hole without connection"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "mounting hole"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "MountingHole*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "MountingHole_0_1"
+				(circle
+					(center 0 0)
+					(radius 1.27)
+					(stroke
+						(width 1.27)
+						(type default)
+					)
+					(fill
+						(type none)
 					)
 				)
 			)
@@ -5031,207 +4769,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Switch:SW_Wuerth_450301014042"
-			(pin_names
-				(offset 1)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "SW"
-				(at 0 5.08 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "SW_Wuerth_450301014042"
-				(at 0 -5.08 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "Button_Switch_THT:SW_Slide-03_Wuerth-WS-SLTV_10x2.5x6.4_P2.54mm"
-				(at 0 -10.16 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" "https://www.we-online.com/components/products/datasheet/450301014042.pdf"
-				(at 0 -7.62 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Switch slide, single pole double throw"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "changeover single-pole opposite-side-connection double-throw spdt ON-ON"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "SW*Wuerth*WS*SLTV*10x2.5x6.4*P2.54mm*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "SW_Wuerth_450301014042_0_1"
-				(circle
-					(center -2.032 0)
-					(radius 0.4572)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.651 0.254) (xy 1.651 2.286)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 2.032 2.54)
-					(radius 0.4572)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 2.032 -2.54)
-					(radius 0.4572)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "SW_Wuerth_450301014042_1_1"
-				(rectangle
-					(start -3.175 3.81)
-					(end 3.175 -3.81)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(pin passive line
-					(at -5.08 0 0)
-					(length 2.54)
-					(name "B"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 -2.54 180)
-					(length 2.54)
-					(name "C"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 2.54 180)
-					(length 2.54)
-					(name "A"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "power:+3.3V"
 			(power global)
 			(pin_numbers
@@ -5920,22 +5457,8 @@
 		(uuid "114e1e8d-ab5d-4b6d-a6df-a0030c2b9426")
 	)
 	(no_connect
-		(at 62.23 233.68)
-		(uuid "a034d124-e2bc-499d-be22-ac4cc27aaf64")
-	)
-	(no_connect
 		(at 53.34 57.15)
 		(uuid "d228cc42-0189-4870-9b53-fa20280763b7")
-	)
-	(wire
-		(pts
-			(xy 342.9 59.69) (xy 350.52 59.69)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "000dde0b-21aa-40fd-b21e-d45394d7ac8a")
 	)
 	(wire
 		(pts
@@ -5959,13 +5482,13 @@
 	)
 	(wire
 		(pts
-			(xy 52.07 231.14) (xy 50.8 231.14)
+			(xy 50.8 157.48) (xy 52.07 157.48)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "01ddf797-9ceb-49f7-add7-5bf7d8043960")
+		(uuid "03ff499d-291a-4551-80eb-6e1d131bf924")
 	)
 	(wire
 		(pts
@@ -5999,6 +5522,16 @@
 	)
 	(wire
 		(pts
+			(xy 342.9 59.69) (xy 350.52 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0518524f-bf01-4022-9a6e-c91b9eead2ee")
+	)
+	(wire
+		(pts
 			(xy 139.7 132.08) (xy 129.54 132.08)
 		)
 		(stroke
@@ -6029,16 +5562,6 @@
 	)
 	(wire
 		(pts
-			(xy 62.23 228.6) (xy 63.5 228.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0c223939-a012-493a-8522-0d1fce911154")
-	)
-	(wire
-		(pts
 			(xy 53.34 49.53) (xy 57.15 49.53)
 		)
 		(stroke
@@ -6046,6 +5569,16 @@
 			(type default)
 		)
 		(uuid "0c4a8bc7-8fd1-4001-bed8-2a6dd623a0e9")
+	)
+	(wire
+		(pts
+			(xy 381 30.48) (xy 388.62 30.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0ceb9fd7-e472-4a00-827d-4663fbb1e2f6")
 	)
 	(wire
 		(pts
@@ -6069,6 +5602,26 @@
 	)
 	(wire
 		(pts
+			(xy 381 27.94) (xy 388.62 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0db9a8ca-55a8-4d14-b8b9-0893d05c9755")
+	)
+	(wire
+		(pts
+			(xy 63.5 157.48) (xy 62.23 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "100888e8-74ed-48da-9e75-2e8a4644c71c")
+	)
+	(wire
+		(pts
 			(xy 114.3 31.75) (xy 114.3 38.1)
 		)
 		(stroke
@@ -6076,6 +5629,16 @@
 			(type default)
 		)
 		(uuid "107d0e8d-236d-4676-9be7-2333152031d3")
+	)
+	(wire
+		(pts
+			(xy 342.9 57.15) (xy 350.52 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "112f7bb5-2fd1-44cd-b0cd-769737874383")
 	)
 	(wire
 		(pts
@@ -6139,16 +5702,6 @@
 	)
 	(wire
 		(pts
-			(xy 50.8 152.4) (xy 52.07 152.4)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1b64e58b-6d28-4237-b472-1b0950062fb8")
-	)
-	(wire
-		(pts
 			(xy 88.9 114.3) (xy 99.06 114.3)
 		)
 		(stroke
@@ -6209,7 +5762,7 @@
 	)
 	(wire
 		(pts
-			(xy 342.9 34.29) (xy 342.9 38.1)
+			(xy 342.9 36.83) (xy 342.9 38.1)
 		)
 		(stroke
 			(width 0)
@@ -6259,16 +5812,6 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 198.12) (xy 63.5 190.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "26ed3e48-cc9b-47d4-8a85-4728ef033a5d")
-	)
-	(wire
-		(pts
 			(xy 279.4 152.4) (xy 266.7 152.4)
 		)
 		(stroke
@@ -6299,6 +5842,16 @@
 	)
 	(wire
 		(pts
+			(xy 63.5 165.1) (xy 63.5 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "295fc339-0365-4220-87a5-18b5b66b5510")
+	)
+	(wire
+		(pts
 			(xy 168.91 115.57) (xy 168.91 118.11)
 		)
 		(stroke
@@ -6309,13 +5862,23 @@
 	)
 	(wire
 		(pts
-			(xy 342.9 31.75) (xy 350.52 31.75)
+			(xy 342.9 34.29) (xy 350.52 34.29)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "2a9ad100-edc6-4867-95eb-6f06323fca6f")
+	)
+	(wire
+		(pts
+			(xy 381 134.62) (xy 381 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2ae6cbde-d97d-4548-bd31-b506ed649dd5")
 	)
 	(wire
 		(pts
@@ -6326,6 +5889,16 @@
 			(type default)
 		)
 		(uuid "2b74f5a8-4859-483a-9dbf-e563d224b1ee")
+	)
+	(wire
+		(pts
+			(xy 381 35.56) (xy 388.62 35.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2cc2e78b-b34d-4183-b802-f3afa1e8fea1")
 	)
 	(wire
 		(pts
@@ -6346,16 +5919,6 @@
 			(type default)
 		)
 		(uuid "2dd46c96-ca89-4ad9-8504-1c94152046a1")
-	)
-	(wire
-		(pts
-			(xy 50.8 190.5) (xy 52.07 190.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2dde57a6-8671-4b87-9574-9e7af3980d67")
 	)
 	(wire
 		(pts
@@ -6409,6 +5972,16 @@
 	)
 	(wire
 		(pts
+			(xy 381 33.02) (xy 388.62 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "33912a2a-e49b-4f65-8baf-19e16dc17336")
+	)
+	(wire
+		(pts
 			(xy 88.9 119.38) (xy 99.06 119.38)
 		)
 		(stroke
@@ -6419,27 +5992,7 @@
 	)
 	(wire
 		(pts
-			(xy 381 27.94) (xy 388.62 27.94)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "35db6e75-9df8-4886-9e3e-af389cc080fa")
-	)
-	(wire
-		(pts
-			(xy 342.9 132.08) (xy 350.52 132.08)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3626e994-1c25-49bf-befa-72cedd6341ce")
-	)
-	(wire
-		(pts
-			(xy 342.9 29.21) (xy 350.52 29.21)
+			(xy 342.9 31.75) (xy 350.52 31.75)
 		)
 		(stroke
 			(width 0)
@@ -6519,26 +6072,6 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 152.4) (xy 62.23 152.4)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3f845427-1651-4a59-ba6d-aea1e946e3cb")
-	)
-	(wire
-		(pts
-			(xy 342.9 54.61) (xy 350.52 54.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4102662b-07c8-42f1-b2cf-4e8c2bd880f4")
-	)
-	(wire
-		(pts
 			(xy 82.55 46.99) (xy 74.93 46.99)
 		)
 		(stroke
@@ -6559,27 +6092,27 @@
 	)
 	(wire
 		(pts
-			(xy 381 30.48) (xy 388.62 30.48)
+			(xy 63.5 176.53) (xy 63.5 182.88)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "4535f635-9d46-4e9c-b6d6-d41fb86817c9")
+		(uuid "479a0913-2fc2-407f-937a-3259ceb6f447")
 	)
 	(wire
 		(pts
-			(xy 342.9 106.68) (xy 350.52 106.68)
+			(xy 342.9 54.61) (xy 350.52 54.61)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "48066436-72fe-4d05-b28f-da02d417207c")
+		(uuid "489f2dda-1e38-444f-b520-f7fb3c9da03f")
 	)
 	(wire
 		(pts
-			(xy 342.9 34.29) (xy 350.52 34.29)
+			(xy 342.9 36.83) (xy 350.52 36.83)
 		)
 		(stroke
 			(width 0)
@@ -6659,26 +6192,6 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 209.55) (xy 63.5 215.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "55a1cc0c-ba55-4f89-b9b9-87946917f051")
-	)
-	(wire
-		(pts
-			(xy 381 43.18) (xy 388.62 43.18)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "57cb01d0-e926-40e6-9285-031d0690da2b")
-	)
-	(wire
-		(pts
 			(xy 279.4 165.1) (xy 279.4 152.4)
 		)
 		(stroke
@@ -6686,6 +6199,16 @@
 			(type default)
 		)
 		(uuid "57e19fd2-3c9f-428b-bcff-2dd2adc8c2d9")
+	)
+	(wire
+		(pts
+			(xy 342.9 62.23) (xy 350.52 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5a4828bf-535e-492b-91c6-00358b46baaa")
 	)
 	(wire
 		(pts
@@ -6769,6 +6292,16 @@
 	)
 	(wire
 		(pts
+			(xy 342.9 134.62) (xy 350.52 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "600fe70e-46b2-49d2-9a3c-ced37688822b")
+	)
+	(wire
+		(pts
 			(xy 129.54 109.22) (xy 139.7 109.22)
 		)
 		(stroke
@@ -6779,13 +6312,13 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 171.45) (xy 63.5 177.8)
+			(xy 52.07 176.53) (xy 50.8 176.53)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "61c06895-a323-4e74-bdb5-5ad0c2b55506")
+		(uuid "60f90d4f-e841-42e6-ae22-5d06baf32ef8")
 	)
 	(wire
 		(pts
@@ -6796,6 +6329,16 @@
 			(type default)
 		)
 		(uuid "61e6004f-c26a-4031-a8f5-993d158e43d3")
+	)
+	(wire
+		(pts
+			(xy 342.9 106.68) (xy 350.52 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6215b85a-432c-4e72-a67a-1f3eb04c645a")
 	)
 	(wire
 		(pts
@@ -6839,16 +6382,6 @@
 	)
 	(wire
 		(pts
-			(xy 342.9 134.62) (xy 350.52 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "678c7643-549a-4e4d-b7ef-00566563306a")
-	)
-	(wire
-		(pts
 			(xy 266.7 101.6) (xy 279.4 101.6)
 		)
 		(stroke
@@ -6876,6 +6409,16 @@
 			(type default)
 		)
 		(uuid "68f687a1-95d3-4b88-acbf-f01a4d749ed5")
+	)
+	(wire
+		(pts
+			(xy 342.9 132.08) (xy 350.52 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6b81f0d0-d6d1-4a55-b5c7-80966e0b5ae7")
 	)
 	(wire
 		(pts
@@ -6909,16 +6452,6 @@
 	)
 	(wire
 		(pts
-			(xy 52.07 209.55) (xy 50.8 209.55)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6fe2ece5-2b5f-41a5-a459-ac279c545e28")
-	)
-	(wire
-		(pts
 			(xy 88.9 132.08) (xy 99.06 132.08)
 		)
 		(stroke
@@ -6939,16 +6472,6 @@
 	)
 	(wire
 		(pts
-			(xy 342.9 57.15) (xy 350.52 57.15)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7428901e-09d6-47d4-a13a-3d33cc0a110b")
-	)
-	(wire
-		(pts
 			(xy 196.85 105.41) (xy 205.74 105.41)
 		)
 		(stroke
@@ -6956,6 +6479,16 @@
 			(type default)
 		)
 		(uuid "746cb271-800e-4c9f-a64a-71b51be8c592")
+	)
+	(wire
+		(pts
+			(xy 381 134.62) (xy 388.62 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "753f6f78-ac52-469c-87f2-79b17458492b")
 	)
 	(wire
 		(pts
@@ -7059,6 +6592,16 @@
 	)
 	(wire
 		(pts
+			(xy 381 55.88) (xy 388.62 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7f250872-312d-49c0-a267-ca3725421dac")
+	)
+	(wire
+		(pts
 			(xy 88.9 142.24) (xy 99.06 142.24)
 		)
 		(stroke
@@ -7066,16 +6609,6 @@
 			(type default)
 		)
 		(uuid "7f8c6169-b6d4-4539-ba49-471e69d314f6")
-	)
-	(wire
-		(pts
-			(xy 342.9 134.62) (xy 342.9 138.43)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "80d8e3f5-c75b-4c07-9e9c-577d947c7ca0")
 	)
 	(wire
 		(pts
@@ -7149,16 +6682,6 @@
 	)
 	(wire
 		(pts
-			(xy 381 45.72) (xy 388.62 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8801a3b7-2641-4480-9660-62c75de0969f")
-	)
-	(wire
-		(pts
 			(xy 181.61 133.35) (xy 181.61 130.81)
 		)
 		(stroke
@@ -7219,13 +6742,13 @@
 	)
 	(wire
 		(pts
-			(xy 52.07 171.45) (xy 50.8 171.45)
+			(xy 381 58.42) (xy 388.62 58.42)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8e0541f5-358a-4b92-a73c-f75a22bfc175")
+		(uuid "8dea9747-33e2-47e4-91de-ecf4d470639d")
 	)
 	(wire
 		(pts
@@ -7259,16 +6782,6 @@
 	)
 	(wire
 		(pts
-			(xy 381 38.1) (xy 388.62 38.1)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "92b4dceb-30ef-440a-9245-8e6da919fd9f")
-	)
-	(wire
-		(pts
 			(xy 336.55 161.29) (xy 336.55 160.02)
 		)
 		(stroke
@@ -7299,16 +6812,6 @@
 	)
 	(wire
 		(pts
-			(xy 62.23 209.55) (xy 63.5 209.55)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "93d3e31a-6d10-4237-b6e9-dab1a23df955")
-	)
-	(wire
-		(pts
 			(xy 279.4 114.3) (xy 279.4 116.84)
 		)
 		(stroke
@@ -7316,16 +6819,6 @@
 			(type default)
 		)
 		(uuid "94fbb897-b4a2-411c-b2a1-57fb1268c5bb")
-	)
-	(wire
-		(pts
-			(xy 381 40.64) (xy 388.62 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9652deff-ecc8-490b-ba58-fa52c5f3bc57")
 	)
 	(wire
 		(pts
@@ -7339,23 +6832,13 @@
 	)
 	(wire
 		(pts
-			(xy 381 33.02) (xy 388.62 33.02)
+			(xy 342.9 52.07) (xy 350.52 52.07)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "96fa6c11-b346-41b2-8fa1-34a0a48d3a12")
-	)
-	(wire
-		(pts
-			(xy 381 48.26) (xy 388.62 48.26)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "972f1ec5-6d71-46df-8750-a575eef6a40d")
+		(uuid "9684cb0c-7648-4f67-9a2a-a0c669bc222d")
 	)
 	(wire
 		(pts
@@ -7459,6 +6942,16 @@
 	)
 	(wire
 		(pts
+			(xy 381 60.96) (xy 388.62 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a89c4d9b-b3df-4966-9bda-853a9b1e8e79")
+	)
+	(wire
+		(pts
 			(xy 114.3 48.26) (xy 114.3 50.8)
 		)
 		(stroke
@@ -7559,16 +7052,6 @@
 	)
 	(wire
 		(pts
-			(xy 342.9 59.69) (xy 342.9 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b0c56c63-4736-4c41-919a-0448a649413e")
-	)
-	(wire
-		(pts
 			(xy 279.4 149.86) (xy 279.4 152.4)
 		)
 		(stroke
@@ -7606,26 +7089,6 @@
 			(type default)
 		)
 		(uuid "b9716380-ed6c-40e3-a931-0b7be3a7118b")
-	)
-	(wire
-		(pts
-			(xy 62.23 171.45) (xy 63.5 171.45)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bb501eb2-041d-4b23-b168-c52c151ac332")
-	)
-	(wire
-		(pts
-			(xy 63.5 228.6) (xy 63.5 234.95)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bc0d2ce8-6c90-41ad-a12a-86de1302fa30")
 	)
 	(wire
 		(pts
@@ -7669,16 +7132,6 @@
 	)
 	(wire
 		(pts
-			(xy 342.9 109.22) (xy 350.52 109.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c3a357c6-8d02-411d-ae34-daf4db59a4cf")
-	)
-	(wire
-		(pts
 			(xy 25.4 67.31) (xy 38.1 67.31)
 		)
 		(stroke
@@ -7709,13 +7162,23 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 190.5) (xy 62.23 190.5)
+			(xy 62.23 176.53) (xy 63.5 176.53)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "cca65ff4-76de-423d-8da0-ca238674bccb")
+		(uuid "c82c69a7-2172-44d3-b403-8c0003703303")
+	)
+	(wire
+		(pts
+			(xy 342.9 109.22) (xy 350.52 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ca329a99-22d7-4566-a47f-2e02c6158362")
 	)
 	(wire
 		(pts
@@ -7726,16 +7189,6 @@
 			(type default)
 		)
 		(uuid "cd819d4a-b4ab-45e5-9ff2-0fc06fcb5f62")
-	)
-	(wire
-		(pts
-			(xy 381 35.56) (xy 388.62 35.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cee75b92-eefa-46c2-9114-831ce50214a5")
 	)
 	(wire
 		(pts
@@ -7756,6 +7209,16 @@
 			(type default)
 		)
 		(uuid "cf214278-6941-4a12-9bc2-c15185ab67d7")
+	)
+	(wire
+		(pts
+			(xy 342.9 50.8) (xy 342.9 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d1226e98-9ddc-467c-88d4-dda9f2017214")
 	)
 	(wire
 		(pts
@@ -7879,6 +7342,16 @@
 	)
 	(wire
 		(pts
+			(xy 342.9 26.67) (xy 350.52 26.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e38902a7-8301-4435-a5f7-af4d72625770")
+	)
+	(wire
+		(pts
 			(xy 304.8 114.3) (xy 304.8 111.76)
 		)
 		(stroke
@@ -7899,6 +7372,26 @@
 	)
 	(wire
 		(pts
+			(xy 381 132.08) (xy 388.62 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e48176d4-6c62-4afe-9e78-8772563316b8")
+	)
+	(wire
+		(pts
+			(xy 342.9 109.22) (xy 342.9 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e52928ca-d068-49f1-81d8-ad00dfc889ff")
+	)
+	(wire
+		(pts
 			(xy 53.34 44.45) (xy 57.15 44.45)
 		)
 		(stroke
@@ -7916,6 +7409,16 @@
 			(type default)
 		)
 		(uuid "e8b1263e-dc16-4550-98fc-6d95fa043138")
+	)
+	(wire
+		(pts
+			(xy 381 53.34) (xy 388.62 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e9da0e63-bd95-46c7-ab2b-03309eccae3f")
 	)
 	(wire
 		(pts
@@ -7979,16 +7482,6 @@
 	)
 	(wire
 		(pts
-			(xy 342.9 109.22) (xy 342.9 113.03)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ee9d30e1-5e28-473a-b6c0-a5bb50344d4f")
-	)
-	(wire
-		(pts
 			(xy 260.35 139.7) (xy 266.7 139.7)
 		)
 		(stroke
@@ -7996,6 +7489,16 @@
 			(type default)
 		)
 		(uuid "eee355a8-3f49-4f4d-99a1-b0e1b21f45b4")
+	)
+	(wire
+		(pts
+			(xy 342.9 25.4) (xy 342.9 26.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "efd20c56-0a1b-4f3a-adeb-b002d256c3a0")
 	)
 	(wire
 		(pts
@@ -8029,16 +7532,6 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 160.02) (xy 63.5 152.4)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f8cf0858-8516-4d33-a4a4-f7ac724e3696")
-	)
-	(wire
-		(pts
 			(xy 101.6 34.29) (xy 101.6 31.75)
 		)
 		(stroke
@@ -8046,6 +7539,16 @@
 			(type default)
 		)
 		(uuid "fb6ddb6d-541b-419c-857f-9739c7683fc4")
+	)
+	(wire
+		(pts
+			(xy 342.9 62.23) (xy 342.9 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc0b2416-5528-4d51-864e-893593ab78b6")
 	)
 	(wire
 		(pts
@@ -8076,6 +7579,26 @@
 			(type default)
 		)
 		(uuid "fe7a53cf-26a6-4741-a6b2-72871b0dee2c")
+	)
+	(wire
+		(pts
+			(xy 342.9 29.21) (xy 350.52 29.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ff6bd0f6-f610-4e58-bf71-4b7a575156a7")
+	)
+	(wire
+		(pts
+			(xy 342.9 134.62) (xy 342.9 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ffbd00ed-f6b6-4996-b935-25c41cf9536b")
 	)
 	(label "AGND"
 		(at 298.45 114.3 180)
@@ -8127,15 +7650,15 @@
 		)
 		(uuid "0453f261-51e9-48ed-ae71-7ca28bbd53c4")
 	)
-	(label "IO3"
-		(at 381 27.94 0)
+	(label "ENC_A_SPK"
+		(at 342.9 59.69 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
-		(uuid "066f3873-a566-4b05-a560-63fefaeab79f")
+		(uuid "079cf03f-1bba-4ccd-9aeb-5fad64c892ea")
 	)
 	(label "LGND"
 		(at 184.15 133.35 270)
@@ -8147,16 +7670,6 @@
 		)
 		(uuid "0a601458-db2e-4c49-ba84-5b2f7bbace89")
 	)
-	(label "SW6"
-		(at 50.8 209.55 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "0c78dcc7-09c7-4ddb-a6cf-7bb4e27fd681")
-	)
 	(label "IO36"
 		(at 139.7 124.46 0)
 		(effects
@@ -8166,6 +7679,16 @@
 			(justify left bottom)
 		)
 		(uuid "0ccd8e53-8bc9-4d47-b38c-c29059d30389")
+	)
+	(label "ENC_A_MIC"
+		(at 88.9 132.08 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "0d4ed0a2-e1bd-4e2a-b610-ff091efc6a9a")
 	)
 	(label "AVDD"
 		(at 186.69 95.25 90)
@@ -8197,15 +7720,15 @@
 		)
 		(uuid "13ae83a7-1185-4dda-b25d-0378301cbfac")
 	)
-	(label "SW4"
-		(at 139.7 132.08 0)
+	(label "ENC_A_MOUSE"
+		(at 139.7 129.54 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "15f8a177-dd50-47e9-89e9-ee96440662be")
+		(uuid "13f3462f-e782-40b4-800a-0195c857d818")
 	)
 	(label "JOY_SW"
 		(at 139.7 139.7 0)
@@ -8217,17 +7740,17 @@
 		)
 		(uuid "1b0085ec-abdd-4021-9730-f16ce57cd118")
 	)
-	(label "ENC2_A"
-		(at 342.9 54.61 0)
+	(label "SW_FORWARD"
+		(at 342.9 106.68 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
-		(uuid "2198dace-fe64-45c0-8dd4-8c42f0246280")
+		(uuid "27117343-1afb-4d73-8080-e18e396c803e")
 	)
-	(label "ENC2_B"
+	(label "ENC_A_SPK"
 		(at 88.9 139.7 180)
 		(effects
 			(font
@@ -8235,7 +7758,27 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "34e1d57c-a37c-4011-80c1-0ba520dc8b77")
+		(uuid "2c8393c5-d4bc-4a70-a35e-37d653315534")
+	)
+	(label "ENC_B_MIC"
+		(at 88.9 134.62 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "3257042b-313f-44d2-9a7d-3c4798229a24")
+	)
+	(label "IO4"
+		(at 381 27.94 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "344df928-8b5f-4cbe-b9ae-c965c1966f5f")
 	)
 	(label "IO4"
 		(at 88.9 119.38 180)
@@ -8267,15 +7810,25 @@
 		)
 		(uuid "3b6ea07d-425d-4968-95f2-d776787f5a3b")
 	)
-	(label "ENC3_B"
-		(at 342.9 82.55 0)
+	(label "SW_RIGHT"
+		(at 50.8 176.53 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
-		(uuid "41e59247-4b09-42b3-9aee-c6b68400be07")
+		(uuid "40294ef8-6baa-4c74-91df-81018c894b8e")
+	)
+	(label "SW_LEFT"
+		(at 50.8 157.48 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "41f75df0-5781-47dd-9901-c5817b7a91f6")
 	)
 	(label "VNEG"
 		(at 203.2 125.73 0)
@@ -8307,27 +7860,17 @@
 		)
 		(uuid "4620c109-26a1-4617-95fa-13af4be5868c")
 	)
-	(label "ENC3_A"
-		(at 88.9 142.24 180)
+	(label "ENC_B_MOUSE"
+		(at 342.9 80.01 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "4823d22c-5947-42c4-b7e2-a6de0a91ba36")
+		(uuid "4674f5d3-3d02-4470-aeca-6e12a89e0847")
 	)
-	(label "SW6"
-		(at 139.7 137.16 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "495e8c3c-9f5d-48b2-ada9-ef5f1dad48ff")
-	)
-	(label "SW7"
+	(label "SW_SWAP"
 		(at 88.9 129.54 180)
 		(effects
 			(font
@@ -8336,6 +7879,16 @@
 			(justify right bottom)
 		)
 		(uuid "4c1f0064-c90f-43fa-aabb-c7701e8c9d53")
+	)
+	(label "SW_BACK"
+		(at 139.7 149.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4ddf109e-2d4e-40f8-966f-e04cf0fda7eb")
 	)
 	(label "BCLK_TX"
 		(at 165.1 107.95 180)
@@ -8347,6 +7900,26 @@
 		)
 		(uuid "4e07a1ef-9c6a-4edd-b040-b8a9dcbb6d38")
 	)
+	(label "ENC_A_MOUSE"
+		(at 342.9 82.55 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "4e0da2a3-e70f-4aa2-aff0-f2d649c0b689")
+	)
+	(label "SW_SPK"
+		(at 342.9 54.61 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "50a235d0-d0c8-4782-93e5-620b27f59031")
+	)
 	(label "IO45"
 		(at 139.7 142.24 0)
 		(effects
@@ -8356,6 +7929,26 @@
 			(justify left bottom)
 		)
 		(uuid "53ba6466-9e94-4f4e-bfe4-2233942e1a4a")
+	)
+	(label "SW_BACK"
+		(at 342.9 132.08 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "54fbb5cc-6cb5-4f04-a4db-4539a56e7960")
+	)
+	(label "IO3"
+		(at 381 33.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "55e58fe8-e206-42d4-986d-8ddcb806ac4d")
 	)
 	(label "JOY_Y"
 		(at 88.9 114.3 180)
@@ -8367,26 +7960,6 @@
 		)
 		(uuid "5796d832-8e62-4e62-95bf-de8baebb8591")
 	)
-	(label "IO21"
-		(at 381 35.56 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "5b518b81-4c2e-4668-8130-b4a37773149d")
-	)
-	(label "ENC1_B"
-		(at 342.9 31.75 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "5bf84a41-75c8-440e-9e3a-d829bd970fc9")
-	)
 	(label "AUDIO_LEFT"
 		(at 342.9 232.41 180)
 		(effects
@@ -8397,15 +7970,25 @@
 		)
 		(uuid "5c1895cb-b027-4192-b741-cd286676d126")
 	)
-	(label "ENC1_B"
-		(at 88.9 134.62 180)
+	(label "ENC_B_SPK"
+		(at 88.9 142.24 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "613d556b-e2c5-43ce-ac19-b5faed094b8a")
+		(uuid "5fb759be-8c5b-4698-aa8e-89dda602f045")
+	)
+	(label "IO37"
+		(at 381 53.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6040f952-8b4c-4a50-8f65-d8e797b1763b")
 	)
 	(label "USB_DM"
 		(at 139.7 114.3 0)
@@ -8427,6 +8010,16 @@
 		)
 		(uuid "63012e5b-36d7-4b18-8595-a3b991f868f2")
 	)
+	(label "SW_MIC"
+		(at 342.9 29.21 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "63612f0a-1062-4df5-a2bb-63de63750633")
+	)
 	(label "JOY_X"
 		(at 342.9 153.67 0)
 		(effects
@@ -8437,35 +8030,25 @@
 		)
 		(uuid "6490e97a-ca8c-41e3-ae0b-59914e1454a2")
 	)
-	(label "SW5"
-		(at 50.8 190.5 180)
+	(label "SW_SPK"
+		(at 88.9 144.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "6511505e-ea1f-432e-b9e8-0089f9872c27")
+		(uuid "65ce578a-45bb-4ac9-a9cd-962233297828")
 	)
-	(label "WS_TX"
-		(at 88.9 149.86 180)
+	(label "ENC_B_MIC"
+		(at 342.9 31.75 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "66625eb6-561e-4a2b-a6a1-6144fc52bb84")
-	)
-	(label "SW5"
-		(at 139.7 134.62 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "728b49b1-f504-4d39-b4f5-cfda3de1f7fa")
+		(uuid "66efdb99-1776-457a-90a0-704e0f0baf51")
 	)
 	(label "RX"
 		(at 342.9 210.82 0)
@@ -8477,25 +8060,35 @@
 		)
 		(uuid "73c3ab5b-abf0-4fd9-b1ba-8cf1b3544267")
 	)
-	(label "SW7"
-		(at 50.8 231.14 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "7f19c582-66dd-45f5-98f2-1fdbc8f78644")
-	)
-	(label "ENC2_B"
-		(at 342.9 57.15 0)
+	(label "SW_LEFT"
+		(at 139.7 134.62 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "81f41215-7855-48d2-b935-c49686ac0871")
+		(uuid "76a40595-a685-4926-87b5-bddab3c82862")
+	)
+	(label "SW_SWAP"
+		(at 381 132.08 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "7d65a135-ebe6-4503-84de-fe3224e7ac02")
+	)
+	(label "IO36"
+		(at 381 55.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "81250fcd-24c4-430e-96fc-a3a6ecebefdf")
 	)
 	(label "AUDIO_LEFT"
 		(at 234.95 102.87 0)
@@ -8517,15 +8110,25 @@
 		)
 		(uuid "8449dcce-1f03-42d6-b4b5-d3a888486d90")
 	)
-	(label "SW_LEFT"
-		(at 139.7 147.32 0)
+	(label "ENC_B_SPK"
+		(at 342.9 57.15 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "87842ba0-753c-4d58-8a22-41ec3490b82d")
+	)
+	(label "SW_RIGHT"
+		(at 139.7 137.16 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "899c74c1-2cc5-4418-97fb-287c60742c92")
+		(uuid "8af69c5d-0d3d-4bfb-9a05-68658d8c891a")
 	)
 	(label "WS_RX"
 		(at 88.9 124.46 180)
@@ -8537,17 +8140,7 @@
 		)
 		(uuid "8c2c1afe-bca6-4458-998e-b9b8fe47c7a4")
 	)
-	(label "SW3"
-		(at 50.8 152.4 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "8dcf92a5-2f7e-4fea-90de-444e83c6d528")
-	)
-	(label "IO4"
+	(label "IO18"
 		(at 381 30.48 0)
 		(effects
 			(font
@@ -8555,7 +8148,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "8e69d712-1eff-4d54-89e2-bb1c2fed478c")
+		(uuid "93087992-14a2-4114-b0cd-dce1c4659083")
 	)
 	(label "AGND"
 		(at 186.69 133.35 270)
@@ -8577,25 +8170,15 @@
 		)
 		(uuid "94f298ad-52f7-4de3-b518-259fc3d68ceb")
 	)
-	(label "SW_RIGHT"
-		(at 342.9 132.08 0)
+	(label "IO35"
+		(at 381 58.42 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "9775364d-44e4-4096-97b1-85dc6c8e7e10")
-	)
-	(label "IO46"
-		(at 381 48.26 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "97e0c7a1-1a82-4568-970e-a1ee3318b1da")
+		(uuid "99a8f644-f538-4924-9134-f6e75a47f265")
 	)
 	(label "CPVDD"
 		(at 181.61 95.25 90)
@@ -8627,35 +8210,15 @@
 		)
 		(uuid "a2a58eb9-c6e0-430a-9083-038fa64d9bb8")
 	)
-	(label "SW3"
-		(at 139.7 129.54 0)
+	(label "IO46"
+		(at 381 35.56 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "a31eb45e-1ebb-4eb7-9cbe-18cc01de961e")
-	)
-	(label "ENC2_A"
-		(at 88.9 137.16 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "a62a4836-34f9-4cf5-b5b4-dc8586a8785d")
-	)
-	(label "IO35"
-		(at 381 38.1 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ad399627-0f84-4857-adeb-6699f87aaf9c")
+		(uuid "a631afab-7379-4de7-985b-952f967aa08f")
 	)
 	(label "IO18"
 		(at 139.7 111.76 0)
@@ -8687,16 +8250,6 @@
 		)
 		(uuid "b4dcd43b-4ac3-4cbc-bd74-76cf473f93f9")
 	)
-	(label "ENC1_A"
-		(at 342.9 29.21 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "bc2ddfdd-9455-43b2-b933-df575b4faa08")
-	)
 	(label "VNEG"
 		(at 260.35 165.1 180)
 		(effects
@@ -8707,45 +8260,15 @@
 		)
 		(uuid "bdc16f7e-887c-4210-9c98-b161183f2ba9")
 	)
-	(label "ENC3_B"
-		(at 88.9 144.78 180)
+	(label "ENC_A_MIC"
+		(at 342.9 34.29 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "bf7fda68-280b-4686-84f1-0463bdeab33d")
-	)
-	(label "IO36"
-		(at 381 40.64 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "c845badf-0028-457b-819f-541e5fee6b9e")
-	)
-	(label "IO18"
-		(at 381 33.02 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ccfd8656-5ef2-48ed-90ac-5e49aa0dad08")
-	)
-	(label "IO45"
-		(at 381 45.72 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "cfb10ad3-cfff-4125-be4e-e8b0f0ad6dd9")
+		(uuid "bf91b286-2e81-4e8a-a308-c771ead4e53e")
 	)
 	(label "RX"
 		(at 139.7 106.68 0)
@@ -8766,6 +8289,26 @@
 			(justify right bottom)
 		)
 		(uuid "d1459be8-907f-48f2-96ad-b5548a31fb03")
+	)
+	(label "BCLK_TX"
+		(at 139.7 109.22 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d2330218-ee27-46d5-8e1a-d59a5e73a729")
+	)
+	(label "SD_TX"
+		(at 88.9 149.86 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d236b777-34ea-452d-b18b-4ef165ac80e9")
 	)
 	(label "JOY_Y"
 		(at 342.9 156.21 0)
@@ -8807,6 +8350,16 @@
 		)
 		(uuid "d6d9ec42-183e-4333-9f2c-ec50c461b4b1")
 	)
+	(label "SW_MIC"
+		(at 88.9 137.16 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d7142b19-668d-4b25-9539-7dea813d31a8")
+	)
 	(label "BCLK_RX"
 		(at 88.9 121.92 180)
 		(effects
@@ -8817,15 +8370,15 @@
 		)
 		(uuid "da1263c7-f410-4e4f-a7d3-c2fa5dd6514b")
 	)
-	(label "BCLK_TX"
-		(at 88.9 147.32 180)
+	(label "SW_FORWARD"
+		(at 139.7 147.32 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify left bottom)
 		)
-		(uuid "da7ad120-0431-4015-a9b4-3a4b9bc7ca90")
+		(uuid "dc730d52-6b26-4d86-a32c-6dc3c61caffe")
 	)
 	(label "LGND"
 		(at 260.35 127 180)
@@ -8846,16 +8399,6 @@
 			(justify left bottom)
 		)
 		(uuid "de8b6645-98d7-46ea-8bdd-3e390d88e420")
-	)
-	(label "ENC1_A"
-		(at 88.9 132.08 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "defaac92-d5bb-4c56-bcf8-af421bed9d4e")
 	)
 	(label "EN"
 		(at 38.1 127 0)
@@ -8887,15 +8430,15 @@
 		)
 		(uuid "e32f151b-b532-450a-85b8-f4154afd5fda")
 	)
-	(label "SW_RIGHT"
-		(at 139.7 149.86 0)
+	(label "IO45"
+		(at 381 60.96 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "e629fe08-349f-4905-9599-377cda8ffa55")
+		(uuid "e5127ded-c32a-4315-952c-6c362c93a84f")
 	)
 	(label "AUDIO_RIGHT"
 		(at 234.95 105.41 0)
@@ -8927,16 +8470,6 @@
 		)
 		(uuid "eb5d2048-8eaa-48a8-9391-d73cc049beca")
 	)
-	(label "SW_LEFT"
-		(at 342.9 106.68 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ebbf5eee-5779-4919-b753-8e6f3663b8b0")
-	)
 	(label "IO35"
 		(at 139.7 121.92 0)
 		(effects
@@ -8946,6 +8479,16 @@
 			(justify left bottom)
 		)
 		(uuid "ebd123ee-6971-430c-8672-dc883728cfff")
+	)
+	(label "ENC_B_MOUSE"
+		(at 139.7 132.08 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f26b6932-41c0-4277-9b06-40bff8b42135")
 	)
 	(label "SD_RX"
 		(at 342.9 184.15 0)
@@ -8967,16 +8510,6 @@
 		)
 		(uuid "f6cf664c-e5f1-4cb8-a954-af09c1958bda")
 	)
-	(label "SW4"
-		(at 50.8 171.45 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "f86eab05-f18d-408b-94e1-595d32491e27")
-	)
 	(label "TX"
 		(at 139.7 104.14 0)
 		(effects
@@ -8997,35 +8530,15 @@
 		)
 		(uuid "fa503760-b619-45f5-872c-fcbd3c295a0e")
 	)
-	(label "SD_TX"
-		(at 139.7 109.22 0)
+	(label "WS_TX"
+		(at 88.9 147.32 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
-		(uuid "fb185e35-d823-4337-831b-af9b3ea353d5")
-	)
-	(label "IO37"
-		(at 381 43.18 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "fe7afb33-3ec7-47ee-bf8b-b08f97c979a5")
-	)
-	(label "ENC3_A"
-		(at 342.9 80.01 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ff51e06d-8970-4fd7-a2ae-6693e51f0fc1")
+		(uuid "ff39a33c-6c4b-4504-a8bf-b3b8cb9425cd")
 	)
 	(symbol
 		(lib_id "Diode:SS34")
@@ -9039,7 +8552,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "01514144-fc5a-4688-b473-03dba2c22a75")
-		(property "Reference" "D3"
+		(property "Reference" "D1"
 			(at 63.8175 22.86 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9134,7 +8647,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "D3")
+					(reference "D1")
 					(unit 1)
 				)
 			)
@@ -9142,7 +8655,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 342.9 113.03 0)
+		(at 63.5 182.88 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9151,9 +8664,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "04519b15-1b0e-457a-94af-43b041be02aa")
-		(property "Reference" "#PWR047"
-			(at 342.9 119.38 0)
+		(uuid "0438967b-8bc4-4659-9c5b-6745733b0154")
+		(property "Reference" "#PWR08"
+			(at 63.5 189.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9164,7 +8677,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 342.9 118.11 0)
+			(at 63.5 187.96 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9174,7 +8687,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 342.9 113.03 0)
+			(at 63.5 182.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9185,7 +8698,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 342.9 113.03 0)
+			(at 63.5 182.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9196,7 +8709,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 342.9 113.03 0)
+			(at 63.5 182.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9207,12 +8720,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "b4b45443-9abc-4b7a-aa0e-271f8b7344ea")
+			(uuid "5d32cfb2-8321-4314-9ce8-7358175e2213")
 		)
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR047")
+					(reference "#PWR08")
 					(unit 1)
 				)
 			)
@@ -9538,7 +9051,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0abf1d12-5133-453c-ad13-7a3210818efe")
-		(property "Reference" "#PWR049"
+		(property "Reference" "#PWR046"
 			(at 342.9 245.11 0)
 			(hide yes)
 			(show_name no)
@@ -9598,7 +9111,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR049")
+					(reference "#PWR046")
 					(unit 1)
 				)
 			)
@@ -9616,7 +9129,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0b047484-7448-4faf-ada8-3be9a0ba4f0a")
-		(property "Reference" "#PWR042"
+		(property "Reference" "#PWR037"
 			(at 336.55 189.23 0)
 			(hide yes)
 			(show_name no)
@@ -9676,7 +9189,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR042")
+					(reference "#PWR037")
 					(unit 1)
 				)
 			)
@@ -9694,7 +9207,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0b0e5ea2-d2e7-4f2d-aba8-6db4ed057037")
-		(property "Reference" "#PWR017"
+		(property "Reference" "#PWR012"
 			(at 101.6 35.56 0)
 			(hide yes)
 			(show_name no)
@@ -9754,7 +9267,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR017")
+					(reference "#PWR012")
 					(unit 1)
 				)
 			)
@@ -9870,6 +9383,84 @@
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
 					(reference "C6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 381 139.7 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "10e5b11e-f2ed-44f1-9db3-b03b8ff9b030")
+		(property "Reference" "#PWR047"
+			(at 381 146.05 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 381 144.78 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 381 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 381 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 381 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "6b0acfe6-c7b0-489a-ac85-8f6b32666219")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "#PWR047")
 					(unit 1)
 				)
 			)
@@ -10001,7 +9592,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "1ae8026c-222a-485a-87b1-0a99a441a493")
-		(property "Reference" "D5"
+		(property "Reference" "D3"
 			(at 336.2325 199.39 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10096,7 +9687,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "D5")
+					(reference "D3")
 					(unit 1)
 				)
 			)
@@ -10114,7 +9705,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1b4c237f-d80a-4433-8631-a6d31eac7f12")
-		(property "Reference" "#PWR05"
+		(property "Reference" "#PWR03"
 			(at 30.48 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -10174,7 +9765,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR05")
+					(reference "#PWR03")
 					(unit 1)
 				)
 			)
@@ -10192,7 +9783,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1db442e4-7ae6-4768-905c-512e6e837222")
-		(property "Reference" "#PWR022"
+		(property "Reference" "#PWR017"
 			(at 114.3 161.29 0)
 			(hide yes)
 			(show_name no)
@@ -10252,7 +9843,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR022")
+					(reference "#PWR017")
 					(unit 1)
 				)
 			)
@@ -10270,7 +9861,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1f4d38f2-92b4-4e72-b742-a5839c5e7283")
-		(property "Reference" "#PWR06"
+		(property "Reference" "#PWR04"
 			(at 63.5 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -10330,7 +9921,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR06")
+					(reference "#PWR04")
 					(unit 1)
 				)
 			)
@@ -10348,7 +9939,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2120c2ea-f8d3-48e3-8066-c96aa155ca11")
-		(property "Reference" "#PWR029"
+		(property "Reference" "#PWR024"
 			(at 184.15 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -10408,212 +9999,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR029")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 342.9 63.5 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "23ccb65b-5e23-4398-99cc-a1c4f1f7dbae")
-		(property "Reference" "#PWR045"
-			(at 342.9 69.85 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 342.9 68.58 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 342.9 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 342.9 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 342.9 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "1e913a6a-5fd3-49bb-b863-81c870c0caca")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR045")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Switch:SW_Wuerth_450301014042")
-		(at 57.15 231.14 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "27a1051d-8e2c-4802-8ad7-387e4914cdbf")
-		(property "Reference" "SW7"
-			(at 57.15 222.25 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SS-12D00-G3"
-			(at 57.15 224.79 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Button_Switch_THT:SW_Slide-03_Wuerth-WS-SLTV_10x2.5x6.4_P2.54mm"
-			(at 57.15 241.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.lcsc.com/product-detail/C22355741.html"
-			(at 57.15 238.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Switch slide, single pole double throw"
-			(at 57.15 231.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "BOM Notes" "LCSC candidate only; current Wuerth footprint kept because no exact KiCad footprint for SS-12D00-G3 was available."
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C22355741"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "SOFNG"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "SS-12D00-G3"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "729d2147-286d-496c-9ec5-2f7045395c2d")
-		)
-		(pin "1"
-			(uuid "9c404c46-f520-4260-be81-55bcfc058c0c")
-		)
-		(pin "3"
-			(uuid "9fa04e43-e86c-4f9e-b745-7152b252723f")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "SW7")
+					(reference "#PWR024")
 					(unit 1)
 				)
 			)
@@ -10631,7 +10017,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2a29a9ec-7c8e-4ae1-89b9-bfa0746d60c1")
-		(property "Reference" "#PWR014"
+		(property "Reference" "#PWR09"
 			(at 69.85 33.02 0)
 			(hide yes)
 			(show_name no)
@@ -10691,7 +10077,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR014")
+					(reference "#PWR09")
 					(unit 1)
 				)
 			)
@@ -10709,7 +10095,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2b319833-266b-46c0-a26c-c937e6768202")
-		(property "Reference" "#PWR046"
+		(property "Reference" "#PWR043"
 			(at 342.9 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -10769,7 +10155,206 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR046")
+					(reference "#PWR043")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3.3V")
+		(at 342.9 50.8 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2b4131c6-eea5-495e-a4ee-78bc1f050abf")
+		(property "Reference" "#PWR041"
+			(at 342.9 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 342.9 45.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 342.9 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 342.9 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(at 342.9 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a6d9b257-cf6d-4acc-93ad-383e85c55155")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "#PWR041")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x04")
+		(at 393.7 30.48 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2ef8ffaf-a553-46b5-a086-207236d8793a")
+		(property "Reference" "J11"
+			(at 396.24 30.4799 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x04"
+			(at 396.24 33.0199 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
+			(at 393.7 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C2691448.html"
+			(at 393.7 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 393.7 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C2691448"
+			(at 38.1 -177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "XFCN"
+			(at 38.1 -177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "PZ254V-11-04P"
+			(at 38.1 -177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "4"
+			(uuid "5bf37a0e-bdd9-42de-a138-717a1585d3c1")
+		)
+		(pin "3"
+			(uuid "a2b61a1d-d1de-46da-a087-3ec6c603e068")
+		)
+		(pin "2"
+			(uuid "b242babe-dc9b-4696-af58-fe0ead1d6337")
+		)
+		(pin "1"
+			(uuid "349b0981-85ba-40ab-98b3-2bea54adb091")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "J11")
 					(unit 1)
 				)
 			)
@@ -10890,6 +10475,84 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+3.3V")
+		(at 342.9 25.4 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "36314817-8cb7-4a05-aa36-1ffe8abe36ae")
+		(property "Reference" "#PWR039"
+			(at 342.9 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 342.9 20.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 342.9 25.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 342.9 25.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(at 342.9 25.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d50e2666-7679-4514-9dc8-d17620704190")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "#PWR039")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 171.45 54.61 0)
 		(unit 1)
@@ -10901,7 +10564,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3cc59709-c8e5-4928-ac08-33436c08efc6")
-		(property "Reference" "#PWR027"
+		(property "Reference" "#PWR022"
 			(at 171.45 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -10961,120 +10624,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR027")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Switch:SW_Push")
-		(at 57.15 171.45 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "3e60ee93-21f6-4b16-a429-ce2cafbb7ccc")
-		(property "Reference" "SW4"
-			(at 57.15 163.83 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "TS-1187A-B-A-B"
-			(at 57.15 166.37 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
-			(at 57.15 166.37 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "http://www.helloxkb.com/public/images/pdf/TS-1187A-X-X-X.pdf"
-			(at 57.15 166.37 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "SMD tactile switch, 5.1x5.1mm, SPST-NO"
-			(at 57.15 171.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C318884"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "XKB Connection"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "TS-1187A-B-A-B"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "70c76670-ca90-4d6d-9c64-13c89966937e")
-		)
-		(pin "2"
-			(uuid "e620baf7-77b3-474b-b9cf-02c80ff3bd6d")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "SW4")
+					(reference "#PWR022")
 					(unit 1)
 				)
 			)
@@ -11311,6 +10861,127 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector_Generic:Conn_01x04")
+		(at 393.7 55.88 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4572eb69-52d9-4df9-9cae-a9977aa2b606")
+		(property "Reference" "J13"
+			(at 396.24 55.8799 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x04"
+			(at 396.24 58.4199 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
+			(at 393.7 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C2691448.html"
+			(at 393.7 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 393.7 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C2691448"
+			(at 38.1 -152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "XFCN"
+			(at 38.1 -152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "PZ254V-11-04P"
+			(at 38.1 -152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "4"
+			(uuid "38c2f731-3543-49ae-aa8b-59a3c51041b4")
+		)
+		(pin "3"
+			(uuid "2c81edb9-be52-4bfa-abfc-5f3b348a0475")
+		)
+		(pin "2"
+			(uuid "a658b1d9-497c-447d-b6bf-60dc3eb67386")
+		)
+		(pin "1"
+			(uuid "de68bbe0-8903-44ce-a685-acb1f9dd6721")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "J13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3.3V")
 		(at 279.4 101.6 0)
 		(unit 1)
@@ -11322,7 +10993,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "45de9fdc-0535-44c5-81f8-393b29c29d61")
-		(property "Reference" "#PWR052"
+		(property "Reference" "#PWR027"
 			(at 279.4 105.41 0)
 			(hide yes)
 			(show_name no)
@@ -11382,15 +11053,15 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR052")
+					(reference "#PWR027")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 355.6 106.68 0)
+		(lib_id "power:GND")
+		(at 63.5 165.1 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11399,31 +11070,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "461e4167-ce01-4cc3-8aa8-0425b1006cb4")
-		(property "Reference" "J6"
-			(at 358.14 106.6799 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Conn_01x02"
-			(at 358.14 109.2199 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
-			(at 355.6 106.68 0)
+		(uuid "462a51c2-0be2-4cbb-9b52-5a630c971ae1")
+		(property "Reference" "#PWR07"
+			(at 63.5 171.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11433,8 +11082,18 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/product-detail/C492401.html"
-			(at 355.6 106.68 0)
+		(property "Value" "GND"
+			(at 63.5 170.18 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 63.5 165.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11444,8 +11103,8 @@
 				)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 355.6 106.68 0)
+		(property "Datasheet" ""
+			(at 63.5 165.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11455,30 +11114,8 @@
 				)
 			)
 		)
-		(property "LCSC" "C492401"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "XFCN"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "PZ254V-11-02P"
-			(at 0 0 0)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 63.5 165.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11489,15 +11126,136 @@
 			)
 		)
 		(pin "1"
-			(uuid "7242411b-8131-448e-9a1b-372367408aef")
-		)
-		(pin "2"
-			(uuid "82db2c0a-b82d-429a-9177-ca1a746b01ae")
+			(uuid "ebe0ed69-2496-4527-9152-c72bbbe7772d")
 		)
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "J6")
+					(reference "#PWR07")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x05")
+		(at 355.6 31.75 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4eb26ea2-cd6d-49a5-9653-aecb6b16db2e")
+		(property "Reference" "J3"
+			(at 358.14 30.4799 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x05"
+			(at 358.14 33.0199 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_JST:JST_XH_B5B-XH-A_1x05_P2.50mm_Vertical"
+			(at 355.6 31.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C492404.html"
+			(at 355.6 31.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 355.6 31.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C492404"
+			(at 0 -127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "XFCN"
+			(at 0 -127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "PZ254V-11-05P"
+			(at 0 -127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "4"
+			(uuid "2621d0a7-5e9b-4f16-a8f2-347160edb59d")
+		)
+		(pin "3"
+			(uuid "6870b87d-db17-4c0e-ac22-515255c1887d")
+		)
+		(pin "2"
+			(uuid "58f5f6c4-8627-4390-8c50-a8234348f67e")
+		)
+		(pin "1"
+			(uuid "ba91b09f-ebb6-437b-bb36-780fea7b50e5")
+		)
+		(pin "5"
+			(uuid "59c213cb-5169-48ed-8f48-875af65a3926")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "J3")
 					(unit 1)
 				)
 			)
@@ -11515,7 +11273,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "537ecf1b-dc79-4ed1-9a21-b56b4337b781")
-		(property "Reference" "#PWR018"
+		(property "Reference" "#PWR013"
 			(at 101.6 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -11575,15 +11333,15 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR018")
+					(reference "#PWR013")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x03")
-		(at 355.6 57.15 0)
+		(lib_id "Switch:SW_Push")
+		(at 57.15 176.53 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11592,31 +11350,29 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "53af2a97-896b-4b98-8a61-8a19d563ffe9")
-		(property "Reference" "J4"
-			(at 358.14 55.8799 0)
+		(uuid "58076356-84c1-4502-ba8a-a75f64db2254")
+		(property "Reference" "SW4"
+			(at 57.15 168.91 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Value" "Conn_01x03"
-			(at 358.14 58.4199 0)
+		(property "Value" "TS-1187A-B-A-B"
+			(at 57.15 171.45 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
-			(at 355.6 57.15 0)
+		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
+			(at 57.15 171.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11626,8 +11382,8 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/product-detail/C2937625.html"
-			(at 355.6 57.15 0)
+		(property "Datasheet" "http://www.helloxkb.com/public/images/pdf/TS-1187A-X-X-X.pdf"
+			(at 57.15 171.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11637,8 +11393,8 @@
 				)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 355.6 57.15 0)
+		(property "Description" "SMD tactile switch, 5.1x5.1mm, SPST-NO"
+			(at 57.15 176.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11648,8 +11404,8 @@
 				)
 			)
 		)
-		(property "LCSC" "C2937625"
-			(at 0 0 0)
+		(property "LCSC" "C318884"
+			(at 0 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11659,8 +11415,8 @@
 				)
 			)
 		)
-		(property "Manufacturer" "XFCN"
-			(at 0 0 0)
+		(property "Manufacturer" "XKB Connection"
+			(at 0 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11670,8 +11426,8 @@
 				)
 			)
 		)
-		(property "MPN" "PZ254V-11-03P"
-			(at 0 0 0)
+		(property "MPN" "TS-1187A-B-A-B"
+			(at 0 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11680,20 +11436,17 @@
 					(size 1.27 1.27)
 				)
 			)
-		)
-		(pin "2"
-			(uuid "3ffa17b2-c7e0-48fe-be0e-6cce1c005f9b")
 		)
 		(pin "1"
-			(uuid "e60bc3ec-e345-495b-875a-2284bd3e9659")
+			(uuid "ab5bf329-1262-4079-acd2-31d03da28299")
 		)
-		(pin "3"
-			(uuid "6996ca7d-4056-42e4-a322-5655a5ab86dc")
+		(pin "2"
+			(uuid "963c2f9d-ec4b-4157-be76-11f5ec1bff44")
 		)
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "J4")
+					(reference "SW4")
 					(unit 1)
 				)
 			)
@@ -11711,7 +11464,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "595cd961-a66f-43fd-9871-d96d3f9e3bad")
-		(property "Reference" "#PWR041"
+		(property "Reference" "#PWR036"
 			(at 336.55 171.45 0)
 			(hide yes)
 			(show_name no)
@@ -11771,7 +11524,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR041")
+					(reference "#PWR036")
 					(unit 1)
 				)
 			)
@@ -11867,7 +11620,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "5e865fe0-e5a7-4c7c-a984-4981768d0e3d")
-		(property "Reference" "D4"
+		(property "Reference" "D2"
 			(at 97.79 38.4174 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11975,7 +11728,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "D4")
+					(reference "D2")
 					(unit 1)
 				)
 			)
@@ -12118,84 +11871,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 63.5 234.95 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "6487f0e5-503e-4e1c-b758-abb27073d981")
-		(property "Reference" "#PWR013"
-			(at 63.5 241.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 63.5 240.03 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 63.5 234.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 63.5 234.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 63.5 234.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "73d3ebfb-0f6f-46fb-8577-4ddeefbf8ec6")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR013")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector_Generic:Conn_01x05")
 		(at 355.6 184.15 0)
 		(unit 1)
@@ -12229,7 +11904,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical"
+		(property "Footprint" "Connector_JST:JST_XH_B5B-XH-A_1x05_P2.50mm_Vertical"
 			(at 355.6 184.15 0)
 			(hide yes)
 			(show_name no)
@@ -12331,7 +12006,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "690f7b8e-0845-45d8-8512-6629009485f5")
-		(property "Reference" "#PWR023"
+		(property "Reference" "#PWR018"
 			(at 158.75 41.91 0)
 			(hide yes)
 			(show_name no)
@@ -12391,7 +12066,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR023")
+					(reference "#PWR018")
 					(unit 1)
 				)
 			)
@@ -12409,7 +12084,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6a72a54d-18d7-41cc-81eb-a23cc5d5ca19")
-		(property "Reference" "#PWR044"
+		(property "Reference" "#PWR040"
 			(at 342.9 44.45 0)
 			(hide yes)
 			(show_name no)
@@ -12469,7 +12144,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR044")
+					(reference "#PWR040")
 					(unit 1)
 				)
 			)
@@ -12486,7 +12161,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "6c497497-0eef-471b-a7a7-63996b86cab0")
-		(property "Reference" "R4"
+		(property "Reference" "R2"
 			(at 58.42 32.258 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12581,7 +12256,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "R4")
+					(reference "R2")
 					(unit 1)
 				)
 			)
@@ -12660,84 +12335,6 @@
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
 					(reference "#FLG01")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 342.9 138.43 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "6dc1c5ee-5c74-4815-84f1-70e6a9dd5569")
-		(property "Reference" "#PWR048"
-			(at 342.9 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 342.9 143.51 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 342.9 138.43 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 342.9 138.43 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 342.9 138.43 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "56257a15-1105-4085-b895-c2a199c0a885")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR048")
 					(unit 1)
 				)
 			)
@@ -12891,7 +12488,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Connector_Audio:Jack_3.5mm_CUI_SJ-3523-SMT_Horizontal"
+		(property "Footprint" "lcsc_footprints:C668608_PJ-313D"
 			(at 354.33 234.95 0)
 			(hide yes)
 			(show_name no)
@@ -12924,7 +12521,7 @@
 				)
 			)
 		)
-		(property "BOM Notes" "LCSC candidate only; keep current CUI SJ-3523 footprint until PJ-313D footprint/pinout is verified."
+		(property "BOM Notes" "Uses the project-local C668608_PJ-313D footprint and 3D model."
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
@@ -12987,6 +12584,84 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 342.9 63.5 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "748c4463-aadf-4d02-af2c-15a4ba3646e3")
+		(property "Reference" "#PWR042"
+			(at 342.9 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 342.9 68.58 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 342.9 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 342.9 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 342.9 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "3634c830-2d5a-497b-968a-e18a56905d72")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "#PWR042")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector_Generic:Conn_01x05")
 		(at 355.6 158.75 0)
 		(unit 1)
@@ -13020,7 +12695,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical"
+		(property "Footprint" "Connector_JST:JST_XH_B5B-XH-A_1x05_P2.50mm_Vertical"
 			(at 355.6 158.75 0)
 			(hide yes)
 			(show_name no)
@@ -13111,232 +12786,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Switch:SW_Push")
-		(at 57.15 209.55 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "76f531c0-d4e5-47c7-b9e0-a302bd702fb4")
-		(property "Reference" "SW6"
-			(at 57.15 201.93 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "TS-1187A-B-A-B"
-			(at 57.15 204.47 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
-			(at 57.15 204.47 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "http://www.helloxkb.com/public/images/pdf/TS-1187A-X-X-X.pdf"
-			(at 57.15 204.47 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "SMD tactile switch, 5.1x5.1mm, SPST-NO"
-			(at 57.15 209.55 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C318884"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "XKB Connection"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "TS-1187A-B-A-B"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "33c7f830-3a9a-4f34-908d-d341c253a000")
-		)
-		(pin "2"
-			(uuid "3caab82a-f920-4c20-83fc-3986a49869e9")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "SW6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Switch:SW_Push")
-		(at 57.15 190.5 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "7959e11b-ae9b-401d-bd22-61b674b32dcb")
-		(property "Reference" "SW5"
-			(at 57.15 182.88 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "TS-1187A-B-A-B"
-			(at 57.15 185.42 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
-			(at 57.15 185.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "http://www.helloxkb.com/public/images/pdf/TS-1187A-X-X-X.pdf"
-			(at 57.15 185.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "SMD tactile switch, 5.1x5.1mm, SPST-NO"
-			(at 57.15 190.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C318884"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "XKB Connection"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "TS-1187A-B-A-B"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0dae95df-3834-4bfb-aa68-7ff99e0bb1b4")
-		)
-		(pin "2"
-			(uuid "6b297068-a532-46bc-ad2a-66acd6a3679b")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "SW5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:+3.3V")
 		(at 165.1 118.11 0)
 		(unit 1)
@@ -13348,7 +12797,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "79653939-b3ff-4083-8cf5-46002e1564db")
-		(property "Reference" "#PWR055"
+		(property "Reference" "#PWR020"
 			(at 165.1 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -13408,7 +12857,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR055")
+					(reference "#PWR020")
 					(unit 1)
 				)
 			)
@@ -13426,7 +12875,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7c309733-12f9-4677-a520-4dcb4b2c2b87")
-		(property "Reference" "#PWR019"
+		(property "Reference" "#PWR014"
 			(at 114.3 35.56 0)
 			(hide yes)
 			(show_name no)
@@ -13486,7 +12935,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR019")
+					(reference "#PWR014")
 					(unit 1)
 				)
 			)
@@ -13617,7 +13066,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "84ad0701-647e-4e6e-bdbc-d5f14b24a892")
-		(property "Reference" "#PWR015"
+		(property "Reference" "#PWR010"
 			(at 69.85 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -13677,7 +13126,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR015")
+					(reference "#PWR010")
 					(unit 1)
 				)
 			)
@@ -13990,7 +13439,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
+		(property "Footprint" "Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical"
 			(at 355.6 82.55 0)
 			(hide yes)
 			(show_name no)
@@ -14075,124 +13524,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x03")
-		(at 355.6 31.75 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "873be40b-466f-4576-b44c-80e078e9a513")
-		(property "Reference" "J3"
-			(at 358.14 30.4799 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Conn_01x03"
-			(at 358.14 33.0199 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
-			(at 355.6 31.75 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.lcsc.com/product-detail/C2937625.html"
-			(at 355.6 31.75 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 355.6 31.75 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C2937625"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "XFCN"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "PZ254V-11-03P"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "afcb0adf-469d-4ebd-896b-b515c9f53bb7")
-		)
-		(pin "1"
-			(uuid "24f27e85-9ba2-4673-8ef7-ca10eb1db58f")
-		)
-		(pin "3"
-			(uuid "164a8854-17de-44c6-8654-731e962eee5d")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "J3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 279.4 165.1 0)
 		(unit 1)
@@ -14204,7 +13535,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "876e2b7a-e6ff-4a68-80a4-4b6e3a6e08d8")
-		(property "Reference" "#PWR035"
+		(property "Reference" "#PWR030"
 			(at 279.4 171.45 0)
 			(hide yes)
 			(show_name no)
@@ -14264,120 +13595,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR035")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Switch:SW_Push")
-		(at 57.15 152.4 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "8917fb2a-199f-4ac0-994b-701961789cef")
-		(property "Reference" "SW3"
-			(at 57.15 144.78 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "TS-1187A-B-A-B"
-			(at 57.15 147.32 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
-			(at 57.15 147.32 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "http://www.helloxkb.com/public/images/pdf/TS-1187A-X-X-X.pdf"
-			(at 57.15 147.32 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "SMD tactile switch, 5.1x5.1mm, SPST-NO"
-			(at 57.15 152.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C318884"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "XKB Connection"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "TS-1187A-B-A-B"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "315a64ea-eb63-4246-b3c0-c1edb2a5d851")
-		)
-		(pin "2"
-			(uuid "9e808124-0d9e-46e9-a0af-047aef1570bc")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "SW3")
+					(reference "#PWR030")
 					(unit 1)
 				)
 			)
@@ -14395,7 +13613,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8a86e5f3-0504-41a6-89ba-970f626a30db")
-		(property "Reference" "#PWR024"
+		(property "Reference" "#PWR019"
 			(at 158.75 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -14455,7 +13673,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR024")
+					(reference "#PWR019")
 					(unit 1)
 				)
 			)
@@ -14673,7 +13891,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8eeb040d-4232-46b5-ac00-55c3cd3dfa57")
-		(property "Reference" "#PWR07"
+		(property "Reference" "#PWR05"
 			(at 63.5 128.27 0)
 			(hide yes)
 			(show_name no)
@@ -14733,7 +13951,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR07")
+					(reference "#PWR05")
 					(unit 1)
 				)
 			)
@@ -14855,6 +14073,121 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 355.6 132.08 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "90076675-e83c-49cb-b552-752be15ec1e0")
+		(property "Reference" "J7"
+			(at 358.14 132.0799 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x02"
+			(at 358.14 134.6199 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
+			(at 355.6 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C492401.html"
+			(at 355.6 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 355.6 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C492401"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "XFCN"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "PZ254V-11-02P"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "255acf75-ad7f-4de4-8e56-cd7cbc16eaf6")
+		)
+		(pin "2"
+			(uuid "c8eca74a-7a92-449a-86ad-0c4b816b8416")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "J7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 114.3 57.15 0)
 		(unit 1)
@@ -14866,7 +14199,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "972082f7-49da-4ce6-b3ba-5296dd496e40")
-		(property "Reference" "#PWR020"
+		(property "Reference" "#PWR015"
 			(at 114.3 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -14926,7 +14259,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR020")
+					(reference "#PWR015")
 					(unit 1)
 				)
 			)
@@ -15040,6 +14373,158 @@
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
 					(reference "SW2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 38.1 266.7 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9943f5f7-974e-470d-80b8-a2f86f74e1c0")
+		(property "Reference" "H2"
+			(at 40.64 265.4299 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 40.64 267.9699 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 38.1 266.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 38.1 266.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 38.1 266.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "H2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 25.4 266.7 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9ac355d2-e8a0-4fa4-82f1-dc374bf3bcf8")
+		(property "Reference" "H1"
+			(at 27.94 265.4299 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 27.94 267.9699 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 25.4 266.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 25.4 266.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 25.4 266.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "H1")
 					(unit 1)
 				)
 			)
@@ -15161,40 +14646,41 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 63.5 198.12 0)
+		(lib_id "Mechanical:MountingHole")
+		(at 63.5 266.7 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "9e4f97a9-1bae-4951-aa9d-bb1dd2afd23d")
-		(property "Reference" "#PWR011"
-			(at 63.5 204.47 0)
-			(hide yes)
+		(uuid "9e7ac820-4722-49b0-9a73-59504a1f60d4")
+		(property "Reference" "H4"
+			(at 66.04 265.4299 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "GND"
-			(at 63.5 203.2 0)
+		(property "Value" "MountingHole"
+			(at 66.04 267.9699 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Footprint" ""
-			(at 63.5 198.12 0)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 63.5 266.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15205,7 +14691,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 63.5 198.12 0)
+			(at 63.5 266.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15215,8 +14701,8 @@
 				)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 63.5 198.12 0)
+		(property "Description" "Mounting Hole without connection"
+			(at 63.5 266.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15225,14 +14711,135 @@
 					(size 1.27 1.27)
 				)
 			)
-		)
-		(pin "1"
-			(uuid "03b43f02-1848-4d09-a1b7-595735444b3f")
 		)
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR011")
+					(reference "H4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x05")
+		(at 355.6 57.15 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a345f0ff-5725-4ae5-a8fa-4229686e9688")
+		(property "Reference" "J4"
+			(at 358.14 55.8799 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x05"
+			(at 358.14 58.4199 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_JST:JST_XH_B5B-XH-A_1x05_P2.50mm_Vertical"
+			(at 355.6 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C492404.html"
+			(at 355.6 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 355.6 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C492404"
+			(at 0 -101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "XFCN"
+			(at 0 -101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "PZ254V-11-05P"
+			(at 0 -101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "4"
+			(uuid "ff268437-667a-4fcd-bd38-db35b5d14b7d")
+		)
+		(pin "3"
+			(uuid "0fd120c0-f757-43d8-ab64-a8bebdb68e99")
+		)
+		(pin "2"
+			(uuid "e0345da8-61dc-46f8-9c10-0ace8f37a91c")
+		)
+		(pin "1"
+			(uuid "802d445f-b2cc-4e2a-9377-60dcf4fab8d2")
+		)
+		(pin "5"
+			(uuid "d481ff27-8398-4aaa-bc1a-bbe29e7cddc8")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "J4")
 					(unit 1)
 				)
 			)
@@ -15371,7 +14978,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a445a102-e07e-4b44-b13b-9c0e7ccc3762")
-		(property "Reference" "#PWR038"
+		(property "Reference" "#PWR033"
 			(at 330.2 209.55 0)
 			(hide yes)
 			(show_name no)
@@ -15431,7 +15038,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR038")
+					(reference "#PWR033")
 					(unit 1)
 				)
 			)
@@ -15449,7 +15056,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "a6c9c7ae-a322-465e-9add-0d13e402ec61")
-		(property "Reference" "R8"
+		(property "Reference" "R6"
 			(at 208.2799 107.95 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15546,7 +15153,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "R8")
+					(reference "R6")
 					(unit 1)
 				)
 			)
@@ -15564,7 +15171,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a7dc231d-9afb-4a9e-8721-e8639c6901f1")
-		(property "Reference" "#PWR054"
+		(property "Reference" "#PWR029"
 			(at 279.4 143.51 0)
 			(hide yes)
 			(show_name no)
@@ -15624,7 +15231,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR054")
+					(reference "#PWR029")
 					(unit 1)
 				)
 			)
@@ -15642,7 +15249,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "aa43ca94-1e46-485c-9b07-5a5a6e1b5ff2")
-		(property "Reference" "#PWR053"
+		(property "Reference" "#PWR031"
 			(at 317.5 105.41 0)
 			(hide yes)
 			(show_name no)
@@ -15702,7 +15309,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR053")
+					(reference "#PWR031")
 					(unit 1)
 				)
 			)
@@ -15720,7 +15327,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "aba4d7dd-491c-455c-8cce-0f1b79b541b8")
-		(property "Reference" "#PWR043"
+		(property "Reference" "#PWR038"
 			(at 336.55 196.85 0)
 			(hide yes)
 			(show_name no)
@@ -15780,7 +15387,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR043")
+					(reference "#PWR038")
 					(unit 1)
 				)
 			)
@@ -15798,7 +15405,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "b0a1a058-13df-42ca-8f26-7b8db7fe2b54")
-		(property "Reference" "R7"
+		(property "Reference" "R5"
 			(at 210.8201 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15895,15 +15502,15 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "R7")
+					(reference "R5")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 355.6 132.08 0)
+		(lib_id "power:GND")
+		(at 342.9 139.7 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -15912,31 +15519,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "b4cbe096-6f1d-4706-80f3-7bc887589ac4")
-		(property "Reference" "J7"
-			(at 358.14 132.0799 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Conn_01x02"
-			(at 358.14 134.6199 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
-			(at 355.6 132.08 0)
+		(uuid "b51e4719-8176-4832-9484-8f16e8d6e559")
+		(property "Reference" "#PWR045"
+			(at 342.9 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15946,8 +15531,18 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/product-detail/C492401.html"
-			(at 355.6 132.08 0)
+		(property "Value" "GND"
+			(at 342.9 144.78 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 342.9 139.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15957,8 +15552,8 @@
 				)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 355.6 132.08 0)
+		(property "Datasheet" ""
+			(at 342.9 139.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15968,30 +15563,8 @@
 				)
 			)
 		)
-		(property "LCSC" "C492401"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "XFCN"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "PZ254V-11-02P"
-			(at 0 0 0)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 342.9 139.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16002,15 +15575,88 @@
 			)
 		)
 		(pin "1"
-			(uuid "30cb98b0-abf5-4a3d-823b-62ae3881617f")
-		)
-		(pin "2"
-			(uuid "6e2b2700-7a99-4c09-84d6-2292a23304db")
+			(uuid "567c5737-5e60-44cb-b38f-955161d1d589")
 		)
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "J7")
+					(reference "#PWR045")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 50.8 266.7 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b59bd3be-afca-4511-b887-0a1eb652cffb")
+		(property "Reference" "H3"
+			(at 53.34 265.4299 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 53.34 267.9699 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 50.8 266.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 50.8 266.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 50.8 266.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "H3")
 					(unit 1)
 				)
 			)
@@ -16143,7 +15789,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "b7ca39fd-d484-4d83-82d0-f538c6d27e60")
-		(property "Reference" "R6"
+		(property "Reference" "R4"
 			(at 99.06 49.5299 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16240,7 +15886,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "R6")
+					(reference "R4")
 					(unit 1)
 				)
 			)
@@ -16459,84 +16105,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 63.5 215.9 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "c26946b1-6aeb-4193-b4eb-71a68cf8a42d")
-		(property "Reference" "#PWR012"
-			(at 63.5 222.25 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 63.5 220.98 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 63.5 215.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 63.5 215.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 63.5 215.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "358e6c7f-b73a-44fa-962a-2d9844730443")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR012")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:+3.3V")
 		(at 336.55 160.02 0)
 		(unit 1)
@@ -16548,7 +16116,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c3922e10-a83a-4dd7-aba4-a13b7ebde4fc")
-		(property "Reference" "#PWR040"
+		(property "Reference" "#PWR035"
 			(at 336.55 163.83 0)
 			(hide yes)
 			(show_name no)
@@ -16608,7 +16176,122 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR040")
+					(reference "#PWR035")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 355.6 106.68 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c5be53f4-fff5-4b9d-a3d8-3a5ca8deb236")
+		(property "Reference" "J6"
+			(at 358.14 106.6799 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x02"
+			(at 358.14 109.2199 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
+			(at 355.6 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C492401.html"
+			(at 355.6 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 355.6 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C492401"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "XFCN"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "PZ254V-11-02P"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "770babe2-7dbf-45d8-b464-b19ae6d6c671")
+		)
+		(pin "2"
+			(uuid "1de4e8fc-3a6a-4a37-b2d6-fce301b0d381")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "J6")
 					(unit 1)
 				)
 			)
@@ -16704,7 +16387,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c6650282-3e81-4cdc-aec7-8cb4706f0f71")
-		(property "Reference" "#PWR033"
+		(property "Reference" "#PWR028"
 			(at 279.4 133.35 0)
 			(hide yes)
 			(show_name no)
@@ -16764,7 +16447,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR033")
+					(reference "#PWR028")
 					(unit 1)
 				)
 			)
@@ -16782,7 +16465,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c9a46836-dc41-4653-beb0-d96fe155d3c5")
-		(property "Reference" "#PWR039"
+		(property "Reference" "#PWR034"
 			(at 330.2 220.98 0)
 			(hide yes)
 			(show_name no)
@@ -16842,7 +16525,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR039")
+					(reference "#PWR034")
 					(unit 1)
 				)
 			)
@@ -16860,7 +16543,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c9ad23ee-37a6-4c17-95ea-46b0eadd4321")
-		(property "Reference" "#PWR021"
+		(property "Reference" "#PWR016"
 			(at 114.3 102.87 0)
 			(hide yes)
 			(show_name no)
@@ -16920,85 +16603,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR021")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 63.5 160.02 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "cd6ae710-5c62-4b20-b1a5-d7b211fe3848")
-		(property "Reference" "#PWR09"
-			(at 63.5 166.37 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 63.5 165.1 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 63.5 160.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 63.5 160.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 63.5 160.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "4a77a5b0-8385-4852-93df-fac9cb08e068")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR09")
+					(reference "#PWR016")
 					(unit 1)
 				)
 			)
@@ -17016,7 +16621,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d13e5ebf-4baa-40f3-b1c9-035931aa35d9")
-		(property "Reference" "#PWR028"
+		(property "Reference" "#PWR023"
 			(at 184.15 41.91 0)
 			(hide yes)
 			(show_name no)
@@ -17076,7 +16681,120 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR028")
+					(reference "#PWR023")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push")
+		(at 57.15 157.48 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d67a7f84-ae30-4885-baf3-ccd778b815bd")
+		(property "Reference" "SW3"
+			(at 57.15 149.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TS-1187A-B-A-B"
+			(at 57.15 152.4 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
+			(at 57.15 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "http://www.helloxkb.com/public/images/pdf/TS-1187A-X-X-X.pdf"
+			(at 57.15 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "SMD tactile switch, 5.1x5.1mm, SPST-NO"
+			(at 57.15 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 0 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "XKB Connection"
+			(at 0 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "TS-1187A-B-A-B"
+			(at 0 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "9513649f-6599-485c-8526-3e0acb940c86")
+		)
+		(pin "2"
+			(uuid "f8efbc1b-b9e2-4cbf-be6d-0267c1a56139")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "SW3")
 					(unit 1)
 				)
 			)
@@ -17192,6 +16910,199 @@
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
 					(reference "R1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 342.9 114.3 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "da43d4ff-604f-4150-ae8c-fe1a8b4058ef")
+		(property "Reference" "#PWR044"
+			(at 342.9 120.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 342.9 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 342.9 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 342.9 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 342.9 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "27944274-2625-4292-b4dd-bcbc17f2e136")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "#PWR044")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 393.7 132.08 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "dc088cb8-e15e-4250-9cd0-526963d934f5")
+		(property "Reference" "J12"
+			(at 396.24 132.0799 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x02"
+			(at 396.24 134.6199 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
+			(at 393.7 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C492401.html"
+			(at 393.7 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 393.7 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C492401"
+			(at 38.1 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "XFCN"
+			(at 38.1 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "PZ254V-11-02P"
+			(at 38.1 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4daefae6-bb10-4e2a-9023-7d8ad3d1f1d7")
+		)
+		(pin "2"
+			(uuid "08d8f812-f52d-4cc6-9ce1-8e8dd5f42e56")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "J12")
 					(unit 1)
 				)
 			)
@@ -17314,84 +17225,6 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 63.5 177.8 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "e0b55ae3-3e94-4250-b884-5b0f324f2f70")
-		(property "Reference" "#PWR010"
-			(at 63.5 184.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 63.5 182.88 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 63.5 177.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 63.5 177.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 63.5 177.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "182cd97a-4616-4de4-a64e-ee569e59abbd")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR010")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
 		(at 69.85 52.07 0)
 		(unit 1)
 		(body_style 1)
@@ -17402,7 +17235,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e4a81dce-cd25-4e78-98e4-fd3f656f7455")
-		(property "Reference" "#PWR016"
+		(property "Reference" "#PWR011"
 			(at 69.85 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -17462,7 +17295,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR016")
+					(reference "#PWR011")
 					(unit 1)
 				)
 			)
@@ -17480,7 +17313,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e5e46d58-ca72-4649-8706-a5b0e4908f1b")
-		(property "Reference" "#PWR030"
+		(property "Reference" "#PWR025"
 			(at 215.9 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -17540,143 +17373,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR030")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x09")
-		(at 393.7 38.1 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "e6e70c37-21b1-47b0-ae98-4af69b8b9362")
-		(property "Reference" "J11"
-			(at 396.24 36.8299 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Conn_01x09"
-			(at 396.24 39.3699 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x09_P2.54mm_Vertical"
-			(at 393.7 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.lcsc.com/product-detail/C492408.html"
-			(at 393.7 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x09, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 393.7 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C492408"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "XFCN"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "PZ254V-11-09P"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "8"
-			(uuid "236a380b-20fd-4b51-9421-b708b59fc048")
-		)
-		(pin "1"
-			(uuid "0b4fac1d-16f5-4fe4-9777-4a6adf9a425b")
-		)
-		(pin "2"
-			(uuid "20332601-0903-4072-a790-2b7d96423898")
-		)
-		(pin "3"
-			(uuid "43d4955b-bdfc-4810-8b5b-3a8462abffbf")
-		)
-		(pin "9"
-			(uuid "3b82047f-699c-4dff-bd42-3e721ab8cada")
-		)
-		(pin "7"
-			(uuid "ab00fd11-583a-469d-a2ab-d79dffc36638")
-		)
-		(pin "6"
-			(uuid "377ce09d-76c7-44c3-a8fb-fed21c40358e")
-		)
-		(pin "5"
-			(uuid "314f05ac-9f0b-4215-8f70-aa8a13be8cae")
-		)
-		(pin "4"
-			(uuid "c0e1a358-c7a3-4a47-9d30-ba6628922ccd")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "J11")
+					(reference "#PWR025")
 					(unit 1)
 				)
 			)
@@ -17694,7 +17391,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e940e56a-963d-48cb-9dbe-19951d1c813c")
-		(property "Reference" "#PWR037"
+		(property "Reference" "#PWR032"
 			(at 317.5 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -17754,7 +17451,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR037")
+					(reference "#PWR032")
 					(unit 1)
 				)
 			)
@@ -17772,7 +17469,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e95e5217-f5ad-4430-a309-438aa40bcb0c")
-		(property "Reference" "#PWR08"
+		(property "Reference" "#PWR06"
 			(at 63.5 146.05 0)
 			(hide yes)
 			(show_name no)
@@ -17832,7 +17529,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR08")
+					(reference "#PWR06")
 					(unit 1)
 				)
 			)
@@ -17964,7 +17661,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "eca7b4fc-d741-413b-8fcf-1074c3b1e144")
-		(property "Reference" "#PWR031"
+		(property "Reference" "#PWR026"
 			(at 228.6 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -18024,7 +17721,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR031")
+					(reference "#PWR026")
 					(unit 1)
 				)
 			)
@@ -18273,7 +17970,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f08873bf-a23b-466e-8e5e-70f4a70c459a")
-		(property "Reference" "#PWR026"
+		(property "Reference" "#PWR021"
 			(at 168.91 129.54 0)
 			(hide yes)
 			(show_name no)
@@ -18333,7 +18030,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR026")
+					(reference "#PWR021")
 					(unit 1)
 				)
 			)
@@ -18351,7 +18048,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "f376682d-23b6-4816-938c-2add3cc3390f")
-		(property "Reference" "R5"
+		(property "Reference" "R3"
 			(at 58.42 38.862 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18446,7 +18143,7 @@
 		(instances
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "R5")
+					(reference "R3")
 					(unit 1)
 				)
 			)
