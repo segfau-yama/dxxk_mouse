@@ -5672,16 +5672,6 @@
 	)
 	(wire
 		(pts
-			(xy 336.55 186.69) (xy 336.55 185.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "17cffe61-7023-452d-a559-f7df4d27a4b2")
-	)
-	(wire
-		(pts
 			(xy 63.5 34.29) (xy 63.5 36.83)
 		)
 		(stroke
@@ -5729,6 +5719,16 @@
 			(type default)
 		)
 		(uuid "1c69705e-0479-4ca0-963a-e532e1b52005")
+	)
+	(wire
+		(pts
+			(xy 336.55 181.61) (xy 336.55 182.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1d079567-f8c9-4056-aaff-b57169d815b5")
 	)
 	(wire
 		(pts
@@ -5942,6 +5942,16 @@
 	)
 	(wire
 		(pts
+			(xy 336.55 179.07) (xy 350.52 179.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2f41da0c-9b98-44b1-8782-201f268e4c7e")
+	)
+	(wire
+		(pts
 			(xy 88.9 144.78) (xy 99.06 144.78)
 		)
 		(stroke
@@ -6062,16 +6072,6 @@
 	)
 	(wire
 		(pts
-			(xy 342.9 181.61) (xy 350.52 181.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3d79b926-53d5-45da-a5cc-661c2bd6f998")
-	)
-	(wire
-		(pts
 			(xy 82.55 46.99) (xy 74.93 46.99)
 		)
 		(stroke
@@ -6149,16 +6149,6 @@
 			(type default)
 		)
 		(uuid "4cec811c-1c60-4a6c-b8c1-694dd9c70308")
-	)
-	(wire
-		(pts
-			(xy 336.55 189.23) (xy 336.55 190.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4ed76b3d-6944-4aad-b94a-31262edb8899")
 	)
 	(wire
 		(pts
@@ -6712,6 +6702,16 @@
 	)
 	(wire
 		(pts
+			(xy 336.55 181.61) (xy 350.52 181.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8c3f1a90-e8a3-4d62-8304-5a18b3c816bd")
+	)
+	(wire
+		(pts
 			(xy 215.9 105.41) (xy 215.9 106.68)
 		)
 		(stroke
@@ -6719,16 +6719,6 @@
 			(type default)
 		)
 		(uuid "8d09d048-65ae-4562-82ae-c7f81e6b839c")
-	)
-	(wire
-		(pts
-			(xy 342.9 179.07) (xy 350.52 179.07)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8d1fb4c9-5152-41a9-b504-b570911e2438")
 	)
 	(wire
 		(pts
@@ -6759,16 +6749,6 @@
 			(type default)
 		)
 		(uuid "8fe3cd0d-5558-48a5-a9f0-32ba6453e9d5")
-	)
-	(wire
-		(pts
-			(xy 336.55 186.69) (xy 350.52 186.69)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "90c0f380-1db1-465f-8007-cbc8a544773b")
 	)
 	(wire
 		(pts
@@ -6929,6 +6909,16 @@
 			(type default)
 		)
 		(uuid "a4075b03-b0fa-4183-a9a1-cadb92ea9132")
+	)
+	(wire
+		(pts
+			(xy 342.9 184.15) (xy 350.52 184.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a4237049-92bf-442a-80fe-0705b35e0a92")
 	)
 	(wire
 		(pts
@@ -7152,6 +7142,16 @@
 	)
 	(wire
 		(pts
+			(xy 342.9 189.23) (xy 350.52 189.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c57ed6ea-fa65-4252-aded-0356bc6a9657")
+	)
+	(wire
+		(pts
 			(xy 342.9 208.28) (xy 350.52 208.28)
 		)
 		(stroke
@@ -7232,13 +7232,13 @@
 	)
 	(wire
 		(pts
-			(xy 336.55 189.23) (xy 350.52 189.23)
+			(xy 342.9 186.69) (xy 350.52 186.69)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d4cd1cef-0199-4104-a8f1-3df14a01d764")
+		(uuid "d627c8fb-7675-4001-b273-ea2af6277889")
 	)
 	(wire
 		(pts
@@ -7329,16 +7329,6 @@
 			(type default)
 		)
 		(uuid "e0f02dfa-1330-48ee-87f9-b7f00460faff")
-	)
-	(wire
-		(pts
-			(xy 342.9 184.15) (xy 350.52 184.15)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e2bb4392-3cf0-4ce8-862f-802b2249aa93")
 	)
 	(wire
 		(pts
@@ -7552,6 +7542,16 @@
 	)
 	(wire
 		(pts
+			(xy 336.55 179.07) (xy 336.55 177.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc5b61f3-0959-43fc-b6c6-a9f67f06edee")
+	)
+	(wire
+		(pts
 			(xy 127 48.26) (xy 127 50.8)
 		)
 		(stroke
@@ -7740,6 +7740,16 @@
 		)
 		(uuid "1b0085ec-abdd-4021-9730-f16ce57cd118")
 	)
+	(label "BCLK_RX"
+		(at 342.9 184.15 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2161ba21-ead7-4322-8ad7-a797aa4ef6cc")
+	)
 	(label "SW_FORWARD"
 		(at 342.9 106.68 180)
 		(effects
@@ -7840,16 +7850,6 @@
 		)
 		(uuid "43f433fa-46f0-4454-9b39-5a9537915082")
 	)
-	(label "BCLK_RX"
-		(at 342.9 179.07 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "4600e97e-4b76-413a-a830-e51e8bac3b9d")
-	)
 	(label "USB_DP"
 		(at 139.7 116.84 0)
 		(effects
@@ -7939,16 +7939,6 @@
 			(justify right bottom)
 		)
 		(uuid "54fbb5cc-6cb5-4f04-a4db-4539a56e7960")
-	)
-	(label "IO3"
-		(at 381 33.02 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "55e58fe8-e206-42d4-986d-8ddcb806ac4d")
 	)
 	(label "JOY_Y"
 		(at 88.9 114.3 180)
@@ -8069,6 +8059,16 @@
 			(justify left bottom)
 		)
 		(uuid "76a40595-a685-4926-87b5-bddab3c82862")
+	)
+	(label "SD_RX"
+		(at 342.9 189.23 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "7c7a8e0f-a0cb-4682-b638-46c65a0531f3")
 	)
 	(label "SW_SWAP"
 		(at 381 132.08 180)
@@ -8210,15 +8210,15 @@
 		)
 		(uuid "a2a58eb9-c6e0-430a-9083-038fa64d9bb8")
 	)
-	(label "IO46"
-		(at 381 35.56 0)
+	(label "WS_RX"
+		(at 342.9 186.69 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "a631afab-7379-4de7-985b-952f967aa08f")
+		(uuid "a583e24d-8d23-40e6-8444-327fdcbaa9ce")
 	)
 	(label "IO18"
 		(at 139.7 111.76 0)
@@ -8410,16 +8410,6 @@
 		)
 		(uuid "e19e4523-51a0-4837-9a9e-aec391472c17")
 	)
-	(label "WS_RX"
-		(at 342.9 181.61 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "e2a669da-5f0a-474d-ab4f-eff6bf02f714")
-	)
 	(label "IO46"
 		(at 139.7 144.78 0)
 		(effects
@@ -8460,6 +8450,16 @@
 		)
 		(uuid "e79f58b0-5a6f-4141-9a5a-f8aa575195d3")
 	)
+	(label "IO3"
+		(at 381 35.56 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e8fd95fa-3df2-4e83-b452-5840c5db59f2")
+	)
 	(label "LDOO"
 		(at 260.35 114.3 180)
 		(effects
@@ -8490,16 +8490,6 @@
 		)
 		(uuid "f26b6932-41c0-4277-9b06-40bff8b42135")
 	)
-	(label "SD_RX"
-		(at 342.9 184.15 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "f2c777c7-35b9-4ffa-bdcd-c95d5681c316")
-	)
 	(label "SD_TX"
 		(at 165.1 105.41 180)
 		(effects
@@ -8509,6 +8499,16 @@
 			(justify right bottom)
 		)
 		(uuid "f6cf664c-e5f1-4cb8-a954-af09c1958bda")
+	)
+	(label "IO46"
+		(at 381 33.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f96aa34c-61c7-4b9c-9898-402665b49b17")
 	)
 	(label "TX"
 		(at 139.7 104.14 0)
@@ -9112,84 +9112,6 @@
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
 					(reference "#PWR046")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3.3V")
-		(at 336.55 185.42 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "0b047484-7448-4faf-ada8-3be9a0ba4f0a")
-		(property "Reference" "#PWR037"
-			(at 336.55 189.23 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+3.3V"
-			(at 336.55 180.34 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 336.55 185.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 336.55 185.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
-			(at 336.55 185.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f4be83f4-044d-45e4-8fea-b929e4d92159")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR037")
 					(unit 1)
 				)
 			)
@@ -11138,6 +11060,84 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 336.55 182.88 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4c5a6c58-63db-4cfb-a5c5-8245a028b108")
+		(property "Reference" "#PWR038"
+			(at 336.55 189.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 336.55 187.96 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 336.55 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 336.55 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 336.55 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f41cda19-2689-46be-98c1-38ee1bb13175")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "#PWR038")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector_Generic:Conn_01x05")
 		(at 355.6 31.75 0)
 		(unit 1)
@@ -11361,7 +11361,7 @@
 				)
 			)
 		)
-		(property "Value" "TS-1187A-B-A-B"
+		(property "Value" "Tactile Switch 6x6x6mm THT"
 			(at 57.15 171.45 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11371,18 +11371,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
-			(at 57.15 171.45 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "http://www.helloxkb.com/public/images/pdf/TS-1187A-X-X-X.pdf"
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 57.15 171.45 0)
 			(hide yes)
 			(show_name no)
@@ -11393,7 +11382,18 @@
 				)
 			)
 		)
-		(property "Description" "SMD tactile switch, 5.1x5.1mm, SPST-NO"
+		(property "Datasheet" "https://www.amazon.co.jp/dp/B084XBRQVN"
+			(at 57.15 171.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic 6x6x6 mm, 4-pin, through-hole, momentary SPST-NO tactile switch"
 			(at 57.15 176.53 0)
 			(hide yes)
 			(show_name no)
@@ -11404,7 +11404,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C318884"
+		(property "LCSC" ""
 			(at 0 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -11415,7 +11415,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "XKB Connection"
+		(property "Manufacturer" "Generic"
 			(at 0 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -11426,7 +11426,7 @@
 				)
 			)
 		)
-		(property "MPN" "TS-1187A-B-A-B"
+		(property "MPN" ""
 			(at 0 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -11435,6 +11435,14 @@
 				(font
 					(size 1.27 1.27)
 				)
+			)
+		)
+		(property "BOM Comments" "Amazon ASIN B084XBRQVN; verify 6.5x4.5 mm pin spacing before assembly" (at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -15316,84 +15324,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 336.55 190.5 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "aba4d7dd-491c-455c-8cce-0f1b79b541b8")
-		(property "Reference" "#PWR038"
-			(at 336.55 196.85 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 336.55 195.58 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 336.55 190.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 336.55 190.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 336.55 190.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "022d7d39-b647-4a0f-9cec-ceb0ec43e199")
-		)
-		(instances
-			(project "dick_mouse"
-				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
-					(reference "#PWR038")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R")
 		(at 209.55 102.87 90)
 		(mirror x)
@@ -15503,6 +15433,84 @@
 			(project "dick_mouse"
 				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
 					(reference "R5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3.3V")
+		(at 336.55 177.8 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b4a2b5cf-8eb8-40ee-b78e-b55fa9b405b9")
+		(property "Reference" "#PWR037"
+			(at 336.55 181.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 336.55 172.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 336.55 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 336.55 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(at 336.55 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "db9e597f-b012-48b3-9901-65a7c0b6948b")
+		)
+		(instances
+			(project "dick_mouse"
+				(path "/3f611c79-1bfe-4c28-9232-503c7924e111"
+					(reference "#PWR037")
 					(unit 1)
 				)
 			)
@@ -15895,7 +15903,6 @@
 	(symbol
 		(lib_id "Power_Protection:USBLC6-2SC6")
 		(at 69.85 44.45 0)
-		(mirror y)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -15905,7 +15912,7 @@
 		(dnp no)
 		(uuid "bb47b003-64b6-46a5-8ea8-024c42572d76")
 		(property "Reference" "U1"
-			(at 68.1989 36.83 0)
+			(at 71.5011 36.83 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -15916,7 +15923,7 @@
 			)
 		)
 		(property "Value" "USBLC6-2SC6"
-			(at 71.12 39.37 0)
+			(at 84.582 39.37 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -15927,7 +15934,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6"
-			(at 68.58 50.8 0)
+			(at 71.12 50.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15940,7 +15947,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.st.com/resource/en/datasheet/usblc6-2.pdf"
-			(at 68.58 52.705 0)
+			(at 71.12 52.705 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16709,7 +16716,7 @@
 				)
 			)
 		)
-		(property "Value" "TS-1187A-B-A-B"
+		(property "Value" "Tactile Switch 6x6x6mm THT"
 			(at 57.15 152.4 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16719,18 +16726,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
-			(at 57.15 152.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "http://www.helloxkb.com/public/images/pdf/TS-1187A-X-X-X.pdf"
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 57.15 152.4 0)
 			(hide yes)
 			(show_name no)
@@ -16741,7 +16737,18 @@
 				)
 			)
 		)
-		(property "Description" "SMD tactile switch, 5.1x5.1mm, SPST-NO"
+		(property "Datasheet" "https://www.amazon.co.jp/dp/B084XBRQVN"
+			(at 57.15 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic 6x6x6 mm, 4-pin, through-hole, momentary SPST-NO tactile switch"
 			(at 57.15 157.48 0)
 			(hide yes)
 			(show_name no)
@@ -16752,7 +16759,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C318884"
+		(property "LCSC" ""
 			(at 0 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -16763,7 +16770,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "XKB Connection"
+		(property "Manufacturer" "Generic"
 			(at 0 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -16774,7 +16781,7 @@
 				)
 			)
 		)
-		(property "MPN" "TS-1187A-B-A-B"
+		(property "MPN" ""
 			(at 0 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -16783,6 +16790,14 @@
 				(font
 					(size 1.27 1.27)
 				)
+			)
+		)
+		(property "BOM Comments" "Amazon ASIN B084XBRQVN; verify 6.5x4.5 mm pin spacing before assembly" (at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
 			)
 		)
 		(pin "1"
